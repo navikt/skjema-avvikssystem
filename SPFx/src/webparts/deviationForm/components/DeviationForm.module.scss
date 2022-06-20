@@ -1,0 +1,7 @@
+@import '~office-ui-fabric-react/dist/sass/References.scss';
+
+.deviationForm {
+  header {
+    @include ms-font-xxl;
+  }
+}

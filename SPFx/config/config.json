@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "deviation-form-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/deviationForm/DeviationFormWebPart.js",
+          "manifest": "./src/webparts/deviationForm/DeviationFormWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "DeviationFormWebPartStrings": "lib/webparts/deviationForm/loc/{locale}.js"
+  }
+}
