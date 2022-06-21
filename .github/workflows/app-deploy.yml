@@ -31,8 +31,8 @@ jobs:
     - name: Office 365 CLI Login
       uses: pnp/action-cli-login@v1.0.0
       with:
-        ADMIN_USERNAME:  ${{ secrets.user }}
-        ADMIN_PASSWORD:  ${{ secrets.pass }}
+        ADMIN_USERNAME:  ${{ secrets.USER }}
+        ADMIN_PASSWORD:  ${{ secrets.PASS }}
     
     # Deploy package to tenant using action-cli-deploy
     - name: Office 365 CLI Deploy
