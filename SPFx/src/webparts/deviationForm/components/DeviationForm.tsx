@@ -8,6 +8,6 @@ const DeviationForm = ({ title }: IDeviationFormProps) => {
       <header>{title}</header>
     </div>
   );
-}
+};
 
 export default DeviationForm;
