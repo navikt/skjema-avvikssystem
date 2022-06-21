@@ -1,0 +1,43 @@
+name: Deploy SharePoint App
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+    
+env:
+  SPPKG_FILE_NAME: 'deviation-form.sppkg'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: Prod
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: 14.x
+
+    - name: Build
+      run: |
+        npm install
+        gulp bundle --ship
+        gulp package-solution --ship
+      working-directory: ./SPFx
+        
+    - name: Office 365 CLI Login
+      uses: pnp/action-cli-login@v1.0.0
+      with:
+        ADMIN_USERNAME:  ${{ secrets.USER }}
+        ADMIN_PASSWORD:  ${{ secrets.PASS }}
+    
+    # Deploy package to tenant using action-cli-deploy
+    - name: Office 365 CLI Deploy
+      uses: pnp/action-cli-deploy@v1.0.0
+      with:
+        APP_FILE_PATH: SPFx/sharepoint/solution/${{ env.SPPKG_FILE_NAME }}
+        OVERWRITE: true
