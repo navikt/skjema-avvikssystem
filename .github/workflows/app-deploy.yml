@@ -10,8 +10,9 @@ env:
   SPPKG_FILE_NAME: 'deviation-form.sppkg'
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    environment: Prod
     
     steps:
     - uses: actions/checkout@v3
