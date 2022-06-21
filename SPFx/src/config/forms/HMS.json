@@ -1,0 +1,28 @@
+{
+    "pages": [
+        {
+            "key": 1,
+            "fields": [
+                {
+                    "key": "state-or-municipality",
+                    "label": "Er du statlig eller kommunalt ansatt?",
+                    "type": "Choice",
+                    "options": ["Statlig", "Kommunalt"]
+                }
+            ],
+            "actions": [
+                {
+                    "key": "next",
+                    "label": "Neste",
+                    "invoke": {
+                        "functionName": "NextPage",
+                        "params": {
+                            "pageNumber": "currentPageNumber",
+                            "setPageNumber": "setPageNumber"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

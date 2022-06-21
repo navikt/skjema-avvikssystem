@@ -16,6 +16,7 @@ export interface IDeviationFormWebPartProps {
 }
 
 export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviationFormWebPartProps> {
+  private _ctxValue;
 
   public render(): void {
     const element: React.ReactElement<IDeviationFormProps> = React.createElement(
