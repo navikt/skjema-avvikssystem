@@ -1,8 +1,8 @@
-import { createContext } from 'react'
+import { createContext } from 'react';
 import { IDeviationForm } from './types';
 
 export interface IDeviationFormContext {
-    forms: IDeviationForm;
+    forms: IDeviationForm[];
 }
 
-export const DeviationFormContext = createContext<IDeviationFormContext>(null)
+export const DeviationFormContext = createContext<IDeviationFormContext>(null);

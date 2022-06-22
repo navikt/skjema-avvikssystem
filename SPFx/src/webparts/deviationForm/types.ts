@@ -7,6 +7,7 @@ export interface IDeviationFormAction {
     key: string;
     label: string;
     invoke: IDeviationFormActionInvoke;
+    disabled?: string;
 }
 
 export interface IDeviationFormField {
@@ -14,14 +15,16 @@ export interface IDeviationFormField {
     label: string;
     type: string;
     options?: string[];
+    required?: string;
 }
 
 export interface IDeviationFormPage {
-    pageNumber: number;
+    key: number;
     fields: IDeviationFormField[];
     actions: IDeviationFormAction[];
 }
 
 export interface IDeviationForm {
+    title: string;
     pages: IDeviationFormPage[];
 }

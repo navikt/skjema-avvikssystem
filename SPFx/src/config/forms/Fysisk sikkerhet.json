@@ -1,27 +1,25 @@
 {
-    "title": "HMS",
+    "title": "Fysisk sikkerhet",
     "pages": [
         {
             "key": 1,
             "fields": [
                 {
-                    "key": "stateOrMunicipality",
-                    "label": "Er du statlig eller kommunalt ansatt?",
+                    "key": "state-or-municipality",
+                    "label": "Gjelder det en statlig eller kommunal tjeneste?",
                     "type": "Choice",
-                    "options": ["Statlig", "Kommunalt"],
-                    "required": "true"
+                    "options": ["Statlig", "Kommunal"]
                 }
             ],
             "actions": [
                 {
                     "key": "next",
                     "label": "Neste",
-                    "disabled": "!state.values.stateOrMunicipality",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
-                            "pageNumber": "currentPageNumber",
-                            "setPageNumber": "setPageNumber"
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
                         }
                     }
                 }

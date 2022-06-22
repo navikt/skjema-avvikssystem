@@ -8,22 +8,28 @@ import {
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 
 import * as strings from 'DeviationFormWebPartStrings';
-import DeviationForm from './components/DeviationForm';
-import { IDeviationFormProps } from './components/IDeviationFormProps';
+import App from './components/App';
+import config from '../../config/config';
+import { DeviationFormContext, IDeviationFormContext } from './DeviationFormContext';
+import { IDeviationForm } from './types';
 
 export interface IDeviationFormWebPartProps {
   webpartTitle: string;
 }
 
 export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviationFormWebPartProps> {
-  private _ctxValue;
 
   public render(): void {
-    const element: React.ReactElement<IDeviationFormProps> = React.createElement(
-      DeviationForm,
-      {
-        title: this.properties.webpartTitle
-      }
+    const value: IDeviationFormContext = {
+      forms: config as IDeviationForm[]
+    };
+
+    const element: React.ReactElement<{}> = (
+      React.createElement(DeviationFormContext.Provider, { value },
+        React.createElement(App,
+          {
+            title: this.properties.webpartTitle
+          }))
     );
 
     ReactDom.render(element, this.domElement);
