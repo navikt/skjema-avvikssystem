@@ -12,4 +12,8 @@ export default class ActionsHandler {
     private NextPage({ currentPageNumber, stateVariable, state }) {
         this._setState({ ...state, [stateVariable]: currentPageNumber + 1 });
     }
+
+    private PreviousPage({ currentPageNumber, stateVariable, state }) {
+        this._setState({ ...state, [stateVariable]: currentPageNumber - 1 });
+    }
 }

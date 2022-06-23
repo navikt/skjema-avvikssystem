@@ -1,9 +1,10 @@
 import { PrimaryButton } from '@microsoft/office-ui-fabric-react-bundle';
-import { Dropdown } from 'office-ui-fabric-react';
+import { ChoiceGroup, Dropdown, TextField } from 'office-ui-fabric-react';
 import * as React from 'react';
 import { useState } from 'react';
 import ActionsHandler from '../../../../config/ActionsHandler';
 import { IDeviationForm, IDeviationFormAction, IDeviationFormField } from '../../types';
+import styles from './DeviationForm.module.scss';
 
 export interface IDeviationFormProps {
     form: IDeviationForm;
@@ -14,19 +15,53 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
     const actionsHandler = new ActionsHandler(setState);
 
     const renderField = (field: IDeviationFormField) => {
-        switch (field.type) {
-            case 'Choice':
-                return (
-                    <Dropdown
-                        label={field.label}
-                        required={eval(field.required)}
-                        options={field.options.map(o => ({ key: o, text: o }))}
-                        onChange={(_, option) => setState({ ...state, values: { ...state.values, [field.key]: option.text } })}
-                    />
-                );
+        let options;
+        if (!field.hidden) {
+            switch (field.type) {
+                case 'Choice':
+                    if (typeof field.options === 'string') {
+                        options = eval(field.options).map(o => ({ key: o, text: o }));
+                    } else options = field.options.map(o => ({ key: o, text: o }));
+                    return (
+                        <div className={styles.field}>
+                            <Dropdown
+                                label={field.label}
+                                selectedKey={state.values[field.key]}
+                                required={eval(field.required)}
+                                options={options}
+                                onChange={(_, option) => setState({ ...state, values: { ...state.values, [field.key]: option.text } })}
+                            />
+                        </div>
+                    );
+                case 'ChoiceGroup':
+                    if (typeof field.options === 'string') {
+                        options = eval(field.options).map(o => ({ key: o, text: o }));
+                    } else options = field.options.map(o => ({ key: o, text: o }));
+                    return (
+                        <div className={styles.field}>
+                            <ChoiceGroup
+                                label={field.label}
+                                selectedKey={state.values[field.key]}
+                                required={eval(field.required)}
+                                options={options}
+                                onChange={(_, option) => setState({ ...state, values: { ...state.values, [field.key]: option.text } })}
+                            />
+                        </div>
+                    );
+                case 'Text':
+                    return (
+                        <TextField
+                            label={field.label}
+                            value={state.values[field.key]}
+                            required={eval(field.required)}
+                            onChange={(_, value) => setState({ ...state, values: { ...state.values, [field.key]: value } })}
+                            multiline={eval(field.multiline)}
+                        />
+                    );
 
-            default:
-                break;
+                default:
+                    break;
+            }
         }
     };
 
@@ -39,6 +74,7 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
                 functionParams = { ...functionParams, stateVariable: params[key], state };
             } else functionParams[key] = params[key];
         }
+        console.log(functionParams);
         return functionParams;
     };
 
@@ -47,14 +83,20 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
         return <PrimaryButton text={action.label} disabled={eval(action.disabled)} onClick={() => actionsHandler.invoke(action.invoke.functionName, params)} />;
     };
 
+    console.log(state.currentPageNumber);
+    console.log(form.pages);
+
     return (
         <div>
             <header>{form.title}</header>
             {form.pages.filter(page => page.key === state.currentPageNumber)
                 .map(page => (
-                    <div>
+                    <div className={styles.page}>
+                        <header>{page.title}</header>
                         {page.fields?.map(field => renderField(field))}
-                        {page.actions?.map(action => renderAction(action))}
+                        <div className={styles.actions}>
+                            {page.actions?.map(action => renderAction(action))}
+                        </div>
                     </div>
                 ))}
         </div>

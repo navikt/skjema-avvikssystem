@@ -1,3 +1,7 @@
+export interface IDeviationFormConditionalOptions {
+    [key: string]: string[];
+}
+
 export interface IDeviationFormActionInvoke {
     functionName: string;
     params: any;
@@ -12,14 +16,17 @@ export interface IDeviationFormAction {
 
 export interface IDeviationFormField {
     key: string;
-    label: string;
     type: string;
-    options?: string[];
+    label?: string;
+    options?: string[] | string;
     required?: string;
+    multiline?: string;
+    hidden?: string;
 }
 
 export interface IDeviationFormPage {
     key: number;
+    title: string;
     fields: IDeviationFormField[];
     actions: IDeviationFormAction[];
 }
@@ -27,4 +34,5 @@ export interface IDeviationFormPage {
 export interface IDeviationForm {
     title: string;
     pages: IDeviationFormPage[];
+    conditionalOptions?: IDeviationFormConditionalOptions;
 }

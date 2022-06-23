@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useState, useContext } from 'react';
 import styles from './App.module.scss';
-import ActionsHandler from '../../../config/ActionsHandler';
 import { DeviationFormContext } from '../DeviationFormContext';
-import { PrimaryButton } from 'office-ui-fabric-react';
+import { DefaultButton } from 'office-ui-fabric-react';
 import DeviationForm from './DeviationForm/DeviationForm';
+import strings from 'DeviationFormWebPartStrings';
 
 export interface IDeviationAppProps {
   title: string;
@@ -12,17 +12,20 @@ export interface IDeviationAppProps {
 
 const App = ({ title }: IDeviationAppProps) => {
   const context = useContext(DeviationFormContext);
-
   const [selectedForm, setSelectedForm] = useState(null);
-
 
   return (
     <div className={styles.wrapper}>
       <header>{title}</header>
       {!selectedForm ?
-        context.forms.map((form) => (
-          <PrimaryButton text={form.title} onClick={() => setSelectedForm(form)} />
-        ))
+        <>
+          <header>{strings.SelectFormText}</header>
+          <div className={styles.forms}>
+            {context.forms.map((form) => (
+              <DefaultButton text={form.title} onClick={() => setSelectedForm(form)} />
+            ))}
+          </div>
+        </>
         :
         <DeviationForm form={selectedForm} />
       }

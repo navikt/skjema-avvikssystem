@@ -1,6 +1,7 @@
 define([], function() {
   return {
     "SettingsGroupName": "Innstillinger",
-    "WebpartTitleLabel": "Tittel"
+    "WebpartTitleLabel": "Tittel",
+    "SelectFormText": "Hva ønsker du å registrere?"
   }
 });

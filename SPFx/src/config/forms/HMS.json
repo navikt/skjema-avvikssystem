@@ -1,14 +1,31 @@
 {
     "title": "HMS",
+    "conditionalOptions": {
+        "Vold, trusler og trakassering som følge av kontakt med tredjepart": [
+            "Truende atferd/trussel",
+            "Trussel om selvskading/ selvdrap",
+            "Verbal utskjelling",
+            "Sjikane/trakasering",
+            "Emosjonell/relasjonell belastning",
+            "Uønsket kontakt, adferd eller kommunikasjon",
+            "Fysisk angrep på person",
+            "Brudd på utestengelsesvedtak",
+            "Hatytringer",
+            "Annet"
+        ]
+    },
     "pages": [
         {
             "key": 1,
+            "title": "Er du statlig eller kommunalt ansatt?",
             "fields": [
                 {
                     "key": "stateOrMunicipality",
-                    "label": "Er du statlig eller kommunalt ansatt?",
                     "type": "Choice",
-                    "options": ["Statlig", "Kommunalt"],
+                    "options": [
+                        "Statlig",
+                        "Kommunalt"
+                    ],
                     "required": "true"
                 }
             ],
@@ -20,8 +37,156 @@
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
-                            "pageNumber": "currentPageNumber",
-                            "setPageNumber": "setPageNumber"
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "key": 2,
+            "title": "Hvilken kategori er denne hendelsen innenfor?",
+            "fields": [
+                {
+                    "key": "category",
+                    "type": "ChoiceGroup",
+                    "options": [
+                        "Vold, trusler og trakassering som følge av kontakt med tredjepart",
+                        "Organisatoriske og psykososiale forhold",
+                        "Fysiske arbeidsmiljøforhold ",
+                        "Kjemiske og biologiske faktorer",
+                        "Ytre miljø/forurensing",
+                        "Nesten ulykke/ personskade",
+                        "Andre uønskede hendelser"
+                    ],
+                    "required": "true"
+                }
+            ],
+            "actions": [
+                {
+                    "key": "previous",
+                    "label": "Tilbake",
+                    "invoke": {
+                        "functionName": "PreviousPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
+                },
+                {
+                    "key": "next",
+                    "label": "Neste",
+                    "disabled": "!state.values.category",
+                    "invoke": {
+                        "functionName": "NextPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "key": 3,
+            "title": "For å behandle innsendelsen på riktig måte trengs det noe mer detaljer rundt type hendelse:",
+            "fields": [
+                {
+                    "key": "categoryDetails",
+                    "type": "ChoiceGroup",
+                    "options": "form.conditionalOptions[state.values.category]",
+                    "required": "true"
+                }
+            ],
+            "actions": [
+                {
+                    "key": "previous",
+                    "label": "Tilbake",
+                    "invoke": {
+                        "functionName": "PreviousPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
+                },
+                {
+                    "key": "next",
+                    "label": "Neste",
+                    "disabled": "!state.values.categoryDetails",
+                    "invoke": {
+                        "functionName": "NextPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "key": 4,
+            "title": "For å behandle innsendelsen på riktig måte trengs det noe mer detaljer rundt type hendelse:",
+            "fields": [
+                {
+                    "key": "unit",
+                    "label": "Hvilken enhet gjelder hendelsen/avviket?",
+                    "type": "ChoiceGroup",
+                    "options": [
+                        "Min hovedenhet",
+                        "Annen enhet"
+                    ],
+                    "required": "true"
+                },
+                {
+                    "key": "unitOther",
+                    "label": "Hvis annen enhet: Velg enhet",
+                    "type": "Choice",
+                    "options": [
+                        "Enhet 1",
+                        "Enhet 2"
+                    ],
+                    "hidden": "!state.values.unit === 'Annen enhet'",
+                    "required": "state.values.unit === 'Annen enhet'"
+                },
+                {
+                    "key": "location",
+                    "label": "Hvor skjedde hendelsen?",
+                    "type": "Choice",
+                    "options": [
+                        "Telefon",
+                        "Modia/e-post/brev",
+                        "I publikumsmottak",
+                        "Samtalerom",
+                        "Chat",
+                        "Utenfor NAV's lokale/ offentlig sted",
+                        "SMS/Sosiale medier",
+                        "Anonyme tilbakemeldingskanaler",
+                        "Medarbeiders private område",
+                        "Brukers private bopel",
+                        "Annet"
+                    ],
+                    "required": "true"
+                },
+                {
+                    "key": "locationDetails",
+                    "type": "Text",
+                    "multiline": "true",
+                    "hidden": "!state.values.location === 'Annet'",
+                    "required": "state.values.location === 'Annet'"
+                }
+            ],
+            "actions": [
+                {
+                    "key": "previous",
+                    "label": "Tilbake",
+                    "invoke": {
+                        "functionName": "PreviousPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
                         }
                     }
                 }

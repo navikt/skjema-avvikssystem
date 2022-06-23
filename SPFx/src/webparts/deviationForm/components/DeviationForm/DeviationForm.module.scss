@@ -1,0 +1,19 @@
+@import '~office-ui-fabric-react/dist/sass/References.scss';
+
+.page {
+    margin: 20px;
+    width: fit-content;
+
+    header {
+        margin: 15px 0;
+    }
+
+    .field {
+        margin: 15px 0;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: space-between;
+    }
+}
