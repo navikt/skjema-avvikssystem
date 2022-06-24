@@ -12,12 +12,36 @@
             "Brudd på utestengelsesvedtak",
             "Hatytringer",
             "Annet"
+        ],
+        "Organisatoriske og psykososiale forhold": [
+            "Arbeidsbelastning",
+            "Brudd på lov, forskrifter og rutiner",
+            "Mestring",
+            "Mellommenneskelige forhold",
+            "Involvering, medvirkning og medbestemmelse",
+            "Informasjon og opplæring",
+            "Organisering og tilrettelegging av arbeidet",
+            "Manglende risikovurdering",
+            "Konflikter, mobbing og trakassering",
+            "Annet"
+        ],
+        "Fysiske arbeidsmiljøforhold": [
+            "Inneklima (temperatur, lys, støv)",
+            "Ergonomiske forhold ved eller på arbeidsplassen",
+            "Støy",
+            "Annet"
+        ],
+        "Ytre miljø/forurensing": [
+            "Skadelig utslipp til miljø",
+            "Annet"
+            
         ]
     },
     "pages": [
         {
             "key": 1,
             "title": "Er du statlig eller kommunalt ansatt?",
+            "type": "Input",
             "fields": [
                 {
                     "key": "stateOrMunicipality",
@@ -33,6 +57,11 @@
                 {
                     "key": "next",
                     "label": "Neste",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronRight"
+                    },
+                    "iconPosition": "right",
                     "disabled": "!state.values.stateOrMunicipality",
                     "invoke": {
                         "functionName": "NextPage",
@@ -46,6 +75,7 @@
         },
         {
             "key": 2,
+            "type": "Input",
             "title": "Hvilken kategori er denne hendelsen innenfor?",
             "fields": [
                 {
@@ -54,7 +84,7 @@
                     "options": [
                         "Vold, trusler og trakassering som følge av kontakt med tredjepart",
                         "Organisatoriske og psykososiale forhold",
-                        "Fysiske arbeidsmiljøforhold ",
+                        "Fysiske arbeidsmiljøforhold",
                         "Kjemiske og biologiske faktorer",
                         "Ytre miljø/forurensing",
                         "Nesten ulykke/ personskade",
@@ -67,6 +97,10 @@
                 {
                     "key": "previous",
                     "label": "Tilbake",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronLeft"
+                    },
                     "invoke": {
                         "functionName": "PreviousPage",
                         "params": {
@@ -78,6 +112,11 @@
                 {
                     "key": "next",
                     "label": "Neste",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronRight"
+                    },
+                    "iconPosition": "right",
                     "disabled": "!state.values.category",
                     "invoke": {
                         "functionName": "NextPage",
@@ -91,19 +130,25 @@
         },
         {
             "key": 3,
+            "type": "Input",
             "title": "For å behandle innsendelsen på riktig måte trengs det noe mer detaljer rundt type hendelse:",
             "fields": [
                 {
                     "key": "categoryDetails",
                     "type": "ChoiceGroup",
                     "options": "form.conditionalOptions[state.values.category]",
-                    "required": "true"
+                    "required": "form.conditionalOptions[state.values.category]",
+                    "hidden": "!(form.conditionalOptions[state.values.category])"
                 }
             ],
             "actions": [
                 {
                     "key": "previous",
                     "label": "Tilbake",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronLeft"
+                    },
                     "invoke": {
                         "functionName": "PreviousPage",
                         "params": {
@@ -115,6 +160,11 @@
                 {
                     "key": "next",
                     "label": "Neste",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronRight"
+                    },
+                    "iconPosition": "right",
                     "disabled": "!state.values.categoryDetails",
                     "invoke": {
                         "functionName": "NextPage",
@@ -128,6 +178,7 @@
         },
         {
             "key": 4,
+            "type": "Input",
             "title": "For å behandle innsendelsen på riktig måte trengs det noe mer detaljer rundt type hendelse:",
             "fields": [
                 {
@@ -148,7 +199,7 @@
                         "Enhet 1",
                         "Enhet 2"
                     ],
-                    "hidden": "!state.values.unit === 'Annen enhet'",
+                    "hidden": "!(state.values.unit === 'Annen enhet')",
                     "required": "state.values.unit === 'Annen enhet'"
                 },
                 {
@@ -168,25 +219,134 @@
                         "Brukers private bopel",
                         "Annet"
                     ],
-                    "required": "true"
+                    "hidden": "state.values.category !== 'Vold, trusler og trakassering som følge av kontakt med tredjepart'",
+                    "required": "state.values.category === 'Vold, trusler og trakassering som følge av kontakt med tredjepart'"
                 },
                 {
                     "key": "locationDetails",
+                    "label": "Du valgte \"Annet\". Vennligst spesifiser: ",
                     "type": "Text",
                     "multiline": "true",
-                    "hidden": "!state.values.location === 'Annet'",
+                    "hidden": "!(state.values.location === 'Annet')",
                     "required": "state.values.location === 'Annet'"
+                },
+                {
+                    "key": "timeOfIncident",
+                    "label": "Når skjedde hendelsen?",
+                    "type": "Date",
+                    "required": "true"
+                },
+                {
+                    "key": "incidentDescription",
+                    "label": "Hva har skjedd? Beskriv hendelsen, mulig årsak og eventuelle konsekvenser",
+                    "type": "Text",
+                    "multiline": "true",
+                    "required": "true"
+                },
+                {
+                    "key": "imediateMeasuresDescription",
+                    "label": "Beskriv eventuelle iverksatte strakstiltak:",
+                    "type": "Text",
+                    "multiline": "true",
+                    "required": "true"
+                },
+                {
+                    "key": "measureSuggestionsDescription",
+                    "label": "Har du forslag til tiltak for å unngå at noe slikt skjer igjen?",
+                    "type": "Text",
+                    "multiline": "true",
+                    "required": "true"
+                },
+                {
+                    "key": "notifiedOfIncident",
+                    "label": "Har du varslet noen andre om denne hendelsen?",
+                    "type": "Choice",
+                    "options": [
+                        "Verneombud",
+                        "Politi",
+                        "AMK",
+                        "Brannvesen",
+                        "Andre offentlige samarbeids- partnere",
+                        "Partnerskap",
+                        "Andre virksomheter i bygget",
+                        "Kommunikasjonsansvarlige",
+                        "Annet"
+                    ],
+                    "required": "true"
+                },
+                {
+                    "key": "othersNotifiedDescription",
+                    "label": "Du valgte \"annet\". Vennligst spesifiser:",
+                    "type": "Text",
+                    "multiline": "true",
+                    "hidden": "!(state.values.notifiedOfIncident === 'Annet')",
+                    "required": "state.values.notifiedOfIncident === 'Annet'"
                 }
             ],
             "actions": [
                 {
                     "key": "previous",
                     "label": "Tilbake",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronLeft"
+                    },
                     "invoke": {
                         "functionName": "PreviousPage",
                         "params": {
                             "state_pageNumber": "currentPageNumber",
                             "setstate": "currentPageNumber"
+                        }
+                    }
+                },
+                {
+                    "key": "next",
+                    "label": "Neste",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronRight"
+                    },
+                    "iconPosition": "right",
+                    "disabled": "!state.valid",
+                    "invoke": {
+                        "functionName": "NextPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "key": 5,
+            "title": "Ønsker du å registrere følgende opplysninger om hendelsen?",
+            "type": "Summary",
+            "values": "state.values",
+            "actions": [
+                {
+                    "key": "previous",
+                    "label": "Tilbake",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronLeft"
+                    },
+                    "invoke": {
+                        "functionName": "PreviousPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
+                },
+                {
+                    "key": "submit",
+                    "label": "Send inn",
+                    "type": "primary",
+                    "invoke": {
+                        "functionName": "Submit",
+                        "params": {
+                            "state_values": "values"
                         }
                     }
                 }

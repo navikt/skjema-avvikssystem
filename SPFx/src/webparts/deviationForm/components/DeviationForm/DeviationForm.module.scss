@@ -15,5 +15,24 @@
     .actions {
         display: flex;
         justify-content: space-between;
+        margin: 15px 0;
+        height: 60px;
+    }
+
+    .summaryFields {
+        display: flex;
+        flex-direction: column;
+
+        .summaryField {
+            margin: 5px 0;
+
+            .summaryFieldLabel {
+                @include ms-font-l;
+            }
+
+            .summaryFieldValue {
+                @include ms-font-m;
+            }
+        }
     }
 }

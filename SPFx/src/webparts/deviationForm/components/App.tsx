@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useContext } from 'react';
 import styles from './App.module.scss';
 import { DeviationFormContext } from '../DeviationFormContext';
-import { DefaultButton } from 'office-ui-fabric-react';
+import { DefaultButton, Link } from 'office-ui-fabric-react';
 import DeviationForm from './DeviationForm/DeviationForm';
 import strings from 'DeviationFormWebPartStrings';
 
@@ -16,7 +16,13 @@ const App = ({ title }: IDeviationAppProps) => {
 
   return (
     <div className={styles.wrapper}>
-      <header>{title}</header>
+      {selectedForm ?
+        <header>
+          <Link onClick={() => setSelectedForm(null)}>{title}</Link>
+          {' > '}
+          {selectedForm.title}
+        </header>
+        : <header>{title}</header>}
       {!selectedForm ?
         <>
           <header>{strings.SelectFormText}</header>

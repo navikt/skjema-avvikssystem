@@ -16,4 +16,8 @@ export default class ActionsHandler {
     private PreviousPage({ currentPageNumber, stateVariable, state }) {
         this._setState({ ...state, [stateVariable]: currentPageNumber - 1 });
     }
+
+    private Submit({ values }) {
+        console.log(values);
+    }
 }
