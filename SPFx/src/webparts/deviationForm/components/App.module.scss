@@ -1,9 +1,16 @@
 @import '~office-ui-fabric-react/dist/sass/References.scss';
 
 .wrapper {
-  header {
-    @include ms-font-xxl;
-    margin: 20px;
+  display: flex;
+  justify-content: center;
+
+  .content {
+    > header {
+      @include ms-font-xxl;
+      margin: 20px;
+    }
+
+    width: fit-content;
   }
 
   .forms {

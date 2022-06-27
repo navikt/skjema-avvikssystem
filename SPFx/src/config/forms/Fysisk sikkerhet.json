@@ -3,23 +3,194 @@
     "pages": [
         {
             "key": 1,
+            "type": "Input",
+            "title": "Hvilken kategori er denne hendelsen innenfor?",
             "fields": [
                 {
-                    "key": "state-or-municipality",
-                    "label": "Gjelder det en statlig eller kommunal tjeneste?",
-                    "type": "Choice",
-                    "options": ["Statlig", "Kommunal"]
+                    "key": "category",
+                    "type": "ChoiceGroup",
+                    "options": [
+                        "Ulåste dører/vinduer",
+                        "Bruker i skjermede områder",
+                        "Mangler på bygg og utstyr",
+                        "Brann, branntilløp og brannforebygging",
+                        "Hærverk",
+                        "Innbrudd",
+                        "Strømbrudd",
+                        "Vannskade",
+                        "Brudd på lov, forskrifter og rutiner",
+                        "Andre uønskede hendelser"
+                    ],
+                    "required": "true"
                 }
             ],
             "actions": [
                 {
                     "key": "next",
                     "label": "Neste",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronRight"
+                    },
+                    "iconPosition": "right",
+                    "disabled": "!state.values.category",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
                             "state_pageNumber": "currentPageNumber",
                             "setstate": "currentPageNumber"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "key": 2,
+            "type": "Input",
+            "fields": [
+                {
+                    "key": "unit",
+                    "label": "Hvilken enhet gjelder hendelsen/avviket?",
+                    "type": "ChoiceGroup",
+                    "options": [
+                        "Min hovedenhet",
+                        "Annen enhet"
+                    ],
+                    "required": "true"
+                },
+                {
+                    "key": "unitOther",
+                    "label": "Hvis annen enhet: Velg enhet",
+                    "type": "Choice",
+                    "options": [
+                        "Enhet 1",
+                        "Enhet 2"
+                    ],
+                    "hidden": "!(state.values.unit === 'Annen enhet')",
+                    "required": "state.values.unit === 'Annen enhet'"
+                },
+                {
+                    "key": "timeOfIncident",
+                    "label": "Når skjedde hendelsen?",
+                    "type": "Date",
+                    "required": "true"
+                },
+                {
+                    "key": "timeOfDiscovery",
+                    "label": "Når ble hendelsen oppdaget?",
+                    "type": "Date",
+                    "required": "true"
+                },
+                {
+                    "key": "incidentDescription",
+                    "label": "Hva har skjedd? Beskriv hendelsen, mulig årsak og eventuelle konsekvenser",
+                    "type": "Text",
+                    "multiline": "true",
+                    "required": "true"
+                },
+                {
+                    "key": "imediateMeasuresDescription",
+                    "label": "Beskriv eventuelle iverksatte strakstiltak:",
+                    "type": "Text",
+                    "multiline": "true",
+                    "required": "true"
+                },
+                {
+                    "key": "measureSuggestionsDescription",
+                    "label": "Har du forslag til tiltak for å unngå at noe slikt skjer igjen?",
+                    "type": "Text",
+                    "multiline": "true",
+                    "required": "true"
+                },
+                {
+                    "key": "notifiedOfIncident",
+                    "label": "Har du varslet noen andre om denne hendelsen?",
+                    "type": "Choice",
+                    "options": [
+                        "Andre virksomheter i bygget",
+                        "Andre offentlige samarbeids-partnere",
+                        "Politi",
+                        "AMK",
+                        "Brannvesen",
+                        "Verneombud",
+                        "Kommunikasjonsansvarlig",
+                        "Annet"
+                    ],
+                    "required": "true"
+                },
+                {
+                    "key": "othersNotifiedDescription",
+                    "label": "Du valgte \"annet\". Vennligst spesifiser:",
+                    "type": "Text",
+                    "multiline": "true",
+                    "hidden": "!(state.values.notifiedOfIncident === 'Annet')",
+                    "required": "state.values.notifiedOfIncident === 'Annet'"
+                }
+            ],
+            "actions": [
+                {
+                    "key": "previous",
+                    "label": "Tilbake",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronLeft"
+                    },
+                    "invoke": {
+                        "functionName": "PreviousPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
+                },
+                {
+                    "key": "next",
+                    "label": "Neste",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronRight"
+                    },
+                    "iconPosition": "right",
+                    "disabled": "!state.valid",
+                    "invoke": {
+                        "functionName": "NextPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "key": 3,
+            "title": "Ønsker du å registrere følgende opplysninger om hendelsen?",
+            "type": "Summary",
+            "values": "state.values",
+            "actions": [
+                {
+                    "key": "previous",
+                    "label": "Tilbake",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronLeft"
+                    },
+                    "invoke": {
+                        "functionName": "PreviousPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
+                },
+                {
+                    "key": "submit",
+                    "label": "Send inn",
+                    "type": "primary",
+                    "invoke": {
+                        "functionName": "Submit",
+                        "params": {
+                            "state_values": "values"
                         }
                     }
                 }

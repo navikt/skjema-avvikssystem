@@ -1,46 +1,23 @@
 {
-    "title": "HMS",
+    "title": "Informasjonssikkerhet",
     "conditionalOptions": {
-        "Vold, trusler og trakassering som følge av kontakt med tredjepart": [
-            "Truende atferd/trussel",
-            "Trussel om selvskading/ selvdrap",
-            "Verbal utskjelling",
-            "Sjikane/trakasering",
-            "Emosjonell/relasjonell belastning",
-            "Uønsket kontakt, adferd eller kommunikasjon",
-            "Fysisk angrep på person",
-            "Brudd på utestengelsesvedtak",
-            "Hatytringer",
+        "Personopplysninger på avveie": [
+            "Brev er sendt til feil mottakere",
+            "Brev er sendt til feil arbeidsgiver",
+            "Opplysninger som følger med i brev til annen bruker",
+            "E-post og SMS sendt til feil mottager",
+            "Opplysninger som er registrert på feil bruker",
+            "Dokumenter er skannet inn på feil bruker",
+            "Feil i et IT-system",
+            "Avvik begått av databehandler",
+            "Tap av utstyr, telefoner, bærbar pc",
             "Annet"
-        ],
-        "Organisatoriske og psykososiale forhold": [
-            "Arbeidsbelastning",
-            "Brudd på lov, forskrifter og rutiner",
-            "Mestring",
-            "Mellommenneskelige forhold",
-            "Involvering, medvirkning og medbestemmelse",
-            "Informasjon og opplæring",
-            "Organisering og tilrettelegging av arbeidet",
-            "Manglende risikovurdering",
-            "Konflikter, mobbing og trakassering",
-            "Annet"
-        ],
-        "Fysiske arbeidsmiljøforhold": [
-            "Inneklima (temperatur, lys, støv)",
-            "Ergonomiske forhold ved eller på arbeidsplassen",
-            "Støy",
-            "Annet"
-        ],
-        "Ytre miljø/forurensing": [
-            "Skadelig utslipp til miljø",
-            "Annet"
-            
         ]
     },
     "pages": [
         {
             "key": 1,
-            "title": "Er du statlig eller kommunalt ansatt?",
+            "title": "Gjelder det en statlig eller kommunal tjeneste?",
             "type": "Input",
             "fields": [
                 {
@@ -48,7 +25,7 @@
                     "type": "Choice",
                     "options": [
                         "Statlig",
-                        "Kommunalt"
+                        "Kommunal"
                     ],
                     "required": "true"
                 }
@@ -75,19 +52,15 @@
         },
         {
             "key": 2,
-            "type": "Input",
             "title": "Hvilken kategori er denne hendelsen innenfor?",
+            "type": "Input",
             "fields": [
                 {
                     "key": "category",
                     "type": "ChoiceGroup",
                     "options": [
-                        "Vold, trusler og trakassering som følge av kontakt med tredjepart",
-                        "Organisatoriske og psykososiale forhold",
-                        "Fysiske arbeidsmiljøforhold",
-                        "Kjemiske og biologiske faktorer",
-                        "Ytre miljø/forurensing",
-                        "Nesten ulykke/ personskade",
+                        "Personopplysninger på avveie",
+                        "Brudd på policy/retningslinje",
                         "Andre uønskede hendelser"
                     ],
                     "required": "true"
@@ -117,7 +90,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.values.category",
+                    "disabled": "!state.valid",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
@@ -130,8 +103,8 @@
         },
         {
             "key": 3,
-            "type": "Input",
             "title": "For å behandle innsendelsen på riktig måte trengs det noe mer detaljer rundt type hendelse:",
+            "type": "Input",
             "fields": [
                 {
                     "key": "categoryDetails",
@@ -202,38 +175,53 @@
                     "required": "state.values.unit === 'Annen enhet'"
                 },
                 {
-                    "key": "location",
-                    "label": "Hvor skjedde hendelsen?",
-                    "type": "Choice",
-                    "options": [
-                        "Telefon",
-                        "Modia/e-post/brev",
-                        "I publikumsmottak",
-                        "Samtalerom",
-                        "Chat",
-                        "Utenfor NAV's lokale/ offentlig sted",
-                        "SMS/Sosiale medier",
-                        "Anonyme tilbakemeldingskanaler",
-                        "Medarbeiders private område",
-                        "Brukers private bopel",
-                        "Annet"
-                    ],
-                    "hidden": "state.values.category !== 'Vold, trusler og trakassering som følge av kontakt med tredjepart'",
-                    "required": "state.values.category === 'Vold, trusler og trakassering som følge av kontakt med tredjepart'"
-                },
-                {
-                    "key": "locationDetails",
-                    "label": "Du valgte \"Annet\". Vennligst spesifiser: ",
-                    "type": "Text",
-                    "multiline": "true",
-                    "hidden": "!(state.values.location === 'Annet')",
-                    "required": "state.values.location === 'Annet'"
-                },
-                {
                     "key": "timeOfIncident",
                     "label": "Når skjedde hendelsen?",
                     "type": "Date",
                     "required": "true"
+                },
+                {
+                    "key": "timeOfDiscovery",
+                    "label": "Når ble hendelsen oppdaget?",
+                    "type": "Date",
+                    "required": "true"
+                },
+                {
+                    "key": "incidentDuration",
+                    "label": "Hvor lenge varte hendelsen?",
+                    "type": "Date",
+                    "hidden": "state.values.category !== 'Personopplysninger på avveie'",
+                    "required": "state.values.category === 'Personopplysninger på avveie'"
+                },
+                {
+                    "key": "affectedPeople",
+                    "label": "Hvem er de berørte? (oppgi navn og personnummer, ett per linje)",
+                    "type": "Text",
+                    "multiline": "true",
+                    "hidden": "state.values.category !== 'Personopplysninger på avveie'",
+                    "required": "state.values.category === 'Personopplysninger på avveie'"
+                },
+                {
+                    "key": "externalReporter",
+                    "label": "Ved ekstern innmelding, oppgi navn og telefonnummer:",
+                    "type": "Text",
+                    "multiline": "true",
+                    "hidden": "state.values.category !== 'Personopplysninger på avveie'"
+                },
+                {
+                    "key": "affectedPeopleCount",
+                    "label": "Antall berørte:",
+                    "type": "Number",
+                    "hidden": "state.values.category !== 'Personopplysninger på avveie'",
+                    "required": "state.values.category === 'Personopplysninger på avveie'"
+                },
+                {
+                    "key": "informationType",
+                    "label": "Hvilken type personopplysninger er berørt?",
+                    "type": "Text",
+                    "multiline": "true",
+                    "hidden": "state.values.category !== 'Personopplysninger på avveie'",
+                    "required": "state.values.category === 'Personopplysninger på avveie'"
                 },
                 {
                     "key": "incidentDescription",
@@ -255,31 +243,6 @@
                     "type": "Text",
                     "multiline": "true",
                     "required": "true"
-                },
-                {
-                    "key": "notifiedOfIncident",
-                    "label": "Har du varslet noen andre om denne hendelsen?",
-                    "type": "Choice",
-                    "options": [
-                        "Verneombud",
-                        "Politi",
-                        "AMK",
-                        "Brannvesen",
-                        "Andre offentlige samarbeids- partnere",
-                        "Partnerskap",
-                        "Andre virksomheter i bygget",
-                        "Kommunikasjonsansvarlige",
-                        "Annet"
-                    ],
-                    "required": "true"
-                },
-                {
-                    "key": "othersNotifiedDescription",
-                    "label": "Du valgte \"annet\". Vennligst spesifiser:",
-                    "type": "Text",
-                    "multiline": "true",
-                    "hidden": "!(state.values.notifiedOfIncident === 'Annet')",
-                    "required": "state.values.notifiedOfIncident === 'Annet'"
                 }
             ],
             "actions": [

@@ -5,6 +5,7 @@
     width: fit-content;
 
     header {
+        @include ms-font-xl;
         margin: 15px 0;
     }
 

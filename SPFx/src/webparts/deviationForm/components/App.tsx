@@ -16,25 +16,27 @@ const App = ({ title }: IDeviationAppProps) => {
 
   return (
     <div className={styles.wrapper}>
-      {selectedForm ?
-        <header>
-          <Link onClick={() => setSelectedForm(null)}>{title}</Link>
-          {' > '}
-          {selectedForm.title}
-        </header>
-        : <header>{title}</header>}
-      {!selectedForm ?
-        <>
-          <header>{strings.SelectFormText}</header>
-          <div className={styles.forms}>
-            {context.forms.map((form) => (
-              <DefaultButton text={form.title} onClick={() => setSelectedForm(form)} />
-            ))}
-          </div>
-        </>
-        :
-        <DeviationForm form={selectedForm} />
-      }
+      <div className={styles.content}>
+        {selectedForm ?
+          <header>
+            <Link onClick={() => setSelectedForm(null)}>{title}</Link>
+            {' > '}
+            {selectedForm.title}
+          </header>
+          : <header>{title}</header>}
+        {!selectedForm ?
+          <>
+            <header>{strings.SelectFormText}</header>
+            <div className={styles.forms}>
+              {context.forms.map((form) => (
+                <DefaultButton text={form.title} onClick={() => setSelectedForm(form)} />
+              ))}
+            </div>
+          </>
+          :
+          <DeviationForm form={selectedForm} />
+        }
+      </div>
     </div>
   );
 };

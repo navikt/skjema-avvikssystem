@@ -30,8 +30,6 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
         prevPageRef.current = state.currentPageNumber;
     }, [state.values, state.currentPageNumber]);
 
-    console.log(state.currentPageNumber);
-
     const renderField = (field: IDeviationFormField) => {
         let options;
 
@@ -86,6 +84,16 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
                             isRequired={eval(field.required)}
                         />
                     );
+                case 'Number':
+                    return (
+                        <TextField
+                            type='number'
+                            label={field.label}
+                            value={state.values[field.key]}
+                            required={eval(field.required)}
+                            onChange={(_, value) => setState({ ...state, values: { ...state.values, [field.key]: value } })}
+                        />
+                    );
 
                 default:
                     break;
@@ -95,19 +103,22 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
 
     const renderSummary = (values: any) => {
         const fields = flatten(form.pages.filter(p => p.type === DeviationFormPageType.Input).map(p => p.fields.filter(f => !eval(f.hidden)).map(f => ({ field: f.label || p.title, value: values[f.key] }))));
-        console.log(fields);
         const getValue = (value: any) => {
             if (value instanceof Date) return value.toLocaleDateString();
             return value;
         };
         return (
             <div className={styles.summaryFields}>
-                {fields.map(f => (
-                    <div className={styles.summaryField}>
-                        <div className={styles.summaryFieldLabel}>{f.field}</div>
-                        <div className={styles.summaryFieldValue}>{getValue(f.value)}</div>
-                    </div>
-                ))}
+                {fields.map(f => {
+                    if (f.value) {
+                        return (
+                            <div className={styles.summaryField}>
+                                <div className={styles.summaryFieldLabel}>{f.field}</div>
+                                <div className={styles.summaryFieldValue}>{getValue(f.value)}</div>
+                            </div>
+                        );
+                    }
+                })}
             </div>
         );
     };
