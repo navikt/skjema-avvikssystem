@@ -183,7 +183,7 @@
                 {
                     "key": "timeOfDiscovery",
                     "label": "Når ble hendelsen oppdaget?",
-                    "type": "Date",
+                    "type": "DateTime",
                     "required": "true"
                 },
                 {

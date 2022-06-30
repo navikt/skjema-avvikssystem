@@ -1,6 +1,6 @@
 import { PrimaryButton } from '@microsoft/office-ui-fabric-react-bundle';
-import { flatten } from '@microsoft/sp-lodash-subset';
-import { ChoiceGroup, DatePicker, DefaultButton, Dropdown, getDatePartHashValue, TextField } from 'office-ui-fabric-react';
+import { flatten, range, padStart } from 'lodash';
+import { ChoiceGroup, ComboBox, DatePicker, DefaultButton, Dropdown, TextField } from 'office-ui-fabric-react';
 import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import ActionsHandler from '../../../../config/ActionsHandler';
@@ -13,8 +13,26 @@ export interface IDeviationFormProps {
 
 const DeviationForm = ({ form }: IDeviationFormProps) => {
     const [state, setState] = useState({ currentPageNumber: 1, values: {}, valid: false });
+    const [fieldTypes, setFieldTypes] = useState<Map<string, string>>(new Map<string, string>());
     const prevPageRef = useRef(state.currentPageNumber);
     const actionsHandler = new ActionsHandler(setState);
+
+    const hours = range(0, 24).map(key => ({ key, text: `${padStart(key.toString(), 2, '0')}` }));
+    const minutes = range(0, 60).map(key => ({ key, text: `${padStart(key.toString(), 2, '0')}` }));
+
+    useEffect(() => {
+        const types = fieldTypes;
+        form.pages.forEach(page => {
+            if (page.type === DeviationFormPageType.Input) {
+                page.fields.forEach(field => {
+                    if (!types.has(field.key)) {
+                        types.set(field.key, field.type);
+                    }
+                });
+            }
+        });
+        setFieldTypes(types);
+    }, []);
 
     useEffect(() => {
         const [page] = form.pages.filter(p => p.key === state.currentPageNumber);
@@ -84,6 +102,48 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
                             isRequired={eval(field.required)}
                         />
                     );
+                case 'DateTime':
+                    return (
+                        <div className={styles.dateTimeField}>
+                            <DatePicker
+                                label={field.label}
+                                value={state.values[field.key]}
+                                onSelectDate={date => setState({ ...state, values: { ...state.values, [field.key]: date } })}
+                                isRequired={eval(field.required)}
+                            />
+                            <div className={styles.timePicker}>
+                                <div className={styles.timeControls}>
+                                    <span>Kl.</span>
+                                    <ComboBox
+                                        className={styles.input}
+                                        options={hours}
+                                        autoComplete="on"
+                                        calloutProps={{ styles: { root: { maxHeight: '200px', overflow: 'auto', width: '80px' } } }}
+                                        selectedKey={new Date(state.values[field.key]).getHours()}
+                                        disabled={!state.values[field.key]}
+                                        onChange={(_, o) => {
+                                            const date: Date = state.values[field.key];
+                                            date.setHours(o.key as number);
+                                            setState({ ...state, values: { ...state.values, [field.key]: date } });
+                                        }}
+                                    />
+                                    <span> : </span>
+                                    <ComboBox
+                                        className={styles.input}
+                                        options={minutes}
+                                        autoComplete="on"
+                                        selectedKey={new Date(state.values[field.key]).getMinutes()}
+                                        disabled={!state.values[field.key]}
+                                        onChange={(_, o) => {
+                                            const date: Date = state.values[field.key];
+                                            date.setMinutes(o.key as number);
+                                            setState({ ...state, values: { ...state.values, [field.key]: date } });
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    );
                 case 'Number':
                     return (
                         <TextField
@@ -102,10 +162,14 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
     };
 
     const renderSummary = (values: any) => {
-        const fields = flatten(form.pages.filter(p => p.type === DeviationFormPageType.Input).map(p => p.fields.filter(f => !eval(f.hidden)).map(f => ({ field: f.label || p.title, value: values[f.key] }))));
-        const getValue = (value: any) => {
-            if (value instanceof Date) return value.toLocaleDateString();
-            return value;
+        const fields = flatten(form.pages.filter(p => p.type === DeviationFormPageType.Input).map(p => p.fields.filter(f => !eval(f.hidden)).map(f => ({ fieldName: f.key, field: f.label || p.title, value: values[f.key] }))));
+        const getValue = (field: any) => {
+            if (field.value instanceof Date) {
+                if (fieldTypes.get(field.fieldName) === 'DateTime') {
+                    return `${field.value.toLocaleDateString()} Kl. ${field.value.toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })}`;
+                } else return field.value.toLocaleDateString();
+            }
+            return field.value;
         };
         return (
             <div className={styles.summaryFields}>
@@ -114,7 +178,7 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
                         return (
                             <div className={styles.summaryField}>
                                 <div className={styles.summaryFieldLabel}>{f.field}</div>
-                                <div className={styles.summaryFieldValue}>{getValue(f.value)}</div>
+                                <div className={styles.summaryFieldValue}>{getValue(f)}</div>
                             </div>
                         );
                     }

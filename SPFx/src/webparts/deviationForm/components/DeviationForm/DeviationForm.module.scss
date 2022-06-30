@@ -13,6 +13,35 @@
         margin: 15px 0;
     }
 
+    .dateTimeField {
+        display: flex;
+        flex-direction: row;
+
+        .timePicker {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+
+            .timeControls {
+                display: flex;
+                flex-direction: row;
+
+                span {
+                    @include ms-font-l;
+                    font-weight: 400;
+                    margin: 5px 0 5px 15px;
+                }
+
+                .input {
+                    width: 80px;
+                    margin-left: 15px;
+                    height: 32px;
+                }
+            }
+        }
+    }
+
+
     .actions {
         display: flex;
         justify-content: space-between;
