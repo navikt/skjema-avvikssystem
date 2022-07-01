@@ -189,7 +189,7 @@
                 {
                     "key": "incidentDuration",
                     "label": "Hvor lenge varte hendelsen?",
-                    "type": "Date",
+                    "type": "TimeSpan",
                     "hidden": "state.values.category !== 'Personopplysninger på avveie'",
                     "required": "state.values.category === 'Personopplysninger på avveie'"
                 },

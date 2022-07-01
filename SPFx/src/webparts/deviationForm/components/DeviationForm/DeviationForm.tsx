@@ -5,6 +5,7 @@ import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import ActionsHandler from '../../../../config/ActionsHandler';
 import { IDeviationForm, IDeviationFormAction, IDeviationFormField, DeviationFormPageType, DeviationActionType, DeviationActionIconPosition } from '../../types';
+import TimeSpanField from '../TimeSpanField/TimeSpanField';
 import styles from './DeviationForm.module.scss';
 
 export interface IDeviationFormProps {
@@ -144,6 +145,8 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
                             </div>
                         </div>
                     );
+                case 'TimeSpan':
+                    return <TimeSpanField label={field.label} onChange={(value) => setState({ ...state, values: { ...state.values, [field.key]: value } })} />;
                 case 'Number':
                     return (
                         <TextField

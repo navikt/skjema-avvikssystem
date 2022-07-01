@@ -1,0 +1,29 @@
+@import '~office-ui-fabric-react/dist/sass/References.scss';
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+
+    .label {
+        margin: 5px 0;
+
+        span {
+            @include ms-font-m;
+            font-weight: 600;
+        }
+    }
+
+    .inputs {
+        display: flex;
+        flex-direction: row;
+        
+        span {
+            margin: 5px 15px 5px 0;
+        }
+        .input {
+            margin-right: 15px;
+
+        }
+    }
+}
