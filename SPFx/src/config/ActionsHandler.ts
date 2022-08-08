@@ -17,7 +17,18 @@ export default class ActionsHandler {
         this._setState({ ...state, [stateVariable]: currentPageNumber - 1 });
     }
 
-    private Submit({ values }) {
+    private async Submit({ values }) {
         console.log(values);
+        const body = JSON.stringify(values);
+        const response = await fetch('http://localhost:7071/api/avviksskjema', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body,
+        });
+        const result = await response.json();
+        console.log(result);
+
     }
 }
