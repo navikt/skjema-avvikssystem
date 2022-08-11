@@ -2,6 +2,7 @@ import { IIconProps } from "office-ui-fabric-react";
 
 export enum DeviationFormPageType {
     Input = "Input",
+    Info = "Info",
     Summary = "Summary"
 }
 
@@ -49,6 +50,8 @@ export interface IDeviationFormPage {
     title: string;
     type: DeviationFormPageType;
     fields: IDeviationFormField[];
+    content: string;
+    format: string[];
     actions: IDeviationFormAction[];
 }
 

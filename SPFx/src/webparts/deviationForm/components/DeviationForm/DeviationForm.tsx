@@ -1,9 +1,10 @@
 import { PrimaryButton } from '@microsoft/office-ui-fabric-react-bundle';
 import { flatten, range, padStart } from 'lodash';
-import { ChoiceGroup, ComboBox, DatePicker, DefaultButton, Dropdown, TextField } from 'office-ui-fabric-react';
+import { ChoiceGroup, ComboBox, DatePicker, DefaultButton, Dropdown, MessageBar, MessageBarType, TextField } from 'office-ui-fabric-react';
 import * as React from 'react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import ActionsHandler from '../../../../config/ActionsHandler';
+import { DeviationFormContext } from '../../DeviationFormContext';
 import { IDeviationForm, IDeviationFormAction, IDeviationFormField, DeviationFormPageType, DeviationActionType, DeviationActionIconPosition } from '../../types';
 import TimeSpanField from '../TimeSpanField/TimeSpanField';
 import styles from './DeviationForm.module.scss';
@@ -13,7 +14,8 @@ export interface IDeviationFormProps {
 }
 
 const DeviationForm = ({ form }: IDeviationFormProps) => {
-    const [state, setState] = useState({ currentPageNumber: 1, values: {}, valid: false });
+    const context = useContext(DeviationFormContext);
+    const [state, setState] = useState({ currentPageNumber: 1, values: { stateOrMunicipality: context.organization || null }, valid: false });
     const [fieldTypes, setFieldTypes] = useState<Map<string, string>>(new Map<string, string>());
     const prevPageRef = useRef(state.currentPageNumber);
     const actionsHandler = new ActionsHandler(setState);
@@ -211,6 +213,25 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
             return <PrimaryButton iconProps={action.iconProps} text={action.label} disabled={eval(action.disabled)} onClick={() => actionsHandler.invoke(action.invoke.functionName, params)} />;
     };
 
+    const renderContent = (content: string, format: string[]): JSX.Element => {
+        const formatString = (string: string, ...args: string[]) => {
+            return string.replace(/{(\d+)}/g, (match, number) => {
+                return typeof args[number] != 'undefined'
+                    ? args[number]
+                    : match;
+            });
+        };
+        if (!format || format.length === 0) return <div dangerouslySetInnerHTML={{ __html: content }} />;
+        try {
+            const resolvedVariables = format.map(f => f.indexOf('state.') !== -1 || f.indexOf('context.') !== -1 ? eval(f) : f);
+            if (resolvedVariables.indexOf(undefined) !== -1) throw new Error('Klarte ikke hente nødvendig data.');
+            const formattedContent = formatString(content, ...resolvedVariables);
+            return <div dangerouslySetInnerHTML={{ __html: formattedContent }} />;
+        } catch (error) {
+            return <MessageBar messageBarType={MessageBarType.error}>{error.message}</MessageBar>;
+        }
+    };
+
     return (
         <div>
             {form.pages.filter(page => page.key === state.currentPageNumber)
@@ -219,6 +240,9 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
                         <header>{page.title}</header>
                         {page.type === DeviationFormPageType.Input &&
                             page.fields?.map(field => renderField(field))
+                        }
+                        {page.type === DeviationFormPageType.Info &&
+                            renderContent(page.content, page.format)
                         }
                         {page.type === DeviationFormPageType.Summary &&
                             renderSummary(state.values)

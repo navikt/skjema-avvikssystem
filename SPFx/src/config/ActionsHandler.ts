@@ -19,7 +19,7 @@ export default class ActionsHandler {
 
     private async Submit({ values }) {
         console.log(values);
-        const body = JSON.stringify(values);
+/*         const body = JSON.stringify(values);
         const response = await fetch('http://localhost:7071/api/avviksskjema', {
             method: 'POST',
             headers: {
@@ -28,7 +28,6 @@ export default class ActionsHandler {
             body,
         });
         const result = await response.json();
-        console.log(result);
-
+        console.log(result); */
     }
 }

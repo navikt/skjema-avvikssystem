@@ -41,18 +41,9 @@
         {
             "key": 1,
             "title": "Er du statlig eller kommunalt ansatt?",
-            "type": "Input",
-            "fields": [
-                {
-                    "key": "stateOrMunicipality",
-                    "type": "Choice",
-                    "options": [
-                        "Statlig",
-                        "Kommunalt"
-                    ],
-                    "required": "true"
-                }
-            ],
+            "type": "Info",
+            "content": "Du er registrert som <strong>{0}</strong> ansatt. Stemmer dette med din stilling?",
+            "format": ["context.organization"],
             "actions": [
                 {
                     "key": "next",

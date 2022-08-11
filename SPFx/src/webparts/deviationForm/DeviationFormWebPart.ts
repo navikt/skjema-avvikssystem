@@ -12,16 +12,19 @@ import App from './components/App';
 import config from '../../config/config';
 import { DeviationFormContext, IDeviationFormContext } from './DeviationFormContext';
 import { IDeviationForm } from './types';
+import { AadHttpClient } from '@microsoft/sp-http';
 
 export interface IDeviationFormWebPartProps {
   webpartTitle: string;
 }
 
 export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviationFormWebPartProps> {
+  private organization: string;
 
   public render(): void {
     const value: IDeviationFormContext = {
-      forms: config as IDeviationForm[]
+      forms: config as IDeviationForm[],
+      organization: this.organization
     };
 
     const element: React.ReactElement<{}> = (
@@ -33,6 +36,26 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
     );
 
     ReactDom.render(element, this.domElement);
+  }
+
+  protected async onInit(): Promise<void> {
+    await super.onInit();
+    const client: AadHttpClient = await this.context.aadHttpClientFactory.getClient('https://graph.microsoft.com');
+    const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName', AadHttpClient.configurations.v1);
+    const user = await res.json();
+    switch (user.companyName) {
+      case 'NAV Kommunal':
+        this.organization = 'Kommunal';
+        break;
+      case 'NAV Statlig':
+        this.organization = 'Statlig';
+        break;
+      case 'Ikke NAV':
+        this.organization = 'Ekstern';
+        break;
+      default:
+        break;
+    }
   }
 
   protected onDispose(): void {
