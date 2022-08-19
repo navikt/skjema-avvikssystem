@@ -16,6 +16,11 @@ export enum DeviationActionIconPosition {
     Right = "right"
 }
 
+export enum DescriptionType {
+    Text = "text",
+    HTML = "html"
+}
+
 export interface IDeviationFormConditionalOptions {
     [key: string]: string[];
 }
@@ -55,8 +60,14 @@ export interface IDeviationFormPage {
     actions: IDeviationFormAction[];
 }
 
+export interface IDeviationFormDescription {
+    type: DescriptionType;
+    content: string;
+}
+
 export interface IDeviationForm {
     title: string;
+    description: IDeviationFormDescription;
     pages: IDeviationFormPage[];
     conditionalOptions?: IDeviationFormConditionalOptions;
 }

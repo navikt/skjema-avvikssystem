@@ -36,6 +36,10 @@
             "Ulovlig overvåking/kontroll av ansatte"
         ]
     },
+    "description": {
+        "type": "html",
+        "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Behandlingsgrunnlag</li> <li>Registrertes rettigheter</li> <li>Databehandleravtaler</li> <li>Overføring til tredjeland</li> <li>Lagring/sletting</li> <li>Manglende oversikter, vurderinger og dokumentasjon</li> <li>Bruk av bilder,lyd- og videoopptak</li> <li>Overvåking/kontroll av ansatte</li> <li>Andre uønskede hendelser</li> </ul> </div>"
+    },
     "pages": [
         {
             "key": 1,

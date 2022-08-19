@@ -37,6 +37,10 @@
             
         ]
     },
+    "description": {
+        "type": "html",
+        "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Vold, trusler og trakassering som følge av kontakt med tredjepart</li> <li>Organisatoriske og psykososiale forhold</li> <li>Fysiske arbeidsmiljøforhold</li> <li>Kjemiske og biologiske faktorer</li> <li>Ytre miljø/forurensing</li> <li>Nesten ulykke/ personskade</li> <li>Andre uønskede hendelser</li> </ul> </div>"
+    },
     "pages": [
         {
             "key": 1,
