@@ -1,6 +1,6 @@
 import { PrimaryButton } from '@microsoft/office-ui-fabric-react-bundle';
 import { flatten, range, padStart } from 'lodash';
-import { ChoiceGroup, ComboBox, DatePicker, DefaultButton, Dropdown, MessageBar, MessageBarType, TextField } from 'office-ui-fabric-react';
+import { ChoiceGroup, ComboBox, DatePicker, DefaultButton, Dropdown, Icon, IconButton, mergeStyles, MessageBar, MessageBarType, TextField, TooltipHost } from 'office-ui-fabric-react';
 import * as React from 'react';
 import { useState, useEffect, useRef, useContext } from 'react';
 import ActionsHandler from '../../../../config/ActionsHandler';
@@ -52,7 +52,7 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
     }, [state.values, state.currentPageNumber]);
 
     const renderField = (field: IDeviationFormField) => {
-        let options;
+        let options: any[];
 
         if (!eval(field.hidden)) {
             switch (field.type) {
@@ -60,6 +60,7 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
                     if (typeof field.options === 'string') {
                         options = eval(field.options).map(o => ({ key: o, text: o }));
                     } else options = field.options.map(o => ({ key: o, text: o }));
+
                     return (
                         <div className={styles.field}>
                             <Dropdown
@@ -75,9 +76,31 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
                     if (typeof field.options === 'string') {
                         options = eval(field.options).map(o => ({ key: o, text: o }));
                     } else options = field.options.map(o => ({ key: o, text: o }));
+                    if (field.choiceInfoTexts) {
+                        field.choiceInfoTexts.forEach((choiceText, i) => {
+                            const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
+                            const [replaceOption] = options.filter(o => o.key === choiceText.key);
+                            const option = {
+                                key: choiceText.key,
+                                text: choiceText.key,
+                                onRenderField: (props, render) => {
+                                    return (
+                                        <div className={optionRootClass}>
+                                            {render!(props)}
+                                            <TooltipHost content={choiceText.text} id={`${field.key}-choice-tooltip-${i}`}>
+                                                <IconButton styles={{ rootHovered: { background: 'none' }, rootPressed: { background: 'none' } }} iconProps={{ iconName: 'Info' }} />
+                                            </TooltipHost>
+                                        </div>
+                                    );
+                                }
+                            };
+                            options.splice(options.indexOf(replaceOption), 1, option);
+                        });
+                    }
                     return (
                         <div className={styles.field}>
                             <ChoiceGroup
+                                id='choiceGroup'
                                 label={field.label}
                                 selectedKey={state.values[field.key]}
                                 required={eval(field.required)}
@@ -90,6 +113,8 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
                     return (
                         <TextField
                             label={field.label}
+                            description={field.description}
+                            styles={{ description: { fontSize: '14px' } }}
                             value={state.values[field.key]}
                             required={eval(field.required)}
                             onChange={(_, value) => setState({ ...state, values: { ...state.values, [field.key]: value } })}

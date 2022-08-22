@@ -40,11 +40,17 @@ export interface IDeviationFormAction {
     disabled?: string;
 }
 
+export interface IChoiceInfoText {
+    key: string;
+    text: string;
+}
 export interface IDeviationFormField {
     key: string;
     type: string;
     label?: string;
+    description?: string;
     options?: string[] | string;
+    choiceInfoTexts?: IChoiceInfoText[];
     required?: string;
     multiline?: string;
     hidden?: string;

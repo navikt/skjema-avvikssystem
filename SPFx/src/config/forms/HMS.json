@@ -34,7 +34,6 @@
         "Ytre miljø/forurensing": [
             "Skadelig utslipp til miljø",
             "Annet"
-            
         ]
     },
     "description": {
@@ -47,7 +46,9 @@
             "title": "Er du statlig eller kommunalt ansatt?",
             "type": "Info",
             "content": "Du er registrert som <strong>{0}</strong> ansatt. Stemmer dette med din stilling?",
-            "format": ["context.organization"],
+            "format": [
+                "context.organization"
+            ],
             "actions": [
                 {
                     "key": "next",
@@ -84,6 +85,16 @@
                         "Ytre miljø/forurensing",
                         "Nesten ulykke/ personskade",
                         "Andre uønskede hendelser"
+                    ],
+                    "choiceInfoTexts": [
+                        {
+                            "key": "Organisatoriske og psykososiale forhold",
+                            "text": "Avvik eller uønskede hendelser som handler om arbeidets organisering, arbeidsinnhold og de sosiale relasjonene på arbeidsplassen og som påvirker de ansattes jobbtilfredshet, jobbengasjement og arbeidshelse (Stami)"
+                        },
+                        {
+                            "key": "Fysiske arbeidsmiljøforhold",
+                            "text": "Inneklima, støy, ergonomiske forhold eller fysiske eksponeringer som kan gi helseskade"
+                        }
                     ],
                     "required": "true"
                 }
@@ -180,7 +191,7 @@
                     "label": "Hvilken enhet gjelder hendelsen/avviket?",
                     "type": "ChoiceGroup",
                     "options": [
-                        "Min hovedenhet",
+                        "Min enhet",
                         "Annen enhet"
                     ],
                     "required": "true"
@@ -232,7 +243,8 @@
                 },
                 {
                     "key": "incidentDescription",
-                    "label": "Hva har skjedd? Beskriv hendelsen, mulig årsak og eventuelle konsekvenser",
+                    "label": "Hva har skjedd?",
+                    "description": "Beskriv hendelsen, mulig årsak og eventuelle konsekvenser",
                     "type": "Text",
                     "multiline": "true",
                     "required": "true"

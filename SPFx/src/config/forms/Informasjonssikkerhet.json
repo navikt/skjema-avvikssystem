@@ -162,7 +162,7 @@
                     "label": "Hvilken enhet gjelder hendelsen/avviket?",
                     "type": "ChoiceGroup",
                     "options": [
-                        "Min hovedenhet",
+                        "Min enhet",
                         "Annen enhet"
                     ],
                     "required": "true"
