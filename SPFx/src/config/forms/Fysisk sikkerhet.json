@@ -111,6 +111,8 @@
                     "label": "Har du varslet noen andre om denne hendelsen?",
                     "type": "Choice",
                     "options": [
+                        "Ingen",
+                        "Leder",
                         "Andre virksomheter i bygget",
                         "Andre offentlige samarbeids-partnere",
                         "Politi",

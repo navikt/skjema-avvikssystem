@@ -1,4 +1,4 @@
-import { IIconProps } from "office-ui-fabric-react";
+import { ICalendarStrings, IIconProps } from "office-ui-fabric-react";
 
 export enum DeviationFormPageType {
     Input = "Input",
@@ -50,10 +50,15 @@ export interface IDeviationFormField {
     label?: string;
     description?: string;
     options?: string[] | string;
+    multiselect?: string;
     choiceInfoTexts?: IChoiceInfoText[];
     required?: string;
+    disabled?: string;
+    minDate?: string;
     multiline?: string;
     hidden?: string;
+    valid?: string;
+    errorMessage?: string;
 }
 
 export interface IDeviationFormPage {
@@ -76,4 +81,8 @@ export interface IDeviationForm {
     description: IDeviationFormDescription;
     pages: IDeviationFormPage[];
     conditionalOptions?: IDeviationFormConditionalOptions;
+}
+export interface IAppConfig {
+    forms: IDeviationForm[];
+    calendarString: ICalendarStrings;
 }

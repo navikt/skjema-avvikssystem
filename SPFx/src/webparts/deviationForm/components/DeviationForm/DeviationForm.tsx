@@ -1,6 +1,6 @@
 import { PrimaryButton } from '@microsoft/office-ui-fabric-react-bundle';
 import { flatten, range, padStart } from 'lodash';
-import { ChoiceGroup, ComboBox, DatePicker, DefaultButton, Dropdown, Icon, IconButton, mergeStyles, MessageBar, MessageBarType, TextField, TooltipHost } from 'office-ui-fabric-react';
+import { ChoiceGroup, ComboBox, DatePicker, DayOfWeek, DefaultButton, Dropdown, IconButton, mergeStyles, MessageBar, MessageBarType, TextField, TooltipHost } from 'office-ui-fabric-react';
 import * as React from 'react';
 import { useState, useEffect, useRef, useContext } from 'react';
 import ActionsHandler from '../../../../config/ActionsHandler';
@@ -60,15 +60,26 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
                     if (typeof field.options === 'string') {
                         options = eval(field.options).map(o => ({ key: o, text: o }));
                     } else options = field.options.map(o => ({ key: o, text: o }));
-
+                    const multiSelect = eval(field.multiselect) || false;
                     return (
                         <div className={styles.field}>
                             <Dropdown
                                 label={field.label}
+                                selectedKeys={state.values[field.key]}
                                 selectedKey={state.values[field.key]}
                                 required={eval(field.required)}
                                 options={options}
-                                onChange={(_, option) => setState({ ...state, values: { ...state.values, [field.key]: option.text } })}
+                                multiSelect={multiSelect}
+                                onChange={(_, option) => {
+                                    let values = [];
+                                    if (multiSelect) {
+                                        const vals = state.values[field.key] || [];
+                                        if (option.selected) {
+                                            values = [...vals, option.text];
+                                        } else values = vals.filter(v => v !== option.text);
+                                    }
+                                    setState({ ...state, values: { ...state.values, [field.key]: multiSelect ? values : option.text } });
+                                }}
                             />
                         </div>
                     );
@@ -124,6 +135,12 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
                 case 'Date':
                     return (
                         <DatePicker
+                            strings={context.config.calendarString}
+                            firstDayOfWeek={DayOfWeek.Monday}
+                            formatDate={date => date.toLocaleDateString('nb-NO')}
+                            maxDate={new Date()}
+                            minDate={eval(field.minDate) || null}
+                            disabled={eval(field.disabled)}
                             label={field.label}
                             value={state.values[field.key]}
                             onSelectDate={date => setState({ ...state, values: { ...state.values, [field.key]: date } })}
@@ -132,44 +149,55 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
                     );
                 case 'DateTime':
                     return (
-                        <div className={styles.dateTimeField}>
-                            <DatePicker
-                                label={field.label}
-                                value={state.values[field.key]}
-                                onSelectDate={date => setState({ ...state, values: { ...state.values, [field.key]: date } })}
-                                isRequired={eval(field.required)}
-                            />
-                            <div className={styles.timePicker}>
-                                <div className={styles.timeControls}>
-                                    <span>Kl.</span>
-                                    <ComboBox
-                                        className={styles.input}
-                                        options={hours}
-                                        autoComplete="on"
-                                        calloutProps={{ styles: { root: { maxHeight: '200px', overflow: 'auto', width: '80px' } } }}
-                                        selectedKey={new Date(state.values[field.key]).getHours()}
-                                        disabled={!state.values[field.key]}
-                                        onChange={(_, o) => {
-                                            const date: Date = state.values[field.key];
-                                            date.setHours(o.key as number);
-                                            setState({ ...state, values: { ...state.values, [field.key]: date } });
-                                        }}
-                                    />
-                                    <span> : </span>
-                                    <ComboBox
-                                        className={styles.input}
-                                        options={minutes}
-                                        autoComplete="on"
-                                        selectedKey={new Date(state.values[field.key]).getMinutes()}
-                                        disabled={!state.values[field.key]}
-                                        onChange={(_, o) => {
-                                            const date: Date = state.values[field.key];
-                                            date.setMinutes(o.key as number);
-                                            setState({ ...state, values: { ...state.values, [field.key]: date } });
-                                        }}
-                                    />
+                        <div className={styles.dateTimeWrapper}>
+                            <div className={styles.dateTimeField}>
+                                <DatePicker
+                                    strings={context.config.calendarString}
+                                    firstDayOfWeek={DayOfWeek.Monday}
+                                    formatDate={date => date.toLocaleDateString('nb-NO')}
+                                    maxDate={new Date()}
+                                    minDate={eval(field.minDate) || null}
+                                    disabled={eval(field.disabled)}
+                                    label={field.label}
+                                    value={state.values[field.key]}
+                                    onSelectDate={date => setState({ ...state, values: { ...state.values, [field.key]: date } })}
+                                    isRequired={eval(field.required)}
+                                />
+                                <div className={styles.timePicker}>
+                                    <div className={styles.timeControls}>
+                                        <span>Kl.</span>
+                                        <ComboBox
+                                            className={styles.input}
+                                            options={hours}
+                                            autoComplete="on"
+                                            calloutProps={{ styles: { root: { maxHeight: '200px', overflow: 'auto', width: '80px' } } }}
+                                            selectedKey={new Date(state.values[field.key]).getHours()}
+                                            disabled={!state.values[field.key]}
+                                            onChange={(_, o) => {
+                                                const date: Date = state.values[field.key];
+                                                date.setHours(o.key as number);
+                                                setState({ ...state, values: { ...state.values, [field.key]: date } });
+                                            }}
+                                        />
+                                        <span> : </span>
+                                        <ComboBox
+                                            className={styles.input}
+                                            options={minutes}
+                                            autoComplete="on"
+                                            calloutProps={{ styles: { root: { maxHeight: '200px', overflow: 'auto', width: '80px' } } }}
+                                            selectedKey={new Date(state.values[field.key]).getMinutes()}
+                                            disabled={!state.values[field.key]}
+                                            onChange={(_, o) => {
+                                                const date: Date = state.values[field.key];
+                                                date.setMinutes(o.key as number);
+                                                setState({ ...state, values: { ...state.values, [field.key]: date } });
+                                            }}
+                                        />
+                                    </div>
                                 </div>
                             </div>
+                            {field.valid !== undefined && state.values[field.key] !== undefined &&
+                                !eval(field.valid) && <MessageBar messageBarType={MessageBarType.error}>{field.errorMessage}</MessageBar>}
                         </div>
                     );
                 case 'TimeSpan':

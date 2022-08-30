@@ -193,7 +193,11 @@
                 {
                     "key": "incidentDuration",
                     "label": "Hvor lenge varte hendelsen?",
-                    "type": "TimeSpan",
+                    "type": "DateTime",
+                    "disabled": "!state.values.timeOfDiscovery",
+                    "minDate": "state.values.timeOfDiscovery",
+                    "valid": "state.values.timeOfDiscovery < state.values.incidentDuration",
+                    "errorMessage": "Slutttidspunktet må være etter starttidspunktet",
                     "hidden": "state.values.category !== 'Personopplysninger på avveie'",
                     "required": "state.values.category === 'Personopplysninger på avveie'"
                 },

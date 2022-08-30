@@ -13,29 +13,34 @@
         margin: 15px 0;
     }
 
-    .dateTimeField {
+    .dateTimeWrapper {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
 
-        .timePicker {
+        .dateTimeField {
             display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
+            flex-direction: row;
 
-            .timeControls {
+            .timePicker {
                 display: flex;
-                flex-direction: row;
+                flex-direction: column;
+                justify-content: flex-end;
 
-                span {
-                    @include ms-font-l;
-                    font-weight: 400;
-                    margin: 5px 0 5px 15px;
-                }
+                .timeControls {
+                    display: flex;
+                    flex-direction: row;
 
-                .input {
-                    width: 80px;
-                    margin-left: 15px;
-                    height: 32px;
+                    span {
+                        @include ms-font-l;
+                        font-weight: 400;
+                        margin: 5px 0 5px 15px;
+                    }
+
+                    .input {
+                        width: 80px;
+                        margin-left: 15px;
+                        height: 32px;
+                    }
                 }
             }
         }

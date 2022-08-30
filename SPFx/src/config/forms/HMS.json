@@ -267,7 +267,10 @@
                     "key": "notifiedOfIncident",
                     "label": "Har du varslet noen andre om denne hendelsen?",
                     "type": "Choice",
+                    "multiselect": "true",
                     "options": [
+                        "Ingen",
+                        "Leder",
                         "Verneombud",
                         "Politi",
                         "AMK",

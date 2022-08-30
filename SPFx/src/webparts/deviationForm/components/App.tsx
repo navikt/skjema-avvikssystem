@@ -31,7 +31,7 @@ const App = ({ title }: IDeviationAppProps) => {
           <>
             <header>{strings.SelectFormText}</header>
             <div className={styles.forms}>
-              {context.forms.map((form, i) => {
+              {context.config.forms.map((form, i) => {
                 const buttonId = `callout-button-${i}`;
                 return (
                   <>

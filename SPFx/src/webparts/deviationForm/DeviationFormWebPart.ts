@@ -11,7 +11,7 @@ import * as strings from 'DeviationFormWebPartStrings';
 import App from './components/App';
 import config from '../../config/config';
 import { DeviationFormContext, IDeviationFormContext } from './DeviationFormContext';
-import { IDeviationForm } from './types';
+import { IAppConfig, IDeviationForm } from './types';
 import { AadHttpClient } from '@microsoft/sp-http';
 
 export interface IDeviationFormWebPartProps {
@@ -23,7 +23,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
 
   public render(): void {
     const value: IDeviationFormContext = {
-      forms: config as IDeviationForm[],
+      config: config as IAppConfig,
       organization: this.organization
     };
 

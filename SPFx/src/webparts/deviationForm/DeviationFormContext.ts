@@ -1,8 +1,8 @@
 import { createContext } from 'react';
-import { IDeviationForm } from './types';
+import { IAppConfig } from './types';
 
 export interface IDeviationFormContext {
-    forms: IDeviationForm[];
+    config: IAppConfig;
     organization: string;
 }
 
