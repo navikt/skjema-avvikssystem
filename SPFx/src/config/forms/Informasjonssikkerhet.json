@@ -203,9 +203,10 @@
                 },
                 {
                     "key": "affectedPeople",
-                    "label": "Hvem er de berørte? (oppgi navn og personnummer, ett per linje)",
+                    "label": "Hvem er de berørte?",
                     "type": "Text",
                     "multiline": "true",
+                    "placeholder": "Oppgi navn og personnummer, ett per linje",
                     "hidden": "state.values.category !== 'Personopplysninger på avveie'",
                     "required": "state.values.category === 'Personopplysninger på avveie'"
                 },
@@ -213,6 +214,7 @@
                     "key": "externalReporter",
                     "label": "Ved ekstern innmelding, oppgi navn og telefonnummer:",
                     "type": "Text",
+                    "placeholder": "Ola Normann, 47101112",
                     "multiline": "true",
                     "hidden": "state.values.category !== 'Personopplysninger på avveie'"
                 },
@@ -233,8 +235,9 @@
                 },
                 {
                     "key": "incidentDescription",
-                    "label": "Hva har skjedd? Beskriv hendelsen, mulig årsak og eventuelle konsekvenser",
+                    "label": "Hva har skjedd?",
                     "type": "Text",
+                    "placeholder": "Beskriv hendelsen, mulig årsak og eventuelle konsekvenser",
                     "multiline": "true",
                     "required": "true"
                 },

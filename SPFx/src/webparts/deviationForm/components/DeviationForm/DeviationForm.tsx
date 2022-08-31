@@ -40,7 +40,7 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
     useEffect(() => {
         const [page] = form.pages.filter(p => p.key === state.currentPageNumber);
         if (page.type === DeviationFormPageType.Input) {
-            const valid = page.fields.filter(f => eval(f.required)).every(f => state.values[f.key]);
+            const valid = page.fields.filter(f => eval(f.required)).every(f => state.values[f.key] && (f.valid !== undefined ? eval(f.valid) : true));
             setState({ ...state, valid });
             if (page.fields.every(f => eval(f.hidden))) {
                 const nextPageNumber = prevPageRef.current < state.currentPageNumber ? state.currentPageNumber + 1 : state.currentPageNumber - 1;
@@ -126,6 +126,7 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
                             label={field.label}
                             description={field.description}
                             styles={{ description: { fontSize: '14px' } }}
+                            placeholder={field.placeholder}
                             value={state.values[field.key]}
                             required={eval(field.required)}
                             onChange={(_, value) => setState({ ...state, values: { ...state.values, [field.key]: value } })}
@@ -197,7 +198,7 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
                                 </div>
                             </div>
                             {field.valid !== undefined && state.values[field.key] !== undefined &&
-                                !eval(field.valid) && <MessageBar messageBarType={MessageBarType.error}>{field.errorMessage}</MessageBar>}
+                                !eval(field.valid) && <MessageBar styles={{ root: { marginTop: '5px' } }} messageBarType={MessageBarType.error}>{field.errorMessage}</MessageBar>}
                         </div>
                     );
                 case 'TimeSpan':

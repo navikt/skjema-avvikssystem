@@ -48,6 +48,7 @@ export interface IDeviationFormField {
     key: string;
     type: string;
     label?: string;
+    placeholder?: string;
     description?: string;
     options?: string[] | string;
     multiselect?: string;

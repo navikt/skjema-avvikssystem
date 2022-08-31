@@ -4,36 +4,53 @@
         "Behandlingsgrunnlag": [
             "Manglende, utilstrekkelig eller feil bruk av behandlingsgrunnlag",
             "Feil bruk av samtykke (ugyldig samtykke)",
-            "Overskuddsinformasjon/innhenting og lagring av flere opplysninger enn nødvendig"
+            "Overskuddsinformasjon/ innhenting og lagring av flere opplysninger enn nødvendig",
+            "Annet"
         ],
         "Registrertes rettigheter": [
-            "Manglende ivaretagelse av registrertes rettigheter (rett til informasjon, innsyn,sletting, retting, særskilte rettigheter ved helautomatisering mm)"
+            "Rett til informasjon",
+            "Rett til informasjon ved automatisering og profilering",
+            "Rett til innsyn",
+            "Rett til retting og sletting",
+            "Rett til begrensning av behandling",
+            "Rett til dataportabilitet",
+            "Rett til å protestere",
+            "Annet"
         ],
         "Databehandleravtaler": [
             "Manglende databehandleravtale",
-            "Databehandler følger ikke avtalens instrukser"
+            "Databehandler følger ikke avtalens instrukser",
+            "Annet"
         ],
         "Overføring til tredjeland": [
-            "Overføring av personopplysninger til tredjeland uten tilstrekkelig rettslig beskyttelse/lovlig overføringsgrunnlag"
+            "Manglende gyldig overføringsgrunnlag",
+            "Manglende tiltak for å sikre tilstrekkelig beskyttelse av personopplysningene",
+            "Brudd på NAV's retningslinjer og prinsipper",
+            "Annet"
         ],
         "Lagring/sletting": [
-            "Ulovlig lagring av personopplysninger"
+            "Det er ikke fastsatt lagringstid",
+            "Det er ikke rutiner for sletting",
+            "Personopplysningene slettes ikke",
+            "Annet"
         ],
         "Manglende oversikter, vurderinger og dokumentasjon": [
             "Behandlingen er ikke registrert i Behandlingskatalogen",
-            "Ikke gjennnomført personvern-konsekvensvurdering (PVK)",
-            "Tiltak fra PVK ikke fulgt opp",
-            "Dokumentasjon av etterlevelseskrav ikke gjennomført",
+            "Ikke gjennomført vurdering av personvernkonsekvenser ",
+            "Tiltak fra vurdering av personvernkonsekvenser ikke fulgt opp",
+            "Dokumentasjon av etterlevelseskrav ikke gjennomført ",
             "Ikke oppdatert Behandlingskatalogen",
-            "Manglende rettslig dokumentasjon ved automatisering"
+            "Annet"
         ],
         "Bruk av bilder,lyd- og videoopptak": [
-            "Ulovlig bruk av lyd- og videoopptak",
-            "Kameraovervåking på arbeidsplass"
+            "Kameraovervåkning på arbeidsplass",
+            "Publisering av bilder, lyd- og videoopptak",
+            "Annet"
         ],
         "Overvåking/kontroll av ansatte": [
-            "Uberettiget innsyn i arbeidstakers e-postkasse, private filer mm",
-            "Ulovlig overvåking/kontroll av ansatte"
+            "Uberettiget innsyn i arbeidstakers e-postkasse, private filer mm.",
+            "Ulovlig overvåkning/kontroll av ansatte",
+            "Annet"
         ]
     },
     "description": {
@@ -93,6 +110,7 @@
                         "Manglende oversikter, vurderinger og dokumentasjon",
                         "Bruk av bilder,lyd- og videoopptak",
                         "Overvåking/kontroll av ansatte",
+                        "Fødselsnummer/biometriske kjennetegn",
                         "Andre uønskede hendelser"
                     ],
                     "required": "true"
