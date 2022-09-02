@@ -91,21 +91,23 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
                         field.choiceInfoTexts.forEach((choiceText, i) => {
                             const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
                             const [replaceOption] = options.filter(o => o.key === choiceText.key);
-                            const option = {
-                                key: choiceText.key,
-                                text: choiceText.key,
-                                onRenderField: (props, render) => {
-                                    return (
-                                        <div className={optionRootClass}>
-                                            {render!(props)}
-                                            <TooltipHost content={choiceText.text} id={`${field.key}-choice-tooltip-${i}`}>
-                                                <IconButton styles={{ rootHovered: { background: 'none' }, rootPressed: { background: 'none' } }} iconProps={{ iconName: 'Info' }} />
-                                            </TooltipHost>
-                                        </div>
-                                    );
-                                }
-                            };
-                            options.splice(options.indexOf(replaceOption), 1, option);
+                            if (options.indexOf(replaceOption) !== -1) {
+                                const option = {
+                                    key: choiceText.key,
+                                    text: choiceText.key,
+                                    onRenderField: (props, render) => {
+                                        return (
+                                            <div className={optionRootClass}>
+                                                {render!(props)}
+                                                <TooltipHost content={choiceText.text} id={`${field.key}-choice-tooltip-${i}`}>
+                                                    <IconButton styles={{ rootHovered: { background: 'none' }, rootPressed: { background: 'none' } }} iconProps={{ iconName: 'Info' }} />
+                                                </TooltipHost>
+                                            </div>
+                                        );
+                                    }
+                                };
+                                options.splice(options.indexOf(replaceOption), 1, option);
+                            }
                         });
                     }
                     return (

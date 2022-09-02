@@ -13,11 +13,11 @@
             "Hatytringer",
             "Annet"
         ],
-        "Organisatoriske og psykososiale forhold": [
+        "Organisatoriske og psykososiale arbeidsmiljøforhold": [
             "Arbeidsbelastning",
             "Brudd på lov, forskrifter og rutiner",
-            "Mestring",
-            "Mellommenneskelige forhold",
+            "Mestring, informasjon og opplæring",
+            "Mellommenneskelige (og sosiale) forhold",
             "Involvering, medvirkning og medbestemmelse",
             "Informasjon og opplæring",
             "Organisering og tilrettelegging av arbeidet",
@@ -38,7 +38,7 @@
     },
     "description": {
         "type": "html",
-        "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Vold, trusler og trakassering som følge av kontakt med tredjepart</li> <li>Organisatoriske og psykososiale forhold</li> <li>Fysiske arbeidsmiljøforhold</li> <li>Kjemiske og biologiske faktorer</li> <li>Ytre miljø/forurensing</li> <li>Nesten ulykke/ personskade</li> <li>Andre uønskede hendelser</li> </ul> </div>"
+        "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Vold, trusler og trakassering som følge av kontakt med tredjepart</li> <li>Organisatoriske og psykososiale forhold</li> <li>Fysiske arbeidsmiljøforhold</li> <li>Kjemiske og biologiske faktorer</li> <li>Ytre miljø/forurensing</li> <li>Nestenulykke/ personskade</li> <li>Andre uønskede hendelser</li> </ul> </div>"
     },
     "pages": [
         {
@@ -79,21 +79,41 @@
                     "type": "ChoiceGroup",
                     "options": [
                         "Vold, trusler og trakassering som følge av kontakt med tredjepart",
-                        "Organisatoriske og psykososiale forhold",
+                        "Organisatoriske og psykososiale arbeidsmiljøforhold",
                         "Fysiske arbeidsmiljøforhold",
                         "Kjemiske og biologiske faktorer",
                         "Ytre miljø/forurensing",
-                        "Nesten ulykke/ personskade",
+                        "Nestenulykke/ personskade",
                         "Andre uønskede hendelser"
                     ],
                     "choiceInfoTexts": [
                         {
-                            "key": "Organisatoriske og psykososiale forhold",
-                            "text": "Avvik eller uønskede hendelser som handler om arbeidets organisering, arbeidsinnhold og de sosiale relasjonene på arbeidsplassen og som påvirker de ansattes jobbtilfredshet, jobbengasjement og arbeidshelse (Stami)"
+                            "key": "Vold, trusler og trakassering som følge av kontakt med tredjepart",
+                            "text": "Hendelser der medarbeideren blir trakassert, truet, utskjelt eller angrepet i sin arbeidssituasjon, og som innebærer en åpenlys eller antydet trussel mot deres sikkerhet og velvære eller helse."
+                        },
+                        {
+                            "key": "Organisatoriske og psykososiale arbeidsmiljøforhold",
+                            "text": "Handler om arbeidets organisering, arbeidsinnhold og de sosiale relasjonene på arbeidsplassen."
                         },
                         {
                             "key": "Fysiske arbeidsmiljøforhold",
-                            "text": "Inneklima, støy, ergonomiske forhold eller fysiske eksponeringer som kan gi helseskade"
+                            "text": "Handler om forhold som påvirker ansatte enten indirekte via egenskaper ved arbeidsplassen og arbeidsredskapene, eller direkte ved bruk av kroppen. Den indirekte påvirkningen kan være fysiske faktorer som for eksempel stråling, støy, vibrasjoner, varme eller kulde."
+                        },
+                        {
+                            "key": "Kjemiske og biologiske faktorer",
+                            "text": "Eksponeringer for kjemiske og biologiske faktorer som kan gi helseskade, som for eksempel rengjøringsmidler, oljer, desinfiksjonsmidler, eksos, virus og bakterier."
+                        },
+                        {
+                            "key": "Ytre miljø/forurensing",
+                            "text": "Forurensing fra virksomheten til luft, vann og jord."
+                        },
+                        {
+                            "key": "Nestenulykke/ personskade",
+                            "text": "Plutselig eller uventa hendelse man utsettes for i arbeidet. Ved melding av avvik på andre kategorier vil leder sammen med medarbeider ta stilling til om hendelsen kan gi personskade på kort eller lang sikt."
+                        },
+                        {
+                            "key": "Andre uønskede hendelser",
+                            "text": "Andre faktorer eller hendelser som kan gi helseskade på sikt, og bør forbedres."
                         }
                     ],
                     "required": "true"
@@ -144,7 +164,61 @@
                     "type": "ChoiceGroup",
                     "options": "form.conditionalOptions[state.values.category]",
                     "required": "form.conditionalOptions[state.values.category]",
-                    "hidden": "!(form.conditionalOptions[state.values.category])"
+                    "hidden": "!(form.conditionalOptions[state.values.category])",
+                    "choiceInfoTexts": [
+                        {
+                            "key": "Truende atferd/trussel",
+                            "text": "Kan være ikke-verbal truende oppførsel, eller verbal trussel. Eksempel på ikke-verbal truende oppførsel er å vise knyttneven, gi fingeren. Eksempel på verbal trussel kan være «jeg vet hvor du bor» eller «jeg skal bombe dere»."
+                        },
+                        {
+                            "key": "Trussel om selvskading/ selvdrap",
+                            "text": "Eksempler på trussel om selvskading eller selvdrap er hvor bruker sier eller antyder skade eller drap på seg selv eller andre i nære relasjoner"
+                        },
+                        {
+                            "key": "Verbal utskjelling",
+                            "text": "Ytringer med spesielt negativt innhold, skremmende og kraftfulle utsagn som oppleves belastende for den ansatte eller for arbeidsmiljøet på kortere eller lengre sikt."
+                        },
+                        {
+                            "key": "Sjikane/trakasering",
+                            "text": "Personlig hetsing og ærekrenkende utsagn, eller å snakke nedsettende om en person om personlige forhold. Dette kan være å snakke nedlatende om ansattes funksjonsevne, religion, hudfarge, nasjonale eller etniske opprinnelse, kjønn, seksuell legning og kjønnsidentitet, leveform eller politisk orientering."
+                        },
+                        {
+                            "key": "Emosjonell/relasjonell belastning",
+                            "text": "Dette handler de emosjonelle kravnene ansatte må forholde seg til i jobbsammenheng i møte med andre, og/eller at man må skjule egne negative følelser og opplevelse av hendelser. Dette kan være i møte med sterke følelser (sinne, sorg osv), eller en opplevelse av følelsesmessig belastning og omsorgstrøtthet over tid."
+                        },
+                        {
+                            "key": "Uønsket kontakt, adferd eller kommunikasjon",
+                            "text": "For eks at bruker ringer eller kontaker deg privat"
+                        },
+                        {
+                            "key": "Fysisk angrep på person",
+                            "text": "Fysisk angrep på personer, egne ansatte, brukere eller andre."
+                        },
+                        {
+                            "key": "Hatytringer",
+                            "text": "Hatytringer er krenkende eller fiendtlige ytringer som retter seg mot NAV som sådan, gjerne anonymt, via en av etatens tilbakemeldingskanaler.  Meldingene kommer inn via nav.no, hotjar eller andre tilbakemeldingskanaler."
+                        },
+                        {
+                            "key": "Arbeidsbelastning",
+                            "text": "For eksempel for mange oppgaver og/eller brukere å følge opp, motstridende krav, manglende prioriteringer, stadig opplæring av nye mm."
+                        },
+                        {
+                            "key": "Brudd på lov, forskrifter og rutiner",
+                            "text": "For eksempel ikke gjennomført risikovurderinger, vernerunder, medarbeidersamtaler mm."
+                        },
+                        {
+                            "key": "Mellommenneskelige (og sosiale) forhold",
+                            "text": "Begynnende konflikt, uro i arbeidsmiljøet"
+                        },
+                        {
+                            "key": "Informasjon og opplæring",
+                            "text": "Manglende HMS-opplæring, HA-opplæring (manglende tilbud, ikke prioritert)"
+                        },
+                        {
+                            "key": "Organisering og tilrettelegging av arbeidet",
+                            "text": "Manglende prioritering, ikke få tilrettelegging, ikke benyttet handlingsrommet i en hybrid arbeidshverdag"
+                        }
+                    ]
                 }
             ],
             "actions": [
