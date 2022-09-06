@@ -75,6 +75,17 @@
             ],
             "actions": [
                 {
+                    "key": "previous",
+                    "label": "Tilbake",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronLeft"
+                    },
+                    "invoke": {
+                        "functionName": "ToFormSelection"
+                    }
+                },
+                {
                     "key": "next",
                     "label": "Neste",
                     "type": "default",
@@ -112,6 +123,16 @@
                         "Overvåking/kontroll av ansatte",
                         "Fødselsnummer/biometriske kjennetegn",
                         "Andre uønskede hendelser"
+                    ],
+                    "choiceInfoTexts": [
+                        {
+                            "key": "Behandlingsgrunnlag",
+                            "text": "Krav til at vi må ha et rettslig grunnlag for å kunne bruke persononpplysninger, eksempel lovhjemmel  eller samtykke"
+                        },
+                        {
+                            "key": "Registrertes rettigheter",
+                            "text": "Brudd på krav til ivaretakelse av brukerens eller ansattes personvernrettigheter. Feilbehandling eller ikke behandlet kravet innen de tidsfrister som er satt for saksbehandlingstid."
+                        }
                     ],
                     "required": "true"
                 }
@@ -161,7 +182,61 @@
                     "type": "ChoiceGroup",
                     "options": "form.conditionalOptions[state.values.category]",
                     "required": "form.conditionalOptions[state.values.category]",
-                    "hidden": "!(form.conditionalOptions[state.values.category])"
+                    "hidden": "!(form.conditionalOptions[state.values.category])",
+                    "choiceInfoTexts": [
+                        {
+                            "key": "Feil bruk av samtykke (ugyldig samtykke)",
+                            "text": "Brudd på kravene til et gyldig samtykke om at det skal være frivillg, spesifikt, informert, utvetydig og aktivt. Personopplysninger er blitt behandlet ut over det samtykket dekker."
+                        },
+                        {
+                            "key": "Rett til informasjon ved automatisering og profilering",
+                            "text": "Brudd på retten til særskilt informasjon om helautomatisert behandling og ev. bruk av profilering"
+                        },
+                        {
+                            "key": "Rett til innsyn",
+                            "text": "Brudd på retten til innsyn i egne personopplysninger og brudd på retten til informasjon om hva vi bruker personopplysningene til"
+                        },
+                        {
+                            "key": "Rett til dataportabilitet",
+                            "text": "Den registrerte kan på visse vilkår få sine personopplysninger flyttet til en annen virksomhet eller be om de utlevert"
+                        },
+                        {
+                            "key": "Manglende databehandleravtale",
+                            "text": "Eksterne leverandører behandler personopplysninger for NAV uten at det er inngått en skriftlig databehandleravtale"
+                        },
+                        {
+                            "key": "Manglende gyldig overføringsgrunnlag",
+                            "text": "For å kunne overføre personopplysninger til andre utenfor EU/EØS må det foreligge et særskilt overføringsgrunnlag etter GDPR"
+                        },
+                        {
+                            "key": "Det er ikke fastsatt lagringstid",
+                            "text": "Det er ikke vurdert om opplysningene skal kasseres/slettes etter en nærmere angitt tid eller vurdert om det er bevaringsverdig"
+                        },
+                        {
+                            "key": "Det er ikke rutiner for sletting",
+                            "text": "Det er fastsatt lagringstider, men ikke etablert rutiner som sikrer at det faktisk skjer"
+                        },
+                        {
+                            "key": "Behandlingen er ikke registrert i Behandlingskatalogen",
+                            "text": "Behandlingskatalogen er direktoratets oversikt over alle områder hvor etaten behandler personopplysninger. All slik behandling skal være registrert i denne katalogen."
+                        },
+                        {
+                            "key": "Ikke gjennomført vurdering av personvernkonsekvenser",
+                            "text": "PVK er ikke gjennomført, er ikke forelagt personvernombudet, ikke fulgt opp etter personvernombudets behandling, ikke godkjent av risikoeier"
+                        },
+                        {
+                            "key": "Dokumentasjon av etterlevelseskrav ikke gjennomført",
+                            "text": "Personvernkrav er ikke gjennomgått i forbindelse med utvikling av digitale produkter. Verktøyet digital støtte for etterlevelse"
+                        },
+                        {
+                            "key": "Kameraovervåkning på arbeidsplass",
+                            "text": "Ulvolig kameraovervåking av uteområder og i kontorbygg hvor personer oppholder seg"
+                        },
+                        {
+                            "key": "Publisering av bilder, lyd- og videoopptak",
+                            "text": "Arbeidsgiver eller brukere mfl. publiserer ulovlig bilder, lydopptak av ansatte eller andre brukere"
+                        }
+                    ]
                 }
             ],
             "actions": [

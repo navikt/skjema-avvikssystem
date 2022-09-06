@@ -1,12 +1,18 @@
 export default class ActionsHandler {
     private _setState;
+    private _setForm;
 
-    constructor(setState: any) {
+    constructor(setState: any, setForm: any) {
         this._setState = setState;
+        this._setForm = setForm;
     }
 
     public invoke(functionName: string, params: any) {
         this[functionName](params);
+    }
+
+    private ToFormSelection() {
+        this._setForm(null);
     }
 
     private NextPage({ currentPageNumber, stateVariable, state }) {

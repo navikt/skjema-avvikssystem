@@ -11,14 +11,15 @@ import styles from './DeviationForm.module.scss';
 
 export interface IDeviationFormProps {
     form: IDeviationForm;
+    setSelectedForm: (form: IDeviationForm) => void;
 }
 
-const DeviationForm = ({ form }: IDeviationFormProps) => {
+const DeviationForm = ({ form, setSelectedForm }: IDeviationFormProps) => {
     const context = useContext(DeviationFormContext);
     const [state, setState] = useState({ currentPageNumber: 1, values: { stateOrMunicipality: context.organization || null }, valid: false });
     const [fieldTypes, setFieldTypes] = useState<Map<string, string>>(new Map<string, string>());
     const prevPageRef = useRef(state.currentPageNumber);
-    const actionsHandler = new ActionsHandler(setState);
+    const actionsHandler = new ActionsHandler(setState, setSelectedForm);
 
     const hours = range(0, 24).map(key => ({ key, text: `${padStart(key.toString(), 2, '0')}` }));
     const minutes = range(0, 60).map(key => ({ key, text: `${padStart(key.toString(), 2, '0')}` }));
@@ -250,14 +251,16 @@ const DeviationForm = ({ form }: IDeviationFormProps) => {
 
     const getFunctionParams = (params: any) => {
         let functionParams = {};
-        for (const key in params) {
-            if (key.indexOf('state_') === 0) {
-                functionParams[params[key]] = state[params[key]];
-            } else if (key === 'setstate') {
-                functionParams = { ...functionParams, stateVariable: params[key], state };
-            } else functionParams[key] = params[key];
-        }
-        return functionParams;
+        if (params) {
+            for (const key in params) {
+                if (key.indexOf('state_') === 0) {
+                    functionParams[params[key]] = state[params[key]];
+                } else if (key === 'setstate') {
+                    functionParams = { ...functionParams, stateVariable: params[key], state };
+                } else functionParams[key] = params[key];
+            }
+            return functionParams;
+        } else return null;
     };
 
     const renderAction = (action: IDeviationFormAction) => {

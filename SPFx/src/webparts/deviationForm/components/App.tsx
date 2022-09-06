@@ -50,7 +50,7 @@ const App = ({ title }: IDeviationAppProps) => {
             </div>
           </>
           :
-          <DeviationForm form={selectedForm} />
+          <DeviationForm form={selectedForm} setSelectedForm={setSelectedForm} />
         }
       </div>
     </div>

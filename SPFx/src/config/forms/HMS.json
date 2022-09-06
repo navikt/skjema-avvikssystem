@@ -51,6 +51,17 @@
             ],
             "actions": [
                 {
+                    "key": "previous",
+                    "label": "Tilbake",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronLeft"
+                    },
+                    "invoke": {
+                        "functionName": "ToFormSelection"
+                    }
+                },
+                {
                     "key": "next",
                     "label": "Neste",
                     "type": "default",
