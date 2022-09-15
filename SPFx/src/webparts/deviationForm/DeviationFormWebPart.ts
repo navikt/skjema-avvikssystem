@@ -11,7 +11,7 @@ import * as strings from 'DeviationFormWebPartStrings';
 import App from './components/App';
 import config from '../../config/config';
 import { DeviationFormContext, IDeviationFormContext } from './DeviationFormContext';
-import { IAppConfig, IDeviationForm } from './types';
+import { IAppConfig } from './types';
 import { AadHttpClient } from '@microsoft/sp-http';
 
 export interface IDeviationFormWebPartProps {

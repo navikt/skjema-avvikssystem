@@ -20,13 +20,13 @@ const App = ({ title }: IDeviationAppProps) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.content}>
-        {selectedForm ?
+        {selectedForm &&
           <header>
             <Link onClick={() => setSelectedForm(null)}>{title}</Link>
             {' > '}
             {selectedForm.title}
           </header>
-          : <header>{title}</header>}
+        }
         {!selectedForm ?
           <>
             <header>{strings.SelectFormText}</header>

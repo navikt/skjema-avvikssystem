@@ -2,7 +2,7 @@
     "title": "Fysisk sikkerhet",
     "description": {
         "type": "html",
-        "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Ulåste dører/vinduer</li> <li>Bruker i skjermede områder</li> <li>Mangler på bygg og utstyr</li> <li>Brann, branntilløp og brannforebygging</li> <li>Hærverk</li> <li>Innbrudd</li> <li>Strømbrudd</li> <li>Vannskade</li> <li>Brudd på lov, forskrifter og rutiner</li> <li>Andre uønskede hendelser</li> </ul> </div>"
+        "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Ulåste dører/vinduer</li> <li>Bruker i skjermede områder</li> <li>Mangler på bygg og utstyr</li> <li>Brann, branntilløp og brannforebygging</li> <li>Hærverk</li> <li>Innbrudd</li> <li>Strømbrudd</li> <li>Vannskade</li> <li>Ytre miljø/forurensing</li> <li>Brudd på lov, forskrifter og rutiner</li> <li>Andre uønskede hendelser</li> </ul> </div>"
     },
     "pages": [
         {
@@ -22,6 +22,7 @@
                         "Innbrudd",
                         "Strømbrudd",
                         "Vannskade",
+                        "Ytre miljø/forurensing",
                         "Brudd på lov, forskrifter og rutiner",
                         "Andre uønskede hendelser"
                     ],
@@ -123,15 +124,15 @@
                     "type": "Choice",
                     "multiselect": "true",
                     "options": [
-                        "Ingen",
                         "Leder",
-                        "Andre virksomheter i bygget",
-                        "Andre offentlige samarbeids-partnere",
-                        "Politi",
                         "AMK",
+                        "Politi",
                         "Brannvesen",
                         "Verneombud",
-                        "Kommunikasjonsansvarlig",
+                        "Kommunikasjonsansvarlige",
+                        "Andre virksomheter i bygget",
+                        "Andre offentlige samarbeidspartnere",
+                        "Ingen",
                         "Annet"
                     ],
                     "required": "true"

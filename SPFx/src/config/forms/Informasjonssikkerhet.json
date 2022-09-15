@@ -11,12 +11,14 @@
             "Feil i et IT-system",
             "Avvik begått av databehandler",
             "Tap av utstyr, telefoner, bærbar pc",
+            "Overhøring av samtaler som inneholder taushetsbelagte personopplysninger",
+            "Oppslag uten tjenstlig behov",
             "Annet"
         ]
     },
     "description": {
         "type": "html",
-        "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Personopplysninger på avveie</li> <li>Brudd på policy/retningslinje</li> <li>Andre uønskede hendelser</li> </ul> </div>"
+        "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Personopplysninger på avveie</li> <li>Brudd på policy/retningslinjer</li> <li>Andre uønskede hendelser</li> </ul> </div>"
     },
     "pages": [
         {
@@ -75,7 +77,7 @@
                     "type": "ChoiceGroup",
                     "options": [
                         "Personopplysninger på avveie",
-                        "Brudd på policy/retningslinje",
+                        "Brudd på policy/retningslinjer",
                         "Andre uønskede hendelser"
                     ],
                     "required": "true"
