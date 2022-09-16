@@ -8,7 +8,7 @@
         {
             "key": 1,
             "type": "Input",
-            "title": "Hvilken kategori er denne hendelsen innenfor?",
+            "title": "Velg kategori",
             "fields": [
                 {
                     "key": "category",
@@ -72,7 +72,17 @@
                         "Min enhet",
                         "Annen enhet"
                     ],
-                    "required": "true"
+                    "required": "true",
+                    "defaultValue": "Min enhet",
+                    "disabledOptions": [
+                        "Annen enhet"
+                    ],
+                    "additionalData": [
+                        {
+                            "key": "Min enhet",
+                            "value": "context.unit"
+                        }
+                    ]
                 },
                 {
                     "key": "unitOther",

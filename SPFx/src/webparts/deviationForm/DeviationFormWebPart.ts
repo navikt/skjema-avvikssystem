@@ -20,11 +20,13 @@ export interface IDeviationFormWebPartProps {
 
 export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviationFormWebPartProps> {
   private organization: string;
+  private unit: string;
 
   public render(): void {
     const value: IDeviationFormContext = {
       config: config as IAppConfig,
-      organization: this.organization
+      organization: this.organization,
+      unit: this.unit
     };
 
     const element: React.ReactElement<{}> = (
@@ -41,7 +43,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
   protected async onInit(): Promise<void> {
     await super.onInit();
     const client: AadHttpClient = await this.context.aadHttpClientFactory.getClient('https://graph.microsoft.com');
-    const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName', AadHttpClient.configurations.v1);
+    const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName,officeLocation', AadHttpClient.configurations.v1);
     const user = await res.json();
     switch (user.companyName) {
       case 'NAV Kommunal':
@@ -56,6 +58,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
       default:
         break;
     }
+    this.unit = user.officeLocation;
   }
 
   protected onDispose(): void {

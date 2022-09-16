@@ -5,16 +5,17 @@ import * as React from 'react';
 import { useState, useEffect, useRef, useContext } from 'react';
 import ActionsHandler from '../../../../config/ActionsHandler';
 import { DeviationFormContext } from '../../DeviationFormContext';
-import { IDeviationForm, IDeviationFormAction, IDeviationFormField, DeviationFormPageType, DeviationActionType, DeviationActionIconPosition } from '../../types';
+import { IDeviationForm, IDeviationFormAction, IDeviationFormField, DeviationFormPageType, DeviationActionType, DeviationActionIconPosition, IDeviationPageConfirmation, IDeviationFormMessage } from '../../types';
 import TimeSpanField from '../TimeSpanField/TimeSpanField';
 import styles from './DeviationForm.module.scss';
 
 export interface IDeviationFormProps {
     form: IDeviationForm;
     setSelectedForm: (form: IDeviationForm) => void;
+    breadcrumbState: { breadcrumbs: string[], setBreadcrumbs: (breadcrumbs: string[]) => void };
 }
 
-const DeviationForm = ({ form, setSelectedForm }: IDeviationFormProps) => {
+const DeviationForm = ({ form, setSelectedForm, breadcrumbState }: IDeviationFormProps) => {
     const context = useContext(DeviationFormContext);
     const [state, setState] = useState({ currentPageNumber: 1, values: { stateOrMunicipality: context.organization || null }, valid: false });
     const [fieldTypes, setFieldTypes] = useState<Map<string, string>>(new Map<string, string>());
@@ -32,9 +33,14 @@ const DeviationForm = ({ form, setSelectedForm }: IDeviationFormProps) => {
                     if (!types.has(field.key)) {
                         types.set(field.key, field.type);
                     }
+                    console.log(field);
+                    if (field.defaultValue) {
+                        setState({ ...state, values: { ...state.values, [field.key]: field.defaultValue } });
+                    }
                 });
             }
         });
+        
         setFieldTypes(types);
     }, []);
 
@@ -87,7 +93,7 @@ const DeviationForm = ({ form, setSelectedForm }: IDeviationFormProps) => {
                 case 'ChoiceGroup':
                     if (typeof field.options === 'string') {
                         options = eval(field.options).map(o => ({ key: o, text: o }));
-                    } else options = field.options.map(o => ({ key: o, text: o }));
+                    } else options = field.options.map(o => ({ key: o, text: o, disabled: field.disabledOptions?.length > 0 && field.disabledOptions.indexOf(o) !== -1 }));
                     if (field.choiceInfoTexts) {
                         field.choiceInfoTexts.forEach((choiceText, i) => {
                             const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
@@ -111,6 +117,31 @@ const DeviationForm = ({ form, setSelectedForm }: IDeviationFormProps) => {
                             }
                         });
                     }
+                    if (field.additionalData) {
+                        field.additionalData.forEach((additionalData, i) => {
+                            const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '20px' });
+                            const [replaceOption] = options.filter(o => o.key === additionalData.key);
+                            const value = eval(additionalData.value);
+                            if (options.indexOf(replaceOption) !== -1) {
+                                const option = {
+                                    key: additionalData.key,
+                                    text: additionalData.key,
+                                    onRenderField: (props, render) => {
+                                        return (
+                                            <div className={optionRootClass}>
+                                                {render!(props)}
+                                                {value ? <span className={styles.additionalDataValue}>{value}</span>
+                                                    : <MessageBar messageBarType={MessageBarType.error}>Klarte ikke hente nødvendig data.</MessageBar>
+                                                }
+                                            </div>
+                                        );
+                                    }
+                                };
+                                options.splice(options.indexOf(replaceOption), 1, option);
+                            }
+                        });
+                    }
+
                     return (
                         <div className={styles.field}>
                             <ChoiceGroup
@@ -267,12 +298,52 @@ const DeviationForm = ({ form, setSelectedForm }: IDeviationFormProps) => {
         const params = getFunctionParams(action.invoke.params);
         const iconRightStyles = { flexContainer: { flexDirection: 'row-reverse' } };
         if (action.type === DeviationActionType.Default)
-            return <DefaultButton styles={action.iconPosition === DeviationActionIconPosition.Right && iconRightStyles} iconProps={action.iconProps} text={action.label} disabled={eval(action.disabled)} onClick={() => actionsHandler.invoke(action.invoke.functionName, params)} />;
+            return <DefaultButton
+                styles={action.iconPosition === DeviationActionIconPosition.Right && iconRightStyles}
+                iconProps={action.iconProps}
+                text={action.label}
+                disabled={eval(action.disabled)}
+                onClick={() => {
+                    if (action.addtobreadcrumbs) breadcrumbState.setBreadcrumbs([...breadcrumbState.breadcrumbs, eval(action.addtobreadcrumbs)]);
+                    if (action.removefrombreadcrumbs) breadcrumbState.setBreadcrumbs(breadcrumbState.breadcrumbs.filter(b => b !== eval(action.removefrombreadcrumbs)));
+                    actionsHandler.invoke(action.invoke.functionName, params);
+                }}
+            />;
         if (action.type === DeviationActionType.Primary)
-            return <PrimaryButton iconProps={action.iconProps} text={action.label} disabled={eval(action.disabled)} onClick={() => actionsHandler.invoke(action.invoke.functionName, params)} />;
+            return <PrimaryButton
+                iconProps={action.iconProps}
+                text={action.label}
+                disabled={eval(action.disabled)}
+                onClick={() => {
+                    if (action.addtobreadcrumbs) breadcrumbState.setBreadcrumbs([...breadcrumbState.breadcrumbs, eval(action.addtobreadcrumbs)]);
+                    if (action.removefrombreadcrumbs) breadcrumbState.setBreadcrumbs(breadcrumbState.breadcrumbs.filter(b => b !== eval(action.removefrombreadcrumbs)));
+                    actionsHandler.invoke(action.invoke.functionName, params);
+                }}
+            />;
     };
 
-    const renderContent = (content: string, format: string[]): JSX.Element => {
+    const getMessageType = (type: string): MessageBarType => {
+        switch (type) {
+            case 'info':
+                return MessageBarType.info;
+            case 'error':
+                return MessageBarType.error;
+            case 'severeWarning':
+                return MessageBarType.severeWarning;
+            case 'success':
+                return MessageBarType.success;
+            case 'warning':
+                return MessageBarType.warning;
+            default:
+                return MessageBarType.info;
+        }
+    };
+
+    const renderMessages = (messages: IDeviationFormMessage[]) => {
+        if (messages) return messages.map(m => { if (eval(m.display)) return <MessageBar messageBarType={getMessageType(m.type)}>{m.content}</MessageBar>; });
+    };
+
+    const renderContent = (content: string, format: string[], confirmation: IDeviationPageConfirmation, messages: IDeviationFormMessage[]): JSX.Element => {
         const formatString = (string: string, ...args: string[]) => {
             return string.replace(/{(\d+)}/g, (match, number) => {
                 return typeof args[number] != 'undefined'
@@ -285,7 +356,14 @@ const DeviationForm = ({ form, setSelectedForm }: IDeviationFormProps) => {
             const resolvedVariables = format.map(f => f.indexOf('state.') !== -1 || f.indexOf('context.') !== -1 ? eval(f) : f);
             if (resolvedVariables.indexOf(undefined) !== -1) throw new Error('Klarte ikke hente nødvendig data.');
             const formattedContent = formatString(content, ...resolvedVariables);
-            return <div dangerouslySetInnerHTML={{ __html: formattedContent }} />;
+            return (
+                <>
+                    <div dangerouslySetInnerHTML={{ __html: formattedContent }} />
+                    {confirmation?.field &&
+                        renderField(confirmation.field)
+                    }
+                </>
+            );
         } catch (error) {
             return <MessageBar messageBarType={MessageBarType.error}>{error.message}</MessageBar>;
         }
@@ -301,11 +379,12 @@ const DeviationForm = ({ form, setSelectedForm }: IDeviationFormProps) => {
                             page.fields?.map(field => renderField(field))
                         }
                         {page.type === DeviationFormPageType.Info &&
-                            renderContent(page.content, page.format)
+                            renderContent(page.content, page.format, page.confirmation, page.messages)
                         }
                         {page.type === DeviationFormPageType.Summary &&
                             renderSummary(state.values)
                         }
+                        {renderMessages(page.messages)}
                         <div className={styles.actions}>
                             {page.actions?.map(action => renderAction(action))}
                         </div>

@@ -63,12 +63,19 @@
             "fields": [
                 {
                     "key": "stateOrMunicipality",
-                    "type": "Choice",
+                    "type": "ChoiceGroup",
                     "options": [
                         "Statlig",
                         "Kommunal"
                     ],
                     "required": "true"
+                }
+            ],
+            "messages": [
+                {
+                    "display": "state.values.stateOrMunicipality && state.values.stateOrMunicipality !== 'Statlig'",
+                    "type": "info",
+                    "content": "For øyeblikket kan kun avvik for statlige tjenester rapporteres."
                 }
             ],
             "actions": [
@@ -91,7 +98,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.values.stateOrMunicipality",
+                    "disabled": "!state.values.stateOrMunicipality || state.values.stateOrMunicipality !== 'Statlig'",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
@@ -104,7 +111,7 @@
         },
         {
             "key": 2,
-            "title": "Hvilken kategori er denne hendelsen innenfor?",
+            "title": "Velg kategori",
             "type": "Input",
             "fields": [
                 {
@@ -184,7 +191,7 @@
         },
         {
             "key": 3,
-            "title": "For å behandle innsendelsen på riktig måte trengs det noe mer detaljer rundt type hendelse:",
+            "title": "Velg underkategori",
             "type": "Input",
             "fields": [
                 {
@@ -324,7 +331,17 @@
                         "Min enhet",
                         "Annen enhet"
                     ],
-                    "required": "true"
+                    "required": "true",
+                    "defaultValue": "Min enhet",
+                    "disabledOptions": [
+                        "Annen enhet"
+                    ],
+                    "additionalData": [
+                        {
+                            "key": "Min enhet",
+                            "value": "context.unit"
+                        }
+                    ]
                 },
                 {
                     "key": "unitOther",

@@ -38,12 +38,20 @@ export interface IDeviationFormAction {
     iconProps?: IIconProps;
     iconPosition?: DeviationActionIconPosition;
     disabled?: string;
+    addtobreadcrumbs?: string;
+    removefrombreadcrumbs?: string;
 }
 
 export interface IChoiceInfoText {
     key: string;
     text: string;
 }
+
+export interface IDeviationFieldAdditionalData {
+    key: string;
+    value: string;
+}
+
 export interface IDeviationFormField {
     key: string;
     type: string;
@@ -60,6 +68,20 @@ export interface IDeviationFormField {
     hidden?: string;
     valid?: string;
     errorMessage?: string;
+    defaultValue?: string;
+    disabledOptions?: string[];
+    additionalData?: IDeviationFieldAdditionalData[];
+}
+
+export interface IDeviationPageConfirmation {
+    required: boolean;
+    field?: IDeviationFormField;
+}
+
+export interface IDeviationFormMessage {
+    display: string;
+    type: string;
+    content: string;
 }
 
 export interface IDeviationFormPage {
@@ -69,6 +91,8 @@ export interface IDeviationFormPage {
     fields: IDeviationFormField[];
     content: string;
     format: string[];
+    confirmation?: IDeviationPageConfirmation;
+    messages?: IDeviationFormMessage[];
     actions: IDeviationFormAction[];
 }
 

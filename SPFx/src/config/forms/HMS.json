@@ -41,6 +41,29 @@
             "format": [
                 "context.organization"
             ],
+            "confirmation": {
+                "required": "true",
+                "field": {
+                    "key": "orgConfirmation",
+                    "type": "ChoiceGroup",
+                    "options": [
+                        "Ja",
+                        "Nei"
+                    ]
+                }
+            },
+            "messages": [
+                {
+                    "display": "state.values.orgConfirmation === 'Nei'",
+                    "type": "info",
+                    "content": "Vennligst kontakt din leder for å rette din registrerte stilling."
+                },
+                {
+                    "display": "state.values.stateOrMunicipality !== 'Statlig' && state.values.orgConfirmation === 'Ja'",
+                    "type": "info",
+                    "content": "For øyeblikket kan kun statlig ansatte rapportere HMS-avvik."
+                }
+            ],
             "actions": [
                 {
                     "key": "previous",
@@ -61,7 +84,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.values.stateOrMunicipality",
+                    "disabled": "(!state.values.stateOrMunicipality || state.values.orgConfirmation !== 'Ja') || state.values.stateOrMunicipality !== 'Statlig'",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
@@ -75,7 +98,7 @@
         {
             "key": 2,
             "type": "Input",
-            "title": "Hvilken kategori er denne hendelsen innenfor?",
+            "title": "Velg kategori",
             "fields": [
                 {
                     "key": "category",
@@ -152,14 +175,15 @@
                             "state_pageNumber": "currentPageNumber",
                             "setstate": "currentPageNumber"
                         }
-                    }
+                    },
+                    "addtobreadcrumbs": "state.values.category"
                 }
             ]
         },
         {
             "key": 3,
             "type": "Input",
-            "title": "For å behandle innsendelsen på riktig måte trengs det noe mer detaljer rundt type hendelse:",
+            "title": "Velg underkategori",
             "fields": [
                 {
                     "key": "categoryDetails",
@@ -241,7 +265,8 @@
                             "state_pageNumber": "currentPageNumber",
                             "setstate": "currentPageNumber"
                         }
-                    }
+                    },
+                    "removefrombreadcrumbs": "state.values.category"
                 },
                 {
                     "key": "next",
@@ -258,7 +283,8 @@
                             "state_pageNumber": "currentPageNumber",
                             "setstate": "currentPageNumber"
                         }
-                    }
+                    },
+                    "addtobreadcrumbs": "state.values.categoryDetails"
                 }
             ]
         },
@@ -274,7 +300,17 @@
                         "Min enhet",
                         "Annen enhet"
                     ],
-                    "required": "true"
+                    "required": "true",
+                    "defaultValue": "Min enhet",
+                    "disabledOptions": [
+                        "Annen enhet"
+                    ],
+                    "additionalData": [
+                        {
+                            "key": "Min enhet",
+                            "value": "context.unit"
+                        }
+                    ]
                 },
                 {
                     "key": "unitOther",
@@ -385,7 +421,8 @@
                             "state_pageNumber": "currentPageNumber",
                             "setstate": "currentPageNumber"
                         }
-                    }
+                    },
+                    "removefrombreadcrumbs": "state.values.categoryDetails"
                 },
                 {
                     "key": "next",
@@ -395,7 +432,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.valid",
+                    "disabled": "!state.valid || !context.unit",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {

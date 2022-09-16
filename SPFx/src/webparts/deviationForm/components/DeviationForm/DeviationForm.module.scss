@@ -11,6 +11,13 @@
 
     .field {
         margin: 15px 0;
+
+        .additionalDataValue {
+            @include ms-font-m;
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 4px;
+        }
     }
 
     .dateTimeWrapper {
