@@ -168,7 +168,8 @@
                             "state_pageNumber": "currentPageNumber",
                             "setstate": "currentPageNumber"
                         }
-                    }
+                    },
+                    "addtobreadcrumbs": "state.values.category"
                 },
                 {
                     "key": "next",
@@ -185,7 +186,8 @@
                             "state_pageNumber": "currentPageNumber",
                             "setstate": "currentPageNumber"
                         }
-                    }
+                    },
+                    "addtobreadcrumbs": "state.values.category"
                 }
             ]
         },
@@ -298,7 +300,8 @@
                             "state_pageNumber": "currentPageNumber",
                             "setstate": "currentPageNumber"
                         }
-                    }
+                    },
+                    "removefrombreadcrumbs": "state.values.category"
                 },
                 {
                     "key": "next",
@@ -315,7 +318,8 @@
                             "state_pageNumber": "currentPageNumber",
                             "setstate": "currentPageNumber"
                         }
-                    }
+                    },
+                    "addtobreadcrumbs": "state.values.categoryDetails"
                 }
             ]
         },
@@ -325,7 +329,7 @@
             "fields": [
                 {
                     "key": "unit",
-                    "label": "Hvilken enhet gjelder hendelsen/avviket?",
+                    "label": "Hvilken enhet gjelder avviket?",
                     "type": "ChoiceGroup",
                     "options": [
                         "Min enhet",
@@ -356,19 +360,19 @@
                 },
                 {
                     "key": "timeOfIncident",
-                    "label": "Når skjedde hendelsen?",
+                    "label": "Når skjedde avviket?",
                     "type": "Date",
                     "required": "true"
                 },
                 {
                     "key": "timeOfDiscovery",
-                    "label": "Når ble hendelsen oppdaget?",
+                    "label": "Når ble avviket oppdaget?",
                     "type": "Date",
                     "required": "true"
                 },
                 {
                     "key": "incidentDescription",
-                    "label": "Hva har skjedd? Beskriv hendelsen, mulig årsak og eventuelle konsekvenser",
+                    "label": "Hva har skjedd? Beskriv avviket, mulig årsak og eventuelle konsekvenser",
                     "type": "Text",
                     "multiline": "true",
                     "required": "true"
@@ -377,8 +381,7 @@
                     "key": "imediateMeasuresDescription",
                     "label": "Beskriv eventuelle iverksatte strakstiltak:",
                     "type": "Text",
-                    "multiline": "true",
-                    "required": "true"
+                    "multiline": "true"
                 },
                 {
                     "key": "measureSuggestionsDescription",
@@ -402,7 +405,8 @@
                             "state_pageNumber": "currentPageNumber",
                             "setstate": "currentPageNumber"
                         }
-                    }
+                    },
+                    "removefrombreadcrumbs": "state.values.categoryDetails"
                 },
                 {
                     "key": "next",
@@ -412,7 +416,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.valid",
+                    "disabled": "!state.valid || !context.unit",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
@@ -425,7 +429,7 @@
         },
         {
             "key": 5,
-            "title": "Ønsker du å registrere følgende opplysninger om hendelsen?",
+            "title": "Verifiser opplysningene som er registrert",
             "type": "Summary",
             "values": "state.values",
             "actions": [

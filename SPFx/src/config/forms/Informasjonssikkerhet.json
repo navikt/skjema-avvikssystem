@@ -121,7 +121,8 @@
                             "state_pageNumber": "currentPageNumber",
                             "setstate": "currentPageNumber"
                         }
-                    }
+                    },
+                    "addtobreadcrumbs": "state.values.category"
                 }
             ]
         },
@@ -152,7 +153,8 @@
                             "state_pageNumber": "currentPageNumber",
                             "setstate": "currentPageNumber"
                         }
-                    }
+                    },
+                    "removefrombreadcrumbs": "state.values.category"
                 },
                 {
                     "key": "next",
@@ -169,7 +171,8 @@
                             "state_pageNumber": "currentPageNumber",
                             "setstate": "currentPageNumber"
                         }
-                    }
+                    },
+                    "addtobreadcrumbs": "state.values.categoryDetails"
                 }
             ]
         },
@@ -179,7 +182,7 @@
             "fields": [
                 {
                     "key": "unit",
-                    "label": "Hvilken enhet gjelder hendelsen/avviket?",
+                    "label": "Hvilken enhet gjelder avviket?",
                     "type": "ChoiceGroup",
                     "options": [
                         "Min enhet",
@@ -210,19 +213,19 @@
                 },
                 {
                     "key": "timeOfIncident",
-                    "label": "Når skjedde hendelsen?",
+                    "label": "Når skjedde avviket?",
                     "type": "Date",
                     "required": "true"
                 },
                 {
                     "key": "timeOfDiscovery",
-                    "label": "Når ble hendelsen oppdaget?",
+                    "label": "Når ble avviket oppdaget?",
                     "type": "DateTime",
                     "required": "true"
                 },
                 {
                     "key": "incidentDuration",
-                    "label": "Hvor lenge varte hendelsen?",
+                    "label": "Hvor lenge varte avviket?",
                     "type": "DateTime",
                     "disabled": "!state.values.timeOfDiscovery",
                     "minDate": "state.values.timeOfDiscovery",
@@ -232,26 +235,38 @@
                     "required": "state.values.category === 'Personopplysninger på avveie'"
                 },
                 {
-                    "key": "affectedPeople",
-                    "label": "Hvem er de berørte?",
-                    "type": "Text",
-                    "multiline": "true",
-                    "placeholder": "Oppgi navn og personnummer, ett per linje",
-                    "hidden": "state.values.category !== 'Personopplysninger på avveie'",
-                    "required": "state.values.category === 'Personopplysninger på avveie'"
+                    "key": "isExternalReporter",
+                    "label": "Gjelder det en ekstern innmelding?",
+                    "type": "ChoiceGroup",
+                    "options": [
+                        "Ja",
+                        "Nei"
+                    ],
+                    "required": "true",
+                    "hidden": "state.values.category !== 'Personopplysninger på avveie'"
                 },
                 {
                     "key": "externalReporter",
-                    "label": "Ved ekstern innmelding, oppgi navn og telefonnummer:",
+                    "label": "Oppgi navn og telefonnummer på ekstern innmelder",
                     "type": "Text",
                     "placeholder": "Ola Normann, 47101112",
                     "multiline": "true",
-                    "hidden": "state.values.category !== 'Personopplysninger på avveie'"
+                    "hidden": "!(state.values.isExternalReporter === 'Ja')",
+                    "required": "state.values.isExternalReporter === 'Ja'"
                 },
                 {
                     "key": "affectedPeopleCount",
                     "label": "Antall berørte:",
                     "type": "Number",
+                    "hidden": "state.values.category !== 'Personopplysninger på avveie'",
+                    "required": "state.values.category === 'Personopplysninger på avveie'"
+                },
+                {
+                    "key": "affectedPeople",
+                    "label": "Hvem er de berørte?",
+                    "type": "Text",
+                    "multiline": "true",
+                    "placeholder": "Oppgi navn og personnummer, ett per linje",
                     "hidden": "state.values.category !== 'Personopplysninger på avveie'",
                     "required": "state.values.category === 'Personopplysninger på avveie'"
                 },
@@ -267,7 +282,7 @@
                     "key": "incidentDescription",
                     "label": "Hva har skjedd?",
                     "type": "Text",
-                    "placeholder": "Beskriv hendelsen, mulig årsak og eventuelle konsekvenser",
+                    "placeholder": "Beskriv avviket, mulig årsak og eventuelle konsekvenser",
                     "multiline": "true",
                     "required": "true"
                 },
@@ -275,8 +290,7 @@
                     "key": "imediateMeasuresDescription",
                     "label": "Beskriv eventuelle iverksatte strakstiltak:",
                     "type": "Text",
-                    "multiline": "true",
-                    "required": "true"
+                    "multiline": "true"
                 },
                 {
                     "key": "measureSuggestionsDescription",
@@ -300,7 +314,8 @@
                             "state_pageNumber": "currentPageNumber",
                             "setstate": "currentPageNumber"
                         }
-                    }
+                    },
+                    "removefrombreadcrumbs": "state.values.categoryDetails"
                 },
                 {
                     "key": "next",
@@ -310,7 +325,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.valid",
+                    "disabled": "!state.valid || !context.unit",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
@@ -323,7 +338,7 @@
         },
         {
             "key": 5,
-            "title": "Ønsker du å registrere følgende opplysninger om hendelsen?",
+            "title": "Verifiser opplysningene som er registrert",
             "type": "Summary",
             "values": "state.values",
             "actions": [

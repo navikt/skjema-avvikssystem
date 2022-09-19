@@ -23,7 +23,10 @@ const App = ({ title }: IDeviationAppProps) => {
       <div className={styles.content}>
         {selectedForm &&
           <header>
-            <Link onClick={() => setSelectedForm(null)}>{title}</Link>
+            <Link onClick={() => {
+              setSelectedForm(null);
+              setBreadcrumbs([]);
+            }}>{title}</Link>
             {' > '}
             {selectedForm.title}
             {breadcrumbs.length > 0 &&
@@ -57,7 +60,7 @@ const App = ({ title }: IDeviationAppProps) => {
             </div>
           </>
           :
-          <DeviationForm form={selectedForm} setSelectedForm={setSelectedForm} breadcrumbState={{breadcrumbs, setBreadcrumbs}} />
+          <DeviationForm form={selectedForm} setSelectedForm={setSelectedForm} breadcrumbState={{ breadcrumbs, setBreadcrumbs }} />
         }
       </div>
     </div>

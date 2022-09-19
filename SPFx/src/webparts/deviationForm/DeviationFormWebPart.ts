@@ -56,9 +56,10 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
         this.organization = 'Ekstern';
         break;
       default:
+        this.organization = 'Statlig';
         break;
     }
-    this.unit = user.officeLocation;
+    this.unit = "2970 IT-Avdelingen";//user.officeLocation;
   }
 
   protected onDispose(): void {

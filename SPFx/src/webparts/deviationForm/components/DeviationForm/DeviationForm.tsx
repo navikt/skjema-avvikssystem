@@ -33,14 +33,13 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState }: IDeviationFor
                     if (!types.has(field.key)) {
                         types.set(field.key, field.type);
                     }
-                    console.log(field);
                     if (field.defaultValue) {
                         setState({ ...state, values: { ...state.values, [field.key]: field.defaultValue } });
                     }
                 });
             }
         });
-        
+
         setFieldTypes(types);
     }, []);
 
@@ -57,6 +56,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState }: IDeviationFor
 
         prevPageRef.current = state.currentPageNumber;
     }, [state.values, state.currentPageNumber]);
+
 
     const renderField = (field: IDeviationFormField) => {
         let options: any[];
@@ -141,7 +141,6 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState }: IDeviationFor
                             }
                         });
                     }
-
                     return (
                         <div className={styles.field}>
                             <ChoiceGroup

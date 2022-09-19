@@ -56,7 +56,8 @@
                             "state_pageNumber": "currentPageNumber",
                             "setstate": "currentPageNumber"
                         }
-                    }
+                    },
+                    "addtobreadcrumbs": "state.values.category"
                 }
             ]
         },
@@ -66,7 +67,7 @@
             "fields": [
                 {
                     "key": "unit",
-                    "label": "Hvilken enhet gjelder hendelsen/avviket?",
+                    "label": "Hvilken enhet gjelder hendelsen?",
                     "type": "ChoiceGroup",
                     "options": [
                         "Min enhet",
@@ -118,8 +119,7 @@
                     "key": "imediateMeasuresDescription",
                     "label": "Beskriv eventuelle iverksatte strakstiltak:",
                     "type": "Text",
-                    "multiline": "true",
-                    "required": "true"
+                    "multiline": "true"
                 },
                 {
                     "key": "measureSuggestionsDescription",
@@ -170,7 +170,8 @@
                             "state_pageNumber": "currentPageNumber",
                             "setstate": "currentPageNumber"
                         }
-                    }
+                    },
+                    "removefrombreadcrumbs": "state.values.category"
                 },
                 {
                     "key": "next",
@@ -180,7 +181,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.valid",
+                    "disabled": "!state.valid || !context.unit",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
@@ -193,7 +194,7 @@
         },
         {
             "key": 3,
-            "title": "Ønsker du å registrere følgende opplysninger om hendelsen?",
+            "title": "Verifiser opplysningene som er registrert",
             "type": "Summary",
             "values": "state.values",
             "actions": [

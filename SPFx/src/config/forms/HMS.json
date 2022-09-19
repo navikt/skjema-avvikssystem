@@ -294,7 +294,7 @@
             "fields": [
                 {
                     "key": "unit",
-                    "label": "Hvilken enhet gjelder hendelsen/avviket?",
+                    "label": "Hvilken enhet gjelder hendelsen?",
                     "type": "ChoiceGroup",
                     "options": [
                         "Min enhet",
@@ -369,8 +369,7 @@
                     "key": "imediateMeasuresDescription",
                     "label": "Beskriv eventuelle iverksatte strakstiltak:",
                     "type": "Text",
-                    "multiline": "true",
-                    "required": "true"
+                    "multiline": "true"
                 },
                 {
                     "key": "measureSuggestionsDescription",
@@ -445,7 +444,7 @@
         },
         {
             "key": 5,
-            "title": "Ønsker du å registrere følgende opplysninger om hendelsen?",
+            "title": "Verifiser opplysningene som er registrert",
             "type": "Summary",
             "values": "state.values",
             "actions": [
