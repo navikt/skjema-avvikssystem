@@ -31,9 +31,20 @@
                     "type": "ChoiceGroup",
                     "options": [
                         "Statlig",
-                        "Kommunal"
+                        "Kommunal",
+                        "Vet ikke"
                     ],
-                    "required": "true"
+                    "required": "true",
+                    "choiceInfoTexts": [
+                        {
+                            "key": "Statlig",
+                            "text": "Omfatter statlige arbeids- og velferdstjenester som arbeid, trygd, familie, pensjon, tiltak og hjelpemidler mfl."
+                        },
+                        {
+                            "key": "Kommunal",
+                            "text": "Omfatter sosiale tjenester og andre kommunale tjenester i NAV-kontoret"
+                        }
+                    ]
                 }
             ],
             "messages": [
@@ -154,7 +165,7 @@
                             "setstate": "currentPageNumber"
                         }
                     },
-                    "removefrombreadcrumbs": "state.values.category"
+                    "removefrombreadcrumbs": "true"
                 },
                 {
                     "key": "next",
@@ -315,7 +326,7 @@
                             "setstate": "currentPageNumber"
                         }
                     },
-                    "removefrombreadcrumbs": "state.values.categoryDetails"
+                    "removefrombreadcrumbs": "true"
                 },
                 {
                     "key": "next",
@@ -361,10 +372,14 @@
                     "key": "submit",
                     "label": "Send inn",
                     "type": "primary",
+                    "disabled": "!state.summaryConfirmed",
                     "invoke": {
                         "functionName": "Submit",
                         "params": {
-                            "state_values": "values"
+                            "state_values": "values",
+                            "context_formSubmitURL": "formSubmitURL",
+                            "setstate": "submitting",
+                            "resultVariable": "submitResult"
                         }
                     }
                 }

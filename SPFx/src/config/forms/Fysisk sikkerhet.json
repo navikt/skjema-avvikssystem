@@ -1,5 +1,11 @@
 {
     "title": "Fysisk sikkerhet",
+    "conditionalOptions": {
+        "Brudd på lov, forskrifter og rutiner": [
+            "Brudd på minimumsstandarden med krav til fysisk utforming og sikring av NAV-kontor",
+            "Øvrige"
+        ]
+    },
     "description": {
         "type": "html",
         "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Ulåste dører/vinduer</li> <li>Bruker i skjermede områder</li> <li>Mangler på bygg og utstyr</li> <li>Brann, branntilløp og brannforebygging</li> <li>Hærverk</li> <li>Innbrudd</li> <li>Strømbrudd</li> <li>Vannskade</li> <li>Ytre miljø/forurensing</li> <li>Brudd på lov, forskrifter og rutiner</li> <li>Andre uønskede hendelser</li> </ul> </div>"
@@ -63,6 +69,56 @@
         },
         {
             "key": 2,
+            "type": "Input",
+            "title": "Velg underkategori",
+            "fields": [
+                {
+                    "key": "categoryDetails",
+                    "type": "ChoiceGroup",
+                    "options": "form.conditionalOptions[state.values.category]",
+                    "required": "form.conditionalOptions[state.values.category]",
+                    "hidden": "!(form.conditionalOptions[state.values.category])"
+                }
+            ],
+            "actions": [
+                {
+                    "key": "previous",
+                    "label": "Tilbake",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronLeft"
+                    },
+                    "invoke": {
+                        "functionName": "PreviousPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    },
+                    "removefrombreadcrumbs": "true"
+                },
+                {
+                    "key": "next",
+                    "label": "Neste",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronRight"
+                    },
+                    "iconPosition": "right",
+                    "disabled": "!state.values.categoryDetails",
+                    "invoke": {
+                        "functionName": "NextPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    },
+                    "addtobreadcrumbs": "state.values.categoryDetails"
+                }
+            ]
+        },
+        {
+            "key": 3,
             "type": "Input",
             "fields": [
                 {
@@ -171,7 +227,7 @@
                             "setstate": "currentPageNumber"
                         }
                     },
-                    "removefrombreadcrumbs": "state.values.category"
+                    "removefrombreadcrumbs": "true"
                 },
                 {
                     "key": "next",
@@ -193,7 +249,7 @@
             ]
         },
         {
-            "key": 3,
+            "key": 4,
             "title": "Verifiser opplysningene som er registrert",
             "type": "Summary",
             "values": "state.values",
@@ -217,10 +273,14 @@
                     "key": "submit",
                     "label": "Send inn",
                     "type": "primary",
+                    "disabled": "!state.summaryConfirmed",
                     "invoke": {
                         "functionName": "Submit",
                         "params": {
-                            "state_values": "values"
+                            "state_values": "values",
+                            "context_formSubmitURL": "formSubmitURL",
+                            "setstate": "submitting",
+                            "resultVariable": "submitResult"
                         }
                     }
                 }

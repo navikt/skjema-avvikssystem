@@ -1,5 +1,10 @@
 @import '~office-ui-fabric-react/dist/sass/References.scss';
 
+.spinner {
+    display: flex;
+    justify-content: center;
+}
+
 .page {
     margin: 20px;
     width: fit-content;
@@ -8,6 +13,7 @@
         @include ms-font-xl;
         margin: 15px 0;
     }
+
 
     .field {
         margin: 15px 0;
@@ -64,6 +70,10 @@
     .summaryFields {
         display: flex;
         flex-direction: column;
+
+        .checkbox {
+            margin: 30px 0 15px 0;
+        }
 
         .summaryField {
             margin: 5px 0;

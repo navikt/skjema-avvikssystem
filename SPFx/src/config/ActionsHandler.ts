@@ -23,17 +23,17 @@ export default class ActionsHandler {
         this._setState({ ...state, [stateVariable]: currentPageNumber - 1 });
     }
 
-    private async Submit({ values }) {
-        console.log(values);
-/*         const body = JSON.stringify(values);
-        const response = await fetch('http://localhost:7071/api/avviksskjema', {
+    private async Submit({ values, formSubmitURL, stateVariable, state, resultVariable }) {
+        this._setState({ ...state, [stateVariable]: true });
+        const body = JSON.stringify(values);
+        const response = await fetch(formSubmitURL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body,
         });
-        const result = await response.json();
-        console.log(result); */
+        const result = await response.text();
+        this._setState({ ...state, [stateVariable]: false, [resultVariable]: result });
     }
 }

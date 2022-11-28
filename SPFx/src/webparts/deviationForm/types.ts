@@ -111,3 +111,12 @@ export interface IAppConfig {
     forms: IDeviationForm[];
     calendarString: ICalendarStrings;
 }
+
+export interface IDeviationFormState {
+    currentPageNumber: number;
+    values: any;
+    valid: boolean;
+    summaryConfirmed: boolean;
+    submitting: boolean;
+    submitResult: string;
+}

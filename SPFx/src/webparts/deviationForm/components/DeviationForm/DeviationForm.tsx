@@ -1,11 +1,12 @@
 import { PrimaryButton } from '@microsoft/office-ui-fabric-react-bundle';
+import strings from 'DeviationFormWebPartStrings';
 import { flatten, range, padStart } from 'lodash';
-import { ChoiceGroup, ComboBox, DatePicker, DayOfWeek, DefaultButton, Dropdown, IconButton, mergeStyles, MessageBar, MessageBarType, TextField, TooltipHost } from 'office-ui-fabric-react';
+import { Checkbox, ChoiceGroup, ComboBox, DatePicker, DayOfWeek, DefaultButton, Dialog, DialogContent, DialogFooter, DialogType, Dropdown, IconButton, mergeStyles, MessageBar, MessageBarType, Spinner, SpinnerSize, TextField, TooltipHost } from 'office-ui-fabric-react';
 import * as React from 'react';
 import { useState, useEffect, useRef, useContext } from 'react';
 import ActionsHandler from '../../../../config/ActionsHandler';
 import { DeviationFormContext } from '../../DeviationFormContext';
-import { IDeviationForm, IDeviationFormAction, IDeviationFormField, DeviationFormPageType, DeviationActionType, DeviationActionIconPosition, IDeviationPageConfirmation, IDeviationFormMessage } from '../../types';
+import { IDeviationForm, IDeviationFormAction, IDeviationFormField, DeviationFormPageType, DeviationActionType, DeviationActionIconPosition, IDeviationPageConfirmation, IDeviationFormMessage, IDeviationFormState } from '../../types';
 import TimeSpanField from '../TimeSpanField/TimeSpanField';
 import styles from './DeviationForm.module.scss';
 
@@ -17,7 +18,18 @@ export interface IDeviationFormProps {
 
 const DeviationForm = ({ form, setSelectedForm, breadcrumbState }: IDeviationFormProps) => {
     const context = useContext(DeviationFormContext);
-    const [state, setState] = useState({ currentPageNumber: 1, values: { stateOrMunicipality: context.organization || null }, valid: false });
+    const [state, setState] = useState<IDeviationFormState>({
+        currentPageNumber: 1,
+        values: {
+            stateOrMunicipality: context.organization || null,
+            reporterEmail: context.reporterEmail,
+            reporterNAVIdentId: context.reporterNAVIdentId
+        },
+        valid: false,
+        summaryConfirmed: false,
+        submitting: false,
+        submitResult: null
+    });
     const [fieldTypes, setFieldTypes] = useState<Map<string, string>>(new Map<string, string>());
     const prevPageRef = useRef(state.currentPageNumber);
     const actionsHandler = new ActionsHandler(setState, setSelectedForm);
@@ -30,11 +42,17 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState }: IDeviationFor
         form.pages.forEach(page => {
             if (page.type === DeviationFormPageType.Input) {
                 page.fields.forEach(field => {
+                    let values = new Map<string, string>();
+                    if (field.additionalData) {
+                        field.additionalData.forEach(d => {
+                            values.set(d.key, eval(d.value));
+                        });
+                    }
                     if (!types.has(field.key)) {
                         types.set(field.key, field.type);
                     }
                     if (field.defaultValue) {
-                        setState({ ...state, values: { ...state.values, [field.key]: field.defaultValue } });
+                        setState({ ...state, values: { ...state.values, [field.key]: field.additionalData && values.has(field.defaultValue) ? values.get(field.defaultValue) : field.defaultValue } });
                     }
                 });
             }
@@ -91,9 +109,15 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState }: IDeviationFor
                         </div>
                     );
                 case 'ChoiceGroup':
+                    let values = new Map<string, string>();
+                    if (field.additionalData) {
+                        field.additionalData.forEach(d => {
+                            values.set(d.key, eval(d.value));
+                        });
+                    }
                     if (typeof field.options === 'string') {
-                        options = eval(field.options).map(o => ({ key: o, text: o }));
-                    } else options = field.options.map(o => ({ key: o, text: o, disabled: field.disabledOptions?.length > 0 && field.disabledOptions.indexOf(o) !== -1 }));
+                        options = eval(field.options).map(o => ({ key: values.has(o) ? values.get(o) : o, text: o }));
+                    } else options = field.options.map(o => ({ key: values.has(o) ? values.get(o) : o, text: o, disabled: field.disabledOptions?.length > 0 && field.disabledOptions.indexOf(o) !== -1 }));
                     if (field.choiceInfoTexts) {
                         field.choiceInfoTexts.forEach((choiceText, i) => {
                             const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
@@ -120,11 +144,11 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState }: IDeviationFor
                     if (field.additionalData) {
                         field.additionalData.forEach((additionalData, i) => {
                             const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '20px' });
-                            const [replaceOption] = options.filter(o => o.key === additionalData.key);
+                            const [replaceOption] = options.filter(o => o.text === additionalData.key);
                             const value = eval(additionalData.value);
                             if (options.indexOf(replaceOption) !== -1) {
                                 const option = {
-                                    key: additionalData.key,
+                                    key: eval(additionalData.value),
                                     text: additionalData.key,
                                     onRenderField: (props, render) => {
                                         return (
@@ -149,7 +173,9 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState }: IDeviationFor
                                 selectedKey={state.values[field.key]}
                                 required={eval(field.required)}
                                 options={options}
-                                onChange={(_, option) => setState({ ...state, values: { ...state.values, [field.key]: option.text } })}
+                                onChange={(_, option) => {
+                                    setState({ ...state, values: { ...state.values, [field.key]: option.key } });
+                                }}
                             />
                         </div>
                     );
@@ -275,6 +301,12 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState }: IDeviationFor
                         );
                     }
                 })}
+                <Checkbox
+                    className={styles.checkbox}
+                    checked={state.summaryConfirmed}
+                    label={state.values.category === 'Personopplysninger på avveie' ? strings.SummaryConfirmationPersonaldata : strings.SummaryConfirmation}
+                    onChange={(_, checked) => setState({ ...state, summaryConfirmed: checked })}
+                />
             </div>
         );
     };
@@ -285,6 +317,8 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState }: IDeviationFor
             for (const key in params) {
                 if (key.indexOf('state_') === 0) {
                     functionParams[params[key]] = state[params[key]];
+                } else if (key.indexOf('context_') === 0) {
+                    functionParams[params[key]] = context[params[key]];
                 } else if (key === 'setstate') {
                     functionParams = { ...functionParams, stateVariable: params[key], state };
                 } else functionParams[key] = params[key];
@@ -294,7 +328,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState }: IDeviationFor
     };
 
     const renderAction = (action: IDeviationFormAction) => {
-        const params = getFunctionParams(action.invoke.params);
+        let params = getFunctionParams(action.invoke.params);
         const iconRightStyles = { flexContainer: { flexDirection: 'row-reverse' } };
         if (action.type === DeviationActionType.Default)
             return <DefaultButton
@@ -304,7 +338,11 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState }: IDeviationFor
                 disabled={eval(action.disabled)}
                 onClick={() => {
                     if (action.addtobreadcrumbs) breadcrumbState.setBreadcrumbs([...breadcrumbState.breadcrumbs, eval(action.addtobreadcrumbs)]);
-                    if (action.removefrombreadcrumbs) breadcrumbState.setBreadcrumbs(breadcrumbState.breadcrumbs.filter(b => b !== eval(action.removefrombreadcrumbs)));
+                    if (eval(action.removefrombreadcrumbs)) {
+                        let crumbs = breadcrumbState.breadcrumbs.slice();
+                        crumbs.splice(crumbs.length - 1, 1);
+                        breadcrumbState.setBreadcrumbs(crumbs);
+                    }
                     actionsHandler.invoke(action.invoke.functionName, params);
                 }}
             />;
@@ -315,7 +353,11 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState }: IDeviationFor
                 disabled={eval(action.disabled)}
                 onClick={() => {
                     if (action.addtobreadcrumbs) breadcrumbState.setBreadcrumbs([...breadcrumbState.breadcrumbs, eval(action.addtobreadcrumbs)]);
-                    if (action.removefrombreadcrumbs) breadcrumbState.setBreadcrumbs(breadcrumbState.breadcrumbs.filter(b => b !== eval(action.removefrombreadcrumbs)));
+                    if (eval(action.removefrombreadcrumbs)) {
+                        let crumbs = breadcrumbState.breadcrumbs.slice();
+                        crumbs.splice(crumbs.length - 1, 1);
+                        breadcrumbState.setBreadcrumbs(crumbs);
+                    }
                     actionsHandler.invoke(action.invoke.functionName, params);
                 }}
             />;
@@ -369,24 +411,38 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState }: IDeviationFor
     };
 
     return (
-        <div>
+        <div className={state.submitting && styles.spinner}>
             {form.pages.filter(page => page.key === state.currentPageNumber)
                 .map(page => (
                     <div className={styles.page}>
-                        <header>{page.title}</header>
-                        {page.type === DeviationFormPageType.Input &&
-                            page.fields?.map(field => renderField(field))
+                        <Dialog
+                            dialogContentProps={{ title: 'Registrer avvik', subText: state.submitResult, showCloseButton: true }}
+                            hidden={!state.submitResult}
+                            onDismiss={() => setState({ ...state, submitResult: null })}>
+                            <DialogFooter>
+                                <DefaultButton text='Lukk' onClick={() => setState({ ...state, submitResult: null })} />
+                            </DialogFooter>
+                        </Dialog>
+                        {state.submitting ?
+                            <Spinner size={SpinnerSize.large} label='Sender inn...' />
+                            :
+                            <>
+                                <header>{page.title}</header>
+                                {page.type === DeviationFormPageType.Input &&
+                                    page.fields?.map(field => renderField(field))
+                                }
+                                {page.type === DeviationFormPageType.Info &&
+                                    renderContent(page.content, page.format, page.confirmation, page.messages)
+                                }
+                                {page.type === DeviationFormPageType.Summary &&
+                                    renderSummary(state.values)
+                                }
+                                {renderMessages(page.messages)}
+                                <div className={styles.actions}>
+                                    {page.actions?.map(action => renderAction(action))}
+                                </div>
+                            </>
                         }
-                        {page.type === DeviationFormPageType.Info &&
-                            renderContent(page.content, page.format, page.confirmation, page.messages)
-                        }
-                        {page.type === DeviationFormPageType.Summary &&
-                            renderSummary(state.values)
-                        }
-                        {renderMessages(page.messages)}
-                        <div className={styles.actions}>
-                            {page.actions?.map(action => renderAction(action))}
-                        </div>
                     </div>
                 ))}
         </div>

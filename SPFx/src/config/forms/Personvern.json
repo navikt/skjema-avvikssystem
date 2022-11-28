@@ -66,9 +66,20 @@
                     "type": "ChoiceGroup",
                     "options": [
                         "Statlig",
-                        "Kommunal"
+                        "Kommunal",
+                        "Vet ikke"
                     ],
-                    "required": "true"
+                    "required": "true",
+                    "choiceInfoTexts": [
+                        {
+                            "key": "Statlig",
+                            "text": "Omfatter statlige arbeids- og velferdstjenester som arbeid, trygd, familie, pensjon, tiltak og hjelpemidler mfl."
+                        },
+                        {
+                            "key": "Kommunal",
+                            "text": "Omfatter sosiale tjenester og andre kommunale tjenester i NAV-kontoret"
+                        }
+                    ]
                 }
             ],
             "messages": [
@@ -132,7 +143,7 @@
                     "choiceInfoTexts": [
                         {
                             "key": "Behandlingsgrunnlag",
-                            "text": "Brudd på krav til lovlig grunnlag eller hjemmel til å kunne bruke persononpplysninger."
+                            "text": "Brudd på krav til lovlig grunnlag eller hjemmel til å kunne bruke personopplysninger."
                         },
                         {
                             "key": "Registrertes rettigheter",
@@ -141,6 +152,14 @@
                         {
                             "key": "Overføring til tredjeland",
                             "text": "Brudd knyttet til overføring av personopplysninger til tredjeland (land utenfor EU/EØS)"
+                        },
+                        {
+                            "key": "Lagring/sletting",
+                            "text": "Brudd knyttet til at lagringstid ikke er fastsatt eller at personopplysninger lagres lengre enn fastsatt lagringstid"
+                        },
+                        {
+                            "key": "Manglende oversikter, vurderinger og dokumentasjon",
+                            "text": "Brudd på krav til dokumentasjon, eks. personvernkonsekvensvurdering, etterlevelseskrav og behandlingskatalog"
                         },
                         {
                             "key": "Fødselsnummer/biometriske kjennetegn",
@@ -301,7 +320,7 @@
                             "setstate": "currentPageNumber"
                         }
                     },
-                    "removefrombreadcrumbs": "state.values.category"
+                    "removefrombreadcrumbs": "true"
                 },
                 {
                     "key": "next",
@@ -406,7 +425,7 @@
                             "setstate": "currentPageNumber"
                         }
                     },
-                    "removefrombreadcrumbs": "state.values.categoryDetails"
+                    "removefrombreadcrumbs": "true"
                 },
                 {
                     "key": "next",
@@ -452,10 +471,14 @@
                     "key": "submit",
                     "label": "Send inn",
                     "type": "primary",
+                    "disabled": "!state.summaryConfirmed",
                     "invoke": {
                         "functionName": "Submit",
                         "params": {
-                            "state_values": "values"
+                            "state_values": "values",
+                            "context_formSubmitURL": "formSubmitURL",
+                            "setstate": "submitting",
+                            "resultVariable": "submitResult"
                         }
                     }
                 }

@@ -5,11 +5,11 @@
             "Truende atferd/trussel",
             "Trussel om selvskading/ selvdrap",
             "Verbal utskjelling",
-            "Sjikane/trakasering",
+            "Sjikane/trakassering",
             "Emosjonell/relasjonell belastning",
             "Uønsket kontakt, adferd eller kommunikasjon",
             "Fysisk angrep på person",
-            "Brudd på utestengelsesbeslutning",
+            "Brudd på etablert sikkerhetstiltak",
             "Hatytringer",
             "Annet"
         ],
@@ -205,12 +205,12 @@
                             "text": "Ytringer med spesielt negativt innhold, skremmende og kraftfulle utsagn som oppleves belastende for den ansatte eller for arbeidsmiljøet på kortere eller lengre sikt."
                         },
                         {
-                            "key": "Sjikane/trakasering",
+                            "key": "Sjikane/trakassering",
                             "text": "Personlig hetsing og ærekrenkende utsagn, eller å snakke nedsettende om en person om personlige forhold. Dette kan være å snakke nedlatende om ansattes funksjonsevne, religion, hudfarge, nasjonale eller etniske opprinnelse, kjønn, seksuell legning og kjønnsidentitet, leveform eller politisk orientering."
                         },
                         {
                             "key": "Emosjonell/relasjonell belastning",
-                            "text": "Dette handler de emosjonelle kravnene ansatte må forholde seg til i jobbsammenheng i møte med andre, og/eller at man må skjule egne negative følelser og opplevelse av hendelser. Dette kan være i møte med sterke følelser (sinne, sorg osv), eller en opplevelse av følelsesmessig belastning og omsorgstrøtthet over tid."
+                            "text": "Dette handler de emosjonelle kravene ansatte må forholde seg til i jobbsammenheng i møte med andre, og/eller at man må skjule egne negative følelser og opplevelse av hendelser. Dette kan være i møte med sterke følelser (sinne, sorg osv), eller en opplevelse av følelsesmessig belastning og omsorgstrøtthet over tid."
                         },
                         {
                             "key": "Uønsket kontakt, adferd eller kommunikasjon",
@@ -219,6 +219,10 @@
                         {
                             "key": "Fysisk angrep på person",
                             "text": "Fysisk angrep på personer, egne ansatte, brukere eller andre."
+                        },
+                        {
+                            "key": "Brudd på etablert sikkerhetstiltak",
+                            "text": "Brudd på beslutning om fysisk utestengelse, brudd på telefonisk utestengelse, brudd på to ansatte i samtale, eller andre sikkerhetstiltak knyttet til bruker"
                         },
                         {
                             "key": "Hatytringer",
@@ -234,7 +238,7 @@
                         },
                         {
                             "key": "Mellommenneskelige og sosiale forhold",
-                            "text": "Begynnende konflikt, uro i arbeidsmiljøet"
+                            "text": "Begynnende uro, konflikt i arbeidsmiljøet mellom ansatte eller grupper av ansatte. Varslingssaker meldes i linjen for å sikre konfidensialitet"
                         },
                         {
                             "key": "Involvering, medvirkning og medbestemmelse",
@@ -266,7 +270,7 @@
                             "setstate": "currentPageNumber"
                         }
                     },
-                    "removefrombreadcrumbs": "state.values.category"
+                    "removefrombreadcrumbs": "true"
                 },
                 {
                     "key": "next",
@@ -359,8 +363,7 @@
                 },
                 {
                     "key": "incidentDescription",
-                    "label": "Hva har skjedd?",
-                    "description": "Beskriv hendelsen, mulig årsak og eventuelle konsekvenser",
+                    "label": "Hva har skjedd? Beskriv hendelsen, mulig årsak og eventuelle konsekvenser",
                     "type": "Text",
                     "multiline": "true",
                     "required": "true"
@@ -421,7 +424,7 @@
                             "setstate": "currentPageNumber"
                         }
                     },
-                    "removefrombreadcrumbs": "state.values.categoryDetails"
+                    "removefrombreadcrumbs": "true"
                 },
                 {
                     "key": "next",
@@ -467,10 +470,14 @@
                     "key": "submit",
                     "label": "Send inn",
                     "type": "primary",
+                    "disabled": "!state.summaryConfirmed",
                     "invoke": {
                         "functionName": "Submit",
                         "params": {
-                            "state_values": "values"
+                            "state_values": "values",
+                            "context_formSubmitURL": "formSubmitURL",
+                            "setstate": "submitting",
+                            "resultVariable": "submitResult"
                         }
                     }
                 }

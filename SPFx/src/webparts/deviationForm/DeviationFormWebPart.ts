@@ -16,17 +16,23 @@ import { AadHttpClient } from '@microsoft/sp-http';
 
 export interface IDeviationFormWebPartProps {
   webpartTitle: string;
+  formSubmitURL: string;
 }
 
 export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviationFormWebPartProps> {
   private organization: string;
   private unit: string;
+  private reporterEmail: string;
+  private reporterNAVIdentId: string;
 
   public render(): void {
     const value: IDeviationFormContext = {
       config: config as IAppConfig,
       organization: this.organization,
-      unit: this.unit
+      unit: this.unit,
+      reporterEmail: this.reporterEmail,
+      reporterNAVIdentId: this.reporterNAVIdentId,
+      formSubmitURL: this.properties.formSubmitURL
     };
 
     const element: React.ReactElement<{}> = (
@@ -43,7 +49,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
   protected async onInit(): Promise<void> {
     await super.onInit();
     const client: AadHttpClient = await this.context.aadHttpClientFactory.getClient('https://graph.microsoft.com');
-    const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName,officeLocation', AadHttpClient.configurations.v1);
+    const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName,officeLocation,mail,onPremisesSamAccountName', AadHttpClient.configurations.v1);
     const user = await res.json();
     switch (user.companyName) {
       case 'NAV Kommunal':
@@ -56,10 +62,11 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
         this.organization = 'Ekstern';
         break;
       default:
-        this.organization = 'Statlig';
         break;
     }
-    this.unit = "2970 IT-Avdelingen";//user.officeLocation;
+    this.unit = user.officeLocation;
+    this.reporterEmail = user.mail;
+    this.reporterNAVIdentId = user.onPremisesSamAccountName;
   }
 
   protected onDispose(): void {
@@ -80,6 +87,9 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
               groupFields: [
                 PropertyPaneTextField('webpartTitle', {
                   label: strings.WebpartTitleLabel
+                }),
+                PropertyPaneTextField('formSubmitURL', {
+                  label: strings.FormSubmitURLLabel
                 })
               ]
             }
