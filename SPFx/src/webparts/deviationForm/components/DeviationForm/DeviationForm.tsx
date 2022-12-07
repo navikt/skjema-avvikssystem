@@ -13,10 +13,11 @@ import styles from './DeviationForm.module.scss';
 export interface IDeviationFormProps {
     form: IDeviationForm;
     setSelectedForm: (form: IDeviationForm) => void;
+    toFormSelection: () => void;
     breadcrumbState: { breadcrumbs: string[], setBreadcrumbs: (breadcrumbs: string[]) => void };
 }
 
-const DeviationForm = ({ form, setSelectedForm, breadcrumbState }: IDeviationFormProps) => {
+const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection }: IDeviationFormProps) => {
     const context = useContext(DeviationFormContext);
     const [state, setState] = useState<IDeviationFormState>({
         currentPageNumber: 1,
@@ -395,7 +396,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState }: IDeviationFor
         };
         if (!format || format.length === 0) return <div dangerouslySetInnerHTML={{ __html: content }} />;
         try {
-            const resolvedVariables = format.map(f => f.indexOf('state.') !== -1 || f.indexOf('context.') !== -1 ? eval(f) : f);
+            const resolvedVariables = format.map(f => f.indexOf('state.') !== -1 || f.indexOf('context.') !== -1 ? (eval(f) as string).toLowerCase() : f);
             if (resolvedVariables.indexOf(undefined) !== -1) throw new Error('Klarte ikke hente nødvendig data.');
             const formattedContent = formatString(content, ...resolvedVariables);
             return (
@@ -419,9 +420,9 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState }: IDeviationFor
                         <Dialog
                             dialogContentProps={{ title: 'Registrer avvik', subText: state.submitResult, showCloseButton: true }}
                             hidden={!state.submitResult}
-                            onDismiss={() => setState({ ...state, submitResult: null })}>
+                            onDismiss={toFormSelection}>
                             <DialogFooter>
-                                <DefaultButton text='Lukk' onClick={() => setState({ ...state, submitResult: null })} />
+                                <DefaultButton text='Lukk' onClick={toFormSelection} />
                             </DialogFooter>
                         </Dialog>
                         {state.submitting ?

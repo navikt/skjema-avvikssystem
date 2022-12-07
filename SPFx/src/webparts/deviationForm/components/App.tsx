@@ -18,15 +18,17 @@ const App = ({ title }: IDeviationAppProps) => {
   const [calloutProps, setCalloutProps] = useState(defaultCalloutProps);
   const [breadcrumbs, setBreadcrumbs] = useState([]);
 
+  const toFormSelection = () => {
+    setSelectedForm(null);
+    setBreadcrumbs([]);
+  };
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.content}>
         {selectedForm &&
           <header>
-            <Link onClick={() => {
-              setSelectedForm(null);
-              setBreadcrumbs([]);
-            }}>{title}</Link>
+            <Link onClick={() => toFormSelection()}>{title}</Link>
             {' > '}
             {selectedForm.title}
             {breadcrumbs.length > 0 &&
@@ -60,7 +62,7 @@ const App = ({ title }: IDeviationAppProps) => {
             </div>
           </>
           :
-          <DeviationForm form={selectedForm} setSelectedForm={setSelectedForm} breadcrumbState={{ breadcrumbs, setBreadcrumbs }} />
+          <DeviationForm form={selectedForm} setSelectedForm={setSelectedForm} toFormSelection={toFormSelection} breadcrumbState={{ breadcrumbs, setBreadcrumbs }} />
         }
       </div>
     </div>

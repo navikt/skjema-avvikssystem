@@ -143,19 +143,19 @@
                     "choiceInfoTexts": [
                         {
                             "key": "Behandlingsgrunnlag",
-                            "text": "Brudd på krav til lovlig grunnlag eller hjemmel til å kunne bruke personopplysninger."
+                            "text": "Brudd knyttet til at all bruk av personopplysninger skal ha et behandlingsgrunnlag for å være lovlig."
                         },
                         {
                             "key": "Registrertes rettigheter",
-                            "text": "Brudd på krav til ivaretakelse av brukerens eller ansattes personvernrettigheter. Vi har behandlet krav fra bruker feil eller ikke innenfor de lovbestemte tidsfrister som er satt for saksbehandlingstid."
+                            "text": "Brudd knyttet til at NAV har behandlet krav fra bruker eller NAV-ansatt feil eller ikke innenfor lovbestemte tidsfrister."
                         },
                         {
                             "key": "Overføring til tredjeland",
-                            "text": "Brudd knyttet til overføring av personopplysninger til tredjeland (land utenfor EU/EØS)"
+                            "text": "Brudd knyttet til overføring av personopplysninger til tredjeland (land utenfor EU/EØS som ikke er forhåndsgodkjent av EU-kommisjonen)"
                         },
                         {
                             "key": "Lagring/sletting",
-                            "text": "Brudd knyttet til at lagringstid ikke er fastsatt eller at personopplysninger lagres lengre enn fastsatt lagringstid"
+                            "text": "Brudd knyttet til at lagringstid ikke er fastsatt eller at personopplysninger lagres lengre enn fastsatt lagringstid."
                         },
                         {
                             "key": "Manglende oversikter, vurderinger og dokumentasjon",
@@ -163,11 +163,11 @@
                         },
                         {
                             "key": "Fødselsnummer/biometriske kjennetegn",
-                            "text": "Ulovlig eller unødvendig bruk av fødselsnummer. Biometriske kjennetegn er fingeravtrykk, ansikt- og stemmegjennkjenning, DNA o.l."
+                            "text": "Ulovlig eller unødvendig bruk av fødselsnummer eller andre biometriske kjennetegn som fingeravtrykk, ansikt- og stemmegjenkjenning, DNA o.l."
                         },
                         {
                             "key": "Andre uønskede hendelser",
-                            "text": "Ev. andre personvernbrudd som ikke er kategorisert her eller som det er vanskelig plassere inn under en kategori"
+                            "text": "Andre personvernbrudd som ikke er kategorisert her eller som faller inn under mer enn en kategori."
                         }
                     ],
                     "required": "true"
@@ -224,39 +224,43 @@
                     "choiceInfoTexts": [
                         {
                             "key": "Feil bruk av samtykke (ugyldig samtykke)",
-                            "text": "Brudd på kravene til bruk av samtykke. Samtykket oppfyller ikke kravene til et gyldig samtykke om at det må være frivillig, spesifikt, informert, utvetydig,aktivt og kan trekkes tilbake. Samtykket kan ikke brukes pga  maktubalansen mellom registrerte og NAV. Brudd fordi personopplysninger er blitt behandlet ut over det samtykket dekker."
+                            "text": "Samtykke oppfyller ikke særskilte krav til bruk av samtykke eller personopplysninger er blitt brukt utover det som samtykket dekker."
                         },
                         {
                             "key": "Overskuddsinformasjon/ innhenting og lagring av flere opplysninger enn nødvendig",
-                            "text": "Brudd på prinsippet om lovlighet og dataminimering. Innhenting og bruk av flere personopplysninger enn det som dekkes av behandlingsgrunnlaget eller som ikke er nødvendig."
+                            "text": "Det innhentes og lagres flere personopplysninger enn det som dekkes av behandlingsgrunnlaget eller det brukes flere personopplysninger enn det som er nødvendig for behandlingen."
                         },
                         {
                             "key": "Rett til informasjon",
-                            "text": "Brudd på kravene om hvilken informasjon som skal gis og når, eller manglende dokumentasjon av bruk av unntak fra informasjonsplikten"
+                            "text": "Det er ikke gitt tilstrekkelig informasjon om hvordan personopplysningene behandles, hvilke konsekvenser behandlingen skal ha, hvilke rettigheter registrerte har og hvordan de kan tas i bruk."
                         },
                         {
                             "key": "Rett til informasjon ved automatisering og profilering",
-                            "text": "Brudd på retten til særskilt informasjon til bruker om helautomatisert behandling og ev. bruk av profilering."
+                            "text": "Brudd på retten til særskilt informasjon om helautomatisert behandling og bruk av profilering."
                         },
                         {
                             "key": "Rett til innsyn",
-                            "text": "Brudd på retten til innsyn i egne personopplysninger og retten til informasjon om hva vi bruker personopplysningene til."
+                            "text": "Bruker eller NAV-ansatt får ikke tilstrekkelig innsyn i egne personopplysninger og informasjon om hva personopplysningene brukes til."
+                        },
+                        {
+                            "key": "Rett til retting og sletting",
+                            "text": "Bruker eller NAV-ansatt får ikke rettet eller slettet uriktig personopplysninger."
                         },
                         {
                             "key": "Rett til begrensning av behandling",
-                            "text": "Feilbehandling ved krav om å få behandling av sine personopplysninger begrenset/stoppet"
+                            "text": "Bruker eller NAV-ansatt får ikke stanset bruk av personopplysninger."
                         },
                         {
                             "key": "Rett til dataportabilitet",
-                            "text": "Brudd på rett til på visse vilkår få sine personopplysninger utlevert eller flyttet til en annen virksomhet."
+                            "text": "Brudd på rett til å få utlevert eller flyttet personopplysninger til en annen virksomhet."
                         },
                         {
                             "key": "Rett til å protestere",
-                            "text": "Feilbehanding av registrertes protest mot behandling av deres personopplysninger."
+                            "text": "Brudd på retten til å protestere mot en behandling av personopplysninger."
                         },
                         {
                             "key": "Manglende databehandleravtale",
-                            "text": "Brudd på kravene til databehandleravtale. Eksterne leverandører og ev. underleverandører behandler personopplysninger for NAV, uten at det er inngått en skriftlig databehandleravtale."
+                            "text": "Eksterne leverandører og ev. underleverandører behandler personopplysninger for NAV, uten at det er inngått en skriftlig databehandleravtale."
                         },
                         {
                             "key": "Databehandler følger ikke avtalens instrukser",
@@ -268,39 +272,51 @@
                         },
                         {
                             "key": "Brudd på NAV's retningslinjer og prinsipper",
-                            "text": "Brudd på, eller at NAV sine retningslinjer og prinsipper for overføring av personopplysninger ikke er blitt fulgt."
+                            "text": "Brudd knyttet til at NAV sine retningslinjer og prinsipper for overføring av personopplysninger ikke er blitt fulgt."
                         },
                         {
                             "key": "Det er ikke fastsatt lagringstid",
-                            "text": "Brudd på kravet om at det skal være fastsatt lagringstid. Det er ikke vurdert hvor lenge personopplysningene skal lagres, eller om de skal kasseres eller bevares."
+                            "text": "Det er ikke vurdert hvor lenge personopplysningene skal lagres. Det er ikke vurdert om personopplysningene skal bevares eller kasseres."
                         },
                         {
                             "key": "Det er ikke rutiner for sletting/personopplysningene slettes ikke",
-                            "text": "Det er fastsatt lagringstider, men ikke etablert rutiner som sikrer at det faktisk skjer."
+                            "text": "Det er fastsatt lagringstider, men ikke etablert rutiner som sikrer at personopplysningene faktisk slettes."
                         },
                         {
                             "key": "Behandlingen er ikke registrert/oppdatert i Behandlingskatalogen",
-                            "text": "Brudd på kravet om at Behandlingskatalogen,som er direktoratets oversikt over alle områder hvor etaten behandler personopplysninger, skal være fylt ut eller oppdatert."
+                            "text": "Behandlingskatalogen er NAVs protokoll over behandlingsaktiviteter. Katalogen skal til enhver tid være oppdatert med NAVs behandling av personopplysninger."
                         },
                         {
                             "key": "Ikke gjennomført vurdering av personvernkonsekvenser (PVK)",
-                            "text": "Brudd på kravene til PVK , ikke forelagt personvernombudet, ikke godkjent av risikoeier."
+                            "text": "Brudd på kravet om at PVK skal gjennomføres ved høy risiko for personvernet. "
+                        },
+                        {
+                            "key": "Tiltak fra vurdering av personvernkonsekvenser ikke fulgt opp",
+                            "text": "Tiltak som er satt i PVK skal gjennomføres innen fastsatte frister."
                         },
                         {
                             "key": "Dokumentasjon av etterlevelseskrav ikke gjennomført",
-                            "text": "Brudd på kravet om at personvernkrav ved systemutvikling, skal være gjennomgått og dokumentert."
+                            "text": "Personvernkrav skal etterleves og dokumenteres."
                         },
                         {
                             "key": "Kameraovervåkning på arbeidsplass",
-                            "text": "Ulovlig kameraovervåking på arbeidsplass, ulovlig lagring av kameraopptak."
+                            "text": "Det foretas kameraovervåking på arbeidsplass som er ulovlig eller ulovlig lagring av kameraopptak. "
                         },
                         {
                             "key": "Publisering av bilder, lyd- og videoopptak",
-                            "text": "Arbeidsgiver eller brukere mfl. publiserer ulovlig bilder, lydopptak av ansatte eller andre brukere i media, nettsider el.l."
+                            "text": "Arbeidsgiver, brukere eller andre publiserer ulovlig bilder, lyd- eller videopptak på nettsider, media o.l."
                         },
                         {
                             "key": "Uberettiget innsyn i arbeidstakers e-postkasse, private filer mm.",
-                            "text": "Brudd på kravene for når arbeidsgiver kan gjøre innsyn, prosedyrekravene ikke fulgt osv."
+                            "text": "Arbeidsgiver foretar innsyn i ansattes e-post kasse, private filer mv. som ikke er berettiget, krav til innsynsprosedyrer ikke fulgt mv."
+                        },
+                        {
+                            "key": "Ulovlig overvåkning/kontroll av ansatte",
+                            "text": "Det foretas f.eks. ulovlig produksjonskontroll, overvåking telefonbruk, sporing m.m. av ansatte som er ulovlig."
+                        },
+                        {
+                            "key": "Annet",
+                            "text": "Ev. andre brudd knyttet til krav behandlingsgrunnlag."
                         }
                     ]
                 }
