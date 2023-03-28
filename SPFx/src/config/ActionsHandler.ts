@@ -23,10 +23,10 @@ export default class ActionsHandler {
         this._setState({ ...state, [stateVariable]: currentPageNumber - 1 });
     }
 
-    private async Submit({ values, formSubmitURL, stateVariable, state, resultVariable }) {
+    private async Submit({ values, functionUrl, stateVariable, state, resultVariable }) {
         this._setState({ ...state, [stateVariable]: true });
         const body = JSON.stringify(values);
-        const response = await fetch(formSubmitURL, {
+        const response = await fetch(`${functionUrl}&mode=post`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

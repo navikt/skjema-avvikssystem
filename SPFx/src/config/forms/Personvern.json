@@ -492,7 +492,7 @@
                         "functionName": "Submit",
                         "params": {
                             "state_values": "values",
-                            "context_formSubmitURL": "formSubmitURL",
+                            "context_functionUrl": "functionUrl",
                             "setstate": "submitting",
                             "resultVariable": "submitResult"
                         }

@@ -1,10 +1,12 @@
 declare interface IDeviationFormWebPartStrings {
   SettingsGroupName: string;
   WebpartTitleLabel: string;
-  FormSubmitURLLabel: string;
+  FunctionURLLabel: string;
   SelectFormText: string;
   SummaryConfirmationPersonaldata: string
   SummaryConfirmation: string;
+  SearchCaseButtonText: string;
+  SearchCaseHeaderText: string;
 }
 
 declare module 'DeviationFormWebPartStrings' {

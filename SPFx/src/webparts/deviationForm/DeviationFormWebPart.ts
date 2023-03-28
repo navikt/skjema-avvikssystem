@@ -16,7 +16,7 @@ import { AadHttpClient } from '@microsoft/sp-http';
 
 export interface IDeviationFormWebPartProps {
   webpartTitle: string;
-  formSubmitURL: string;
+  functionUrl: string;
 }
 
 export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviationFormWebPartProps> {
@@ -31,8 +31,8 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
       organization: this.organization,
       unit: this.unit,
       reporterEmail: this.reporterEmail,
-      reporterNAVIdentId: this.reporterNAVIdentId,
-      formSubmitURL: this.properties.formSubmitURL
+      reporterNAVIdentId: 'G166597',//this.reporterNAVIdentId,
+      functionUrl: this.properties.functionUrl
     };
 
     const element: React.ReactElement<{}> = (
@@ -48,6 +48,28 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
 
   protected async onInit(): Promise<void> {
     await super.onInit();
+/*     let body = `query {
+      orgEnheter(where: {}) {
+           orgEnhet {
+             id
+             navn
+             gyldigFom
+             gyldigTom
+             organiseringer {
+               retning
+               orgEnhet {
+                 id
+               }
+             }
+           }
+       }
+   }`
+    const testClient = await this.context.aadHttpClientFactory.getClient('api://prod-gcp.nom.nom-api');
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    // https://nom.nav.no/nom-api/graphql
+    let test = await testClient.post('https://nom.nav.no/nom-api/graphql', AadHttpClient.configurations.v1, { body, headers });
+    console.log(test); */
     const client: AadHttpClient = await this.context.aadHttpClientFactory.getClient('https://graph.microsoft.com');
     const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName,officeLocation,mail,onPremisesSamAccountName', AadHttpClient.configurations.v1);
     const user = await res.json();
@@ -88,8 +110,8 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
                 PropertyPaneTextField('webpartTitle', {
                   label: strings.WebpartTitleLabel
                 }),
-                PropertyPaneTextField('formSubmitURL', {
-                  label: strings.FormSubmitURLLabel
+                PropertyPaneTextField('functionUrl', {
+                  label: strings.FunctionURLLabel
                 })
               ]
             }

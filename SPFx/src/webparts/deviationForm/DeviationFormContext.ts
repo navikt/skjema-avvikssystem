@@ -7,7 +7,7 @@ export interface IDeviationFormContext {
     unit: string;
     reporterEmail: string;
     reporterNAVIdentId: string;
-    formSubmitURL: string;
+    functionUrl: string;
 }
 
 export const DeviationFormContext = createContext<IDeviationFormContext>(null);
