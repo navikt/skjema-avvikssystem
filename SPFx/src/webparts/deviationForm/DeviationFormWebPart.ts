@@ -31,7 +31,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
       organization: this.organization,
       unit: this.unit,
       reporterEmail: this.reporterEmail,
-      reporterNAVIdentId: 'G166597',//this.reporterNAVIdentId,
+      reporterNAVIdentId: this.reporterNAVIdentId,
       functionUrl: this.properties.functionUrl
     };
 

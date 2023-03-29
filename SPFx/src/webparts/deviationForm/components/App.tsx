@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useContext } from 'react';
 import styles from './App.module.scss';
 import { DeviationFormContext } from '../DeviationFormContext';
-import { Callout, DefaultButton, DirectionalHint, Link, PrimaryButton, SearchBox } from 'office-ui-fabric-react';
+import { Callout, DefaultButton, DirectionalHint, Link, PrimaryButton, SearchBox, Spinner, SpinnerSize } from 'office-ui-fabric-react';
 import DeviationForm from './DeviationForm/DeviationForm';
 import strings from 'DeviationFormWebPartStrings';
 import { DescriptionType } from '../types';
@@ -15,7 +15,7 @@ export interface IDeviationAppProps {
 const App = ({ title }: IDeviationAppProps) => {
   const context = useContext(DeviationFormContext);
   const defaultCalloutProps = { display: false, button: null };
-  const initialSearchState = { search: false, caseId: null, result: null };
+  const initialSearchState = { search: false, caseId: null, result: null, searching: false };
   const [selectedForm, setSelectedForm] = useState(null);
   const [calloutProps, setCalloutProps] = useState(defaultCalloutProps);
   const [breadcrumbs, setBreadcrumbs] = useState([]);
@@ -28,10 +28,11 @@ const App = ({ title }: IDeviationAppProps) => {
   };
 
   const getCase = async () => {
+    setSearchState({ ...searchState, searching: true });
     const values = {
       reporterNAVIdentId: context.reporterNAVIdentId,
       avvikNumber: searchState.caseId
-    }
+    };
     const body = JSON.stringify(values);
     const response = await fetch(`${context.functionUrl}&mode=get`, {
       method: 'POST',
@@ -41,11 +42,8 @@ const App = ({ title }: IDeviationAppProps) => {
       body,
     });
     const result = await response.json();
-    setSearchState({ ...searchState, result });
-  }
-
-  console.log(searchState);
-  console.log(context.reporterNAVIdentId);
+    setSearchState({ ...searchState, result, searching: false });
+  };
 
   if (searchState.search) {
     return (
@@ -53,14 +51,23 @@ const App = ({ title }: IDeviationAppProps) => {
         <div className={styles.content}>
           <header>Fyll inn id på avviket</header>
           <div className={styles.search}>
-            <SearchBox className={styles.searchBox} value={searchState.caseId} onChange={(_, val) => setSearchState({ ...searchState, caseId: val })} />
-            <PrimaryButton text='Søk' onClick={() => getCase()} />
+            <SearchBox
+              className={styles.searchBox}
+              disabled={searchState.searching}
+              value={searchState.caseId}
+              onChange={(_, val) => setSearchState({ ...searchState, caseId: val })}
+              onSearch={() => getCase()}
+            />
+            <PrimaryButton disabled={searchState.searching} text='Søk' onClick={() => getCase()} />
           </div>
-          <SearchResult result={searchState.result} />
+          {searchState.searching ? <Spinner className={styles.searchSpinner} size={SpinnerSize.large} label='Søker...' />
+            :
+            <SearchResult result={searchState.result} />
+          }
           <DefaultButton text='Tilbake' onClick={() => toFormSelection()} />
         </div>
       </div>
-    )
+    );
   } else return (
     <div className={styles.wrapper}>
       <div className={styles.content}>

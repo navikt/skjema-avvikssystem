@@ -107,9 +107,18 @@ export interface IDeviationForm {
     pages: IDeviationFormPage[];
     conditionalOptions?: IDeviationFormConditionalOptions;
 }
+export interface ISearchResultField {
+    name: string;
+    displayName: string;
+    type: string;
+}
+export interface ISearchResult {
+    fields: ISearchResultField[];
+}
 export interface IAppConfig {
     forms: IDeviationForm[];
     calendarString: ICalendarStrings;
+    searchResult: ISearchResult;
 }
 
 export interface IDeviationFormState {

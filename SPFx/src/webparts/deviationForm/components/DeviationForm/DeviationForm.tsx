@@ -98,14 +98,14 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                                 options={options}
                                 multiSelect={multiSelect}
                                 onChange={(_, option) => {
-                                    let values = [];
+                                    let selectedValues = [];
                                     if (multiSelect) {
                                         const vals = state.values[field.key] || [];
                                         if (option.selected) {
-                                            values = [...vals, option.text];
-                                        } else values = vals.filter(v => v !== option.text);
+                                            selectedValues = [...vals, option.text];
+                                        } else selectedValues = vals.filter(v => v !== option.text);
                                     }
-                                    setState({ ...state, values: { ...state.values, [field.key]: multiSelect ? values : option.text } });
+                                    setState({ ...state, values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.text } });
                                 }}
                             />
                         </div>

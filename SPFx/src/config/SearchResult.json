@@ -1,0 +1,74 @@
+{
+    "fields": [
+        {
+            "name": "Avvik_IncidentNumber__c",
+            "displayName": "Avviksnummer",
+            "type": "string"
+        },
+        {
+            "name": "Owner",
+            "displayName": "Sakseier",
+            "type": "user"
+        },
+        {
+            "name": "Status",
+            "displayName": "Status",
+            "type": "string"
+        },
+        {
+            "name": "CreatedDate",
+            "displayName": "Dato åpnet",
+            "type": "date"
+        },
+        {
+            "name": "Avvik_IncidentDate__c",
+            "displayName": "Avviksdato",
+            "type": "date"
+        },
+        {
+            "name": "Avvik_SuperordinateCategory__c",
+            "displayName": "Hovedkategori",
+            "type": "string"
+        },
+        {
+            "name": "Avvik_BasicCategory__c",
+            "displayName": "Underkategori",
+            "type": "string"
+        },
+        {
+            "name": "Avvik_SubordinateCategory__c",
+            "displayName": "Subkategori",
+            "type": "string"
+        },
+        {
+            "name": "Avvik_IncidentDescription__c",
+            "displayName": "Beskrivelse",
+            "type": "string"
+        },
+        {
+            "name": "Description",
+            "displayName": "Saksbeskrivelse",
+            "type": "string"
+        },
+        {
+            "name": "Avvik_PlannedActions__c",
+            "displayName": "Planlagte tiltak",
+            "type": "string"
+        },
+        {
+            "name": "Avvik_IsActionCompleted__c",
+            "displayName": "Er tiltak gjennomført?",
+            "type": "boolean"
+        },
+        {
+            "name": "Avvik_DeadlineForAction__c",
+            "displayName": "Frist for gjennomførelse av tiltak",
+            "type": "date"
+        },
+        {
+            "name": "ClosedDate",
+            "displayName": "Dato lukket",
+            "type": "date"
+        }
+    ]
+}

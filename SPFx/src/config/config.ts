@@ -2,6 +2,7 @@ import HMS from './forms/HMS.json';
 import FysiskSikkerhet from './forms/Fysisk sikkerhet.json';
 import InformasjonsSikkerhet from './forms/Informasjonssikkerhet.json';
 import Personvern from './forms/personvern.json';
+import SearchResult from './SearchResult.json';
 import { ICalendarStrings } from 'office-ui-fabric-react';
 
 const CalendarStrings: ICalendarStrings = {
@@ -12,4 +13,4 @@ const CalendarStrings: ICalendarStrings = {
     goToToday: 'Gå til i dag'
 };
 
-export default {forms: [HMS, FysiskSikkerhet, InformasjonsSikkerhet, Personvern], calendarString: CalendarStrings};
+export default {forms: [HMS, FysiskSikkerhet, InformasjonsSikkerhet, Personvern], searchResult: SearchResult, calendarString: CalendarStrings};
