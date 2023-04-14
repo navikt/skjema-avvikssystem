@@ -48,7 +48,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
 
   protected async onInit(): Promise<void> {
     await super.onInit();
-/*     let body = `query {
+    let body = `query {
       orgEnheter(where: {}) {
            orgEnhet {
              id
@@ -63,13 +63,14 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
              }
            }
        }
-   }`
+   }`;
     const testClient = await this.context.aadHttpClientFactory.getClient('api://prod-gcp.nom.nom-api');
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    // https://nom.nav.no/nom-api/graphql
-    let test = await testClient.post('https://nom.nav.no/nom-api/graphql', AadHttpClient.configurations.v1, { body, headers });
-    console.log(test); */
+    headers.append('target-app', 'nom-api');
+    headers.append('target-client-id', '3e962532-1cd2-4bb4-8222-515c83df854a');
+    let test = await testClient.post('https://org-ekstern-proxy.nav.no/graphql', AadHttpClient.configurations.v1, { body, headers });
+    console.log(test);
     const client: AadHttpClient = await this.context.aadHttpClientFactory.getClient('https://graph.microsoft.com');
     const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName,officeLocation,mail,onPremisesSamAccountName', AadHttpClient.configurations.v1);
     const user = await res.json();
