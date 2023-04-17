@@ -88,6 +88,27 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                         options = eval(field.options).map(o => ({ key: o, text: o }));
                     } else options = field.options.map(o => ({ key: o, text: o }));
                     const multiSelect = eval(field.multiselect) || false;
+                    if (eval(field.combobox)) {
+                        return (
+                            <div className={styles.field}>
+                                <ComboBox
+                                    label={field.label}
+                                    options={options}
+                                    required={eval(field.required)}
+                                    onChange={(_, option) => {
+                                        let selectedValues = [];
+                                        if (multiSelect) {
+                                            const vals = state.values[field.key] || [];
+                                            if (option.selected) {
+                                                selectedValues = [...vals, option.text];
+                                            } else selectedValues = vals.filter(v => v !== option.text);
+                                        }
+                                        setState({ ...state, values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.text } });
+                                    }}
+                                />
+                            </div>
+                        );
+                    }
                     return (
                         <div className={styles.field}>
                             <Dropdown

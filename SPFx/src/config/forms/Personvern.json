@@ -372,9 +372,6 @@
                     ],
                     "required": "true",
                     "defaultValue": "Min enhet",
-                    "disabledOptions": [
-                        "Annen enhet"
-                    ],
                     "additionalData": [
                         {
                             "key": "Min enhet",
@@ -386,10 +383,8 @@
                     "key": "unitOther",
                     "label": "Hvis annen enhet: Velg enhet",
                     "type": "Choice",
-                    "options": [
-                        "Enhet 1",
-                        "Enhet 2"
-                    ],
+                    "combobox": "true",
+                    "options": "context.orgUnits",
                     "hidden": "!(state.values.unit === 'Annen enhet')",
                     "required": "state.values.unit === 'Annen enhet'"
                 },

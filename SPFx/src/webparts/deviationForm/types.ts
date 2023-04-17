@@ -63,6 +63,7 @@ export interface IDeviationFormField {
     choiceInfoTexts?: IChoiceInfoText[];
     required?: string;
     disabled?: string;
+    combobox?: string;
     minDate?: string;
     multiline?: string;
     hidden?: string;

@@ -332,10 +332,7 @@
                     "key": "unitOther",
                     "label": "Hvis annen enhet: Velg enhet",
                     "type": "Choice",
-                    "options": [
-                        "Enhet 1",
-                        "Enhet 2"
-                    ],
+                    "options": "context.orgUnits",
                     "hidden": "!(state.values.unit === 'Annen enhet')",
                     "required": "state.values.unit === 'Annen enhet'"
                 },

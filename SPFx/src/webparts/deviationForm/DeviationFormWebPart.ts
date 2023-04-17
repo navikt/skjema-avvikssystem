@@ -24,12 +24,14 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
   private unit: string;
   private reporterEmail: string;
   private reporterNAVIdentId: string;
+  private orgUnits: string[];
 
   public render(): void {
     const value: IDeviationFormContext = {
       config: config as IAppConfig,
       organization: this.organization,
       unit: this.unit,
+      orgUnits: this.orgUnits,
       reporterEmail: this.reporterEmail,
       reporterNAVIdentId: this.reporterNAVIdentId,
       functionUrl: this.properties.functionUrl
@@ -48,29 +50,19 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
 
   protected async onInit(): Promise<void> {
     await super.onInit();
-    let body = `query {
-      orgEnheter(where: {}) {
-           orgEnhet {
-             id
-             navn
-             gyldigFom
-             gyldigTom
-             organiseringer {
-               retning
-               orgEnhet {
-                 id
-               }
-             }
-           }
-       }
-   }`;
+    let body = `{
+      "query": "query { orgEnheter(where: {}) { orgEnhet { id navn gyldigFom gyldigTom organiseringer { retning orgEnhet { id }} } }}"
+      }`;
     const testClient = await this.context.aadHttpClientFactory.getClient('api://prod-gcp.nom.nom-api');
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('target-app', 'nom-api');
     headers.append('target-client-id', '3e962532-1cd2-4bb4-8222-515c83df854a');
-    let test = await testClient.post('https://org-ekstern-proxy.nav.no/graphql', AadHttpClient.configurations.v1, { body, headers });
-    console.log(test);
+    let response = await testClient.post('https://org-ekstern-proxy.nav.no/graphql', AadHttpClient.configurations.v1, { body, headers });
+    let json = await response.json();
+    console.log(json);
+    let units = json.data.orgEnheter.filter(unit => (new Date(unit.orgEnhet.gyldigTom) > new Date()) || !unit.orgEnhet.gyldigTom).map(unit => unit.orgEnhet.navn);
+    console.log(units);
     const client: AadHttpClient = await this.context.aadHttpClientFactory.getClient('https://graph.microsoft.com');
     const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName,officeLocation,mail,onPremisesSamAccountName', AadHttpClient.configurations.v1);
     const user = await res.json();
@@ -87,6 +79,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
       default:
         break;
     }
+    this.orgUnits = units;
     this.unit = user.officeLocation;
     this.reporterEmail = user.mail;
     this.reporterNAVIdentId = user.onPremisesSamAccountName;
