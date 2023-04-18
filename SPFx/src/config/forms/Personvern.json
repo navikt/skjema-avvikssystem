@@ -446,7 +446,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.valid || !context.unit",
+                    "disabled": "!state.valid",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {

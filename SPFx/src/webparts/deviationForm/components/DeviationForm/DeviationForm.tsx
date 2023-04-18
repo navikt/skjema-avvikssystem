@@ -1,7 +1,7 @@
 import { PrimaryButton } from '@microsoft/office-ui-fabric-react-bundle';
 import strings from 'DeviationFormWebPartStrings';
 import { flatten, range, padStart } from 'lodash';
-import { Checkbox, ChoiceGroup, ComboBox, DatePicker, DayOfWeek, DefaultButton, Dialog, DialogContent, DialogFooter, DialogType, Dropdown, IconButton, mergeStyles, MessageBar, MessageBarType, Spinner, SpinnerSize, TextField, TooltipHost } from 'office-ui-fabric-react';
+import { Checkbox, ChoiceGroup, ComboBox, DatePicker, DayOfWeek, DefaultButton, Dialog, DialogContent, DialogFooter, DialogType, Dropdown, IconButton, mergeStyles, MessageBar, MessageBarType, Spinner, SpinnerSize, TextField, TooltipHost, VirtualizedComboBox } from 'office-ui-fabric-react';
 import * as React from 'react';
 import { useState, useEffect, useRef, useContext } from 'react';
 import ActionsHandler from '../../../../config/ActionsHandler';
@@ -91,8 +91,11 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                     if (eval(field.combobox)) {
                         return (
                             <div className={styles.field}>
-                                <ComboBox
+                                <VirtualizedComboBox
                                     label={field.label}
+                                    selectedKey={state.values[field.key]}
+                                    allowFreeform
+                                    autoComplete="on"
                                     options={options}
                                     required={eval(field.required)}
                                     onChange={(_, option) => {

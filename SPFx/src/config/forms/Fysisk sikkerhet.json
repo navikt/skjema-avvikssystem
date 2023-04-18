@@ -145,10 +145,8 @@
                     "key": "unitOther",
                     "label": "Hvis annen enhet: Velg enhet",
                     "type": "Choice",
-                    "options": [
-                        "Enhet 1",
-                        "Enhet 2"
-                    ],
+                    "combobox": "true",
+                    "options": "context.orgUnits",
                     "hidden": "!(state.values.unit === 'Annen enhet')",
                     "required": "state.values.unit === 'Annen enhet'"
                 },
@@ -237,7 +235,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.valid || !context.unit",
+                    "disabled": "!state.valid",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
