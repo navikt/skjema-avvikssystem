@@ -50,6 +50,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
 
   protected async onInit(): Promise<void> {
     await super.onInit();
+    
     const body = `{
       "query": "query { orgEnheter(where: {}) { orgEnhet { id navn gyldigFom gyldigTom organiseringer { retning orgEnhet { id }} } }}"
       }`;
@@ -61,6 +62,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
     const response = await nomClient.post('https://org-ekstern-proxy.nav.no/graphql', AadHttpClient.configurations.v1, { body, headers });
     const json = await response.json();
     let units = json.data.orgEnheter.filter(unit => (new Date(unit.orgEnhet.gyldigTom) > new Date()) || !unit.orgEnhet.gyldigTom).map(unit => unit.orgEnhet.navn);
+
     const client: AadHttpClient = await this.context.aadHttpClientFactory.getClient('https://graph.microsoft.com');
     const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName,officeLocation,mail,onPremisesSamAccountName', AadHttpClient.configurations.v1);
     const user = await res.json();

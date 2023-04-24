@@ -86,7 +86,9 @@ const App = ({ title }: IDeviationAppProps) => {
         }
         {!selectedForm ?
           <>
-            <header>{strings.SelectFormText}</header>
+            <header>
+              <h1>{strings.SelectFormText}</h1>
+            </header>
             <div className={styles.forms}>
               {context.config.forms.map((form, i) => {
                 const buttonId = `callout-button-${i}`;
@@ -102,8 +104,11 @@ const App = ({ title }: IDeviationAppProps) => {
                       </Callout>}
                     <DefaultButton
                       id={buttonId}
+                      ariaDescription={extractContent(form.description?.content)}
                       text={form.title}
                       onClick={() => setSelectedForm(form)}
+                      onFocus={() => setCalloutProps({ display: true, button: buttonId })}
+                      onBlur={() => setCalloutProps(defaultCalloutProps)}
                       onMouseEnter={() => setCalloutProps({ display: true, button: buttonId })}
                       onMouseLeave={() => setCalloutProps(defaultCalloutProps)}
                     />
@@ -111,7 +116,9 @@ const App = ({ title }: IDeviationAppProps) => {
                 );
               })}
             </div>
-            <header>{strings.SearchCaseHeaderText}</header>
+            <header>
+              <h1>{strings.SearchCaseHeaderText}</h1>
+            </header>
             <DefaultButton
               className={styles.searchButton}
               text={strings.SearchCaseButtonText}
@@ -125,6 +132,12 @@ const App = ({ title }: IDeviationAppProps) => {
       </div>
     </div>
   );
+};
+
+const extractContent = (s) => {
+  var span = document.createElement('span');
+  span.innerHTML = s;
+  return span.textContent || span.innerText;
 };
 
 export default App;

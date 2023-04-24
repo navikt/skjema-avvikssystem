@@ -1,7 +1,7 @@
 import { PrimaryButton } from '@microsoft/office-ui-fabric-react-bundle';
 import strings from 'DeviationFormWebPartStrings';
 import { flatten, range, padStart } from 'lodash';
-import { Checkbox, ChoiceGroup, ComboBox, DatePicker, DayOfWeek, DefaultButton, Dialog, DialogContent, DialogFooter, DialogType, Dropdown, IconButton, mergeStyles, MessageBar, MessageBarType, Spinner, SpinnerSize, TextField, TooltipHost, VirtualizedComboBox } from 'office-ui-fabric-react';
+import { Checkbox, ChoiceGroup, ComboBox, DatePicker, DayOfWeek, DefaultButton, Dialog, DialogContent, DialogFooter, DialogType, Dropdown, Icon, IconButton, mergeStyles, MessageBar, MessageBarType, Spinner, SpinnerSize, TextField, TooltipHost, VirtualizedComboBox } from 'office-ui-fabric-react';
 import * as React from 'react';
 import { useState, useEffect, useRef, useContext } from 'react';
 import ActionsHandler from '../../../../config/ActionsHandler';
@@ -157,7 +157,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                                             <div className={optionRootClass}>
                                                 {render!(props)}
                                                 <TooltipHost content={choiceText.text} id={`${field.key}-choice-tooltip-${i}`}>
-                                                    <IconButton styles={{ rootHovered: { background: 'none' }, rootPressed: { background: 'none' } }} iconProps={{ iconName: 'Info' }} />
+                                                    <Icon aria-hidden='true' iconName='Info' />
                                                 </TooltipHost>
                                             </div>
                                         );
@@ -222,6 +222,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                     return (
                         <DatePicker
                             strings={context.config.calendarString}
+                            allowTextInput
                             firstDayOfWeek={DayOfWeek.Monday}
                             formatDate={date => date.toLocaleDateString('nb-NO')}
                             maxDate={new Date()}
@@ -453,7 +454,9 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                             <Spinner size={SpinnerSize.large} label='Sender inn...' />
                             :
                             <>
-                                <header>{page.title}</header>
+                                <header>
+                                    <h2>{page.title}</h2>
+                                </header>
                                 {page.type === DeviationFormPageType.Input &&
                                     page.fields?.map(field => renderField(field))
                                 }
