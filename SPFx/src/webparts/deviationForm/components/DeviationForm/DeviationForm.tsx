@@ -1,7 +1,27 @@
 import { PrimaryButton } from '@microsoft/office-ui-fabric-react-bundle';
 import strings from 'DeviationFormWebPartStrings';
 import { flatten, range, padStart } from 'lodash';
-import { Checkbox, ChoiceGroup, ComboBox, DatePicker, DayOfWeek, DefaultButton, Dialog, DialogContent, DialogFooter, DialogType, Dropdown, Icon, IconButton, mergeStyles, MessageBar, MessageBarType, Spinner, SpinnerSize, TextField, TooltipHost, VirtualizedComboBox } from 'office-ui-fabric-react';
+import {
+    Checkbox,
+    ChoiceGroup,
+    ComboBox,
+    DatePicker,
+    DayOfWeek,
+    DefaultButton,
+    Dialog,
+    DialogFooter,
+    Dropdown,
+    IChoiceGroupOption,
+    IconButton,
+    mergeStyles,
+    MessageBar,
+    MessageBarType,
+    Spinner,
+    SpinnerSize,
+    TextField,
+    TooltipHost,
+    VirtualizedComboBox
+} from 'office-ui-fabric-react';
 import * as React from 'react';
 import { useState, useEffect, useRef, useContext } from 'react';
 import ActionsHandler from '../../../../config/ActionsHandler';
@@ -148,16 +168,25 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                         field.choiceInfoTexts.forEach((choiceText, i) => {
                             const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
                             const [replaceOption] = options.filter(o => o.key === choiceText.key);
+                            const screenReaderTextId = `screenReaderText-${field.key}-choice-tooltip-${i}`;
+
                             if (options.indexOf(replaceOption) !== -1) {
-                                const option = {
+                                const option: IChoiceGroupOption = {
                                     key: choiceText.key,
                                     text: choiceText.key,
+
                                     onRenderField: (props, render) => {
                                         return (
-                                            <div className={optionRootClass}>
+                                            <div aria-describedby={screenReaderTextId} className={optionRootClass}>
                                                 {render!(props)}
+                                                <span
+                                                    style={{ height: '1px', width: '1px', position: 'absolute', overflow: 'hidden', margin: '-1px', padding: '0px', border: '0px' }}
+                                                    id={screenReaderTextId}
+                                                >
+                                                    {choiceText.text}
+                                                </span>
                                                 <TooltipHost content={choiceText.text} id={`${field.key}-choice-tooltip-${i}`}>
-                                                    <Icon aria-hidden='true' iconName='Info' />
+                                                    <IconButton tabIndex={-1} aria-hidden='true' styles={{ rootHovered: { background: 'none' }, rootPressed: { background: 'none' } }} iconProps={{ iconName: 'Info' }} />
                                                 </TooltipHost>
                                             </div>
                                         );

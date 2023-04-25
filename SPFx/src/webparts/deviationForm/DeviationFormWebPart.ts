@@ -50,7 +50,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
 
   protected async onInit(): Promise<void> {
     await super.onInit();
-    
+
     const body = `{
       "query": "query { orgEnheter(where: {}) { orgEnhet { id navn gyldigFom gyldigTom organiseringer { retning orgEnhet { id }} } }}"
       }`;
