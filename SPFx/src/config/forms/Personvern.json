@@ -53,7 +53,7 @@
     },
     "description": {
         "type": "html",
-        "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Behandlingsgrunnlag</li> <li>Registrertes rettigheter</li> <li>Databehandleravtaler</li> <li>Overføring til tredjeland</li> <li>Lagring/sletting</li> <li>Manglende oversikter, vurderinger og dokumentasjon</li> <li>Bruk av bilder,lyd- og videoopptak</li> <li>Overvåking/kontroll av ansatte</li> <li>Fødselsnummer/biometriske kjennetegn</li> <li>Andre uønskede hendelser</li> </ul> </div>"
+        "content": "<div style='padding: 5px 10px'> <p>Personvern omfatter brudd på registrertes rettigheter og NAVs forpliktelser etter personopplysningsloven.<br />Følgende kategorier faller inn under Personvern:</p> <ul> <li>Behandlingsgrunnlag</li> <li>Registrertes rettigheter</li> <li>Databehandleravtaler</li> <li>Overføring til tredjeland</li> <li>Lagring/sletting</li> <li>Manglende oversikter, vurderinger og dokumentasjon</li> <li>Bruk av bilder,lyd- og videoopptak</li> <li>Overvåking/kontroll av ansatte</li> <li>Fødselsnummer/biometriske kjennetegn</li> <li>Andre uønskede hendelser</li> </ul> <p>Brudd på personopplysningssikkerhet hører inn under tema Informasjonssikkerhet.</p> </div>"
     },
     "pages": [
         {
@@ -147,7 +147,7 @@
                         },
                         {
                             "key": "Registrertes rettigheter",
-                            "text": "Brudd knyttet til at NAV har behandlet krav fra bruker eller NAV-ansatt feil eller ikke innenfor lovbestemte tidsfrister."
+                            "text": "Brudd knyttet til at NAV ikke ivaretar rettigheter den registrerte har, eller ikke har behandlet krav fra den registrerte innen gjeldende frister. Registrertes rettigheter omfatter rett til informasjon, innsyn i egne personopplysninger, rett til sletting eller endring av personopplysninger, rett til begrensning, dataportabilitet og retten til å protestere."
                         },
                         {
                             "key": "Overføring til tredjeland",
@@ -313,10 +313,6 @@
                         {
                             "key": "Ulovlig overvåkning/kontroll av ansatte",
                             "text": "Det foretas f.eks. ulovlig produksjonskontroll, overvåking telefonbruk, sporing m.m. av ansatte som er ulovlig."
-                        },
-                        {
-                            "key": "Annet",
-                            "text": "Ev. andre brudd knyttet til krav behandlingsgrunnlag."
                         }
                     ]
                 }

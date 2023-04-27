@@ -147,7 +147,13 @@
                     "type": "ChoiceGroup",
                     "options": "form.conditionalOptions[state.values.category]",
                     "required": "form.conditionalOptions[state.values.category]",
-                    "hidden": "!(form.conditionalOptions[state.values.category])"
+                    "hidden": "!(form.conditionalOptions[state.values.category])",
+                    "choiceInfoTexts": [
+                        {
+                            "key": "Feil i et IT-system",
+                            "text": "Feil som medfører at personopplysninger blir synlige for personer som ikke skal se de. Andre feil kan være at personopplysningene er blitt uriktig endret, slettet, eller vært utilgjengelige."
+                        }
+                    ]
                 }
             ],
             "actions": [
@@ -233,19 +239,8 @@
                     "required": "true"
                 },
                 {
-                    "key": "incidentDuration",
-                    "label": "Hvor lenge varte avviket?",
-                    "type": "DateTime",
-                    "disabled": "!state.values.timeOfDiscovery",
-                    "minDate": "state.values.timeOfDiscovery",
-                    "valid": "state.values.timeOfDiscovery < state.values.incidentDuration",
-                    "errorMessage": "Slutttidspunktet må være etter starttidspunktet",
-                    "hidden": "state.values.category !== 'Personopplysninger på avveie'",
-                    "required": "state.values.category === 'Personopplysninger på avveie'"
-                },
-                {
                     "key": "isExternalReporter",
-                    "label": "Gjelder det en ekstern innmelding?",
+                    "label": "Ble avviket oppdaget av noen utenfor NAV?",
                     "type": "ChoiceGroup",
                     "options": [
                         "Ja",

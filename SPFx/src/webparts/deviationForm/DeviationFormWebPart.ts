@@ -52,8 +52,8 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
     await super.onInit();
 
     const body = `{
-      "query": "query { orgEnheter(where: {}) { orgEnhet { id navn gyldigFom gyldigTom organiseringer { retning orgEnhet { id }} } }}"
-      }`;
+          "query": "query { orgEnheter(where: {}) { orgEnhet { id navn gyldigFom gyldigTom organiseringer { retning orgEnhet { id }} } }}"
+          }`;
     const nomClient = await this.context.aadHttpClientFactory.getClient('api://prod-gcp.nom.nom-api');
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -64,7 +64,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
     let units = json.data.orgEnheter.filter(unit => (new Date(unit.orgEnhet.gyldigTom) > new Date()) || !unit.orgEnhet.gyldigTom).map(unit => unit.orgEnhet.navn);
 
     const client: AadHttpClient = await this.context.aadHttpClientFactory.getClient('https://graph.microsoft.com');
-    const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName,officeLocation,mail,onPremisesSamAccountName', AadHttpClient.configurations.v1);
+    const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName,department,mail,onPremisesSamAccountName', AadHttpClient.configurations.v1);
     const user = await res.json();
     switch (user.companyName) {
       case 'NAV Kommunal':
@@ -80,7 +80,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
         break;
     }
     this.orgUnits = units.sort();
-    this.unit = user.officeLocation;
+    this.unit = user.department;
     this.reporterEmail = user.mail;
     this.reporterNAVIdentId = user.onPremisesSamAccountName;
   }

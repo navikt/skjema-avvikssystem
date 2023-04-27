@@ -6,17 +6,17 @@
             "Trussel om selvskading/ selvdrap",
             "Verbal utskjelling",
             "Sjikane/trakassering",
-            "Emosjonell/relasjonell belastning",
             "Uønsket kontakt, adferd eller kommunikasjon",
             "Fysisk angrep på person",
             "Brudd på etablert sikkerhetstiltak",
-            "Hatytringer",
+            "Hatytringer mot NAV",
             "Annet"
         ],
         "Organisatoriske og psykososiale arbeidsmiljøforhold": [
             "Arbeidsbelastning",
             "Mestring, informasjon og opplæring",
             "Mellommenneskelige og sosiale forhold",
+            "Emosjonell belastning",
             "Involvering, medvirkning og medbestemmelse",
             "Organisering og tilrettelegging av arbeidet",
             "Brudd på lov, forskrifter og rutiner",
@@ -209,7 +209,7 @@
                             "text": "Å bli snakket hetsende eller nedsettende til om personlige forhold som religion, hudfarge, funksjonsevne eller seksuell legning."
                         },
                         {
-                            "key": "Emosjonell/relasjonell belastning",
+                            "key": "Emosjonell belastning",
                             "text": "Belastning gjennom dialog med brukere som står i en svært vanskelig livssituasjon, eller at du må formidle budskap du ikke er enig i og undertrykke egne meninger. Eller når du har mange slike situasjoner over tid, og kjenner at det er påvirker deg negativt."
                         },
                         {
@@ -225,7 +225,7 @@
                             "text": "Brudd på beslutning om fysisk utestengelse, brudd på telefonisk utestengelse, brudd på to ansatte i samtale, eller andre sikkerhetstiltak knyttet til bruker"
                         },
                         {
-                            "key": "Hatytringer",
+                            "key": "Hatytringer mot NAV",
                             "text": " Krenkende eller fiendtlige ytringer som retter seg mot NAV som sådan, også anonymt via etatens tilbakemeldingskanaler."
                         },
                         {
@@ -398,6 +398,7 @@
                     "multiselect": "true",
                     "options": [
                         "Leder",
+                        "Leder ved annen enhet",
                         "AMK",
                         "Politi",
                         "Brannvesen",

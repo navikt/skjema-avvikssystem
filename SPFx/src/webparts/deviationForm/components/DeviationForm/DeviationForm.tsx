@@ -448,14 +448,14 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                     : match;
             });
         };
-        if (!format || format.length === 0) return <div dangerouslySetInnerHTML={{ __html: content }} />;
+        if (!format || format.length === 0) return <div role='banner' aria-label={content} dangerouslySetInnerHTML={{ __html: content }} />;
         try {
             const resolvedVariables = format.map(f => f.indexOf('state.') !== -1 || f.indexOf('context.') !== -1 ? (eval(f) as string).toLowerCase() : f);
             if (resolvedVariables.indexOf(undefined) !== -1) throw new Error('Klarte ikke hente nødvendig data.');
             const formattedContent = formatString(content, ...resolvedVariables);
             return (
                 <>
-                    <div dangerouslySetInnerHTML={{ __html: formattedContent }} />
+                    <div role='banner' aria-label={formattedContent} dangerouslySetInnerHTML={{ __html: formattedContent }} />
                     {confirmation?.field &&
                         renderField(confirmation.field)
                     }
@@ -483,9 +483,11 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                             <Spinner size={SpinnerSize.large} label='Sender inn...' />
                             :
                             <>
-                                <header>
-                                    <h2>{page.title}</h2>
-                                </header>
+                                {page.title &&
+                                    <header role='banner' aria-label={page.title}>
+                                        <h2>{page.title}</h2>
+                                    </header>
+                                }
                                 {page.type === DeviationFormPageType.Input &&
                                     page.fields?.map(field => renderField(field))
                                 }

@@ -70,7 +70,7 @@ const App = ({ title }: IDeviationAppProps) => {
     );
   } else return (
     <div className={styles.wrapper}>
-      <div className={styles.content}>
+      <div role='main' aria-label='content' className={styles.content}>
         {selectedForm &&
           <header>
             <Link onClick={() => toFormSelection()}>{title}</Link>
@@ -86,7 +86,7 @@ const App = ({ title }: IDeviationAppProps) => {
         }
         {!selectedForm ?
           <>
-            <header>
+            <header role='banner' aria-label={strings.SelectFormText}>
               <h1>{strings.SelectFormText}</h1>
             </header>
             <div className={styles.forms}>
@@ -116,7 +116,7 @@ const App = ({ title }: IDeviationAppProps) => {
                 );
               })}
             </div>
-            <header>
+            <header role='banner' aria-label={strings.SearchCaseHeaderText}>
               <h1>{strings.SearchCaseHeaderText}</h1>
             </header>
             <DefaultButton

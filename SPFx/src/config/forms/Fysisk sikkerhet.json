@@ -32,6 +32,12 @@
                         "Brudd på lov, forskrifter og rutiner",
                         "Andre uønskede hendelser"
                     ],
+                    "choiceInfoTexts": [
+                        {
+                            "key": "Brudd på lov, forskrifter og rutiner",
+                            "text": "Herunder brudd på krav til fysisk sikring og minimumsstandarden for NAV-kontor."
+                        }
+                    ],
                     "required": "true"
                 }
             ],
