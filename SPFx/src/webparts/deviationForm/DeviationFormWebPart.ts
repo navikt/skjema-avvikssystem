@@ -13,7 +13,6 @@ import config from '../../config/config';
 import { DeviationFormContext, IDeviationFormContext } from './DeviationFormContext';
 import { IAppConfig } from './types';
 import { AadHttpClient } from '@microsoft/sp-http';
-
 export interface IDeviationFormWebPartProps {
   webpartTitle: string;
   functionUrl: string;
@@ -52,8 +51,8 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
     await super.onInit();
 
     const body = `{
-          "query": "query { orgEnheter(where: {}) { orgEnhet { id navn gyldigFom gyldigTom organiseringer { retning orgEnhet { id }} } }}"
-          }`;
+              "query": "query { orgEnheter(where: {}) { orgEnhet { id navn gyldigFom gyldigTom organiseringer { retning orgEnhet { id }} } }}"
+              }`;
     const nomClient = await this.context.aadHttpClientFactory.getClient('api://prod-gcp.nom.nom-api');
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');

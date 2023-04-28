@@ -174,14 +174,16 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                                 const option: IChoiceGroupOption = {
                                     key: choiceText.key,
                                     text: choiceText.key,
+                                    "aria-describedby": screenReaderTextId,
 
                                     onRenderField: (props, render) => {
                                         return (
-                                            <div aria-describedby={screenReaderTextId} className={optionRootClass}>
+                                            <div className={optionRootClass}>
                                                 {render!(props)}
                                                 <span
                                                     style={{ height: '1px', width: '1px', position: 'absolute', overflow: 'hidden', margin: '-1px', padding: '0px', border: '0px' }}
                                                     id={screenReaderTextId}
+                                                    aria-hidden='true'
                                                 >
                                                     {choiceText.text}
                                                 </span>

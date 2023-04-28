@@ -49,9 +49,12 @@ const App = ({ title }: IDeviationAppProps) => {
     return (
       <div className={styles.wrapper}>
         <div className={styles.content}>
-          <header>Fyll inn id på avviket</header>
+          <header>
+            <h2>Fyll inn id på avviket</h2>
+          </header>
           <div className={styles.search}>
             <SearchBox
+              ariaLabel='Fyll inn id på avviket'
               className={styles.searchBox}
               disabled={searchState.searching}
               value={searchState.caseId}
@@ -72,7 +75,7 @@ const App = ({ title }: IDeviationAppProps) => {
     <div className={styles.wrapper}>
       <div role='main' aria-label='content' className={styles.content}>
         {selectedForm &&
-          <header>
+          <header role='banner' aria-label='breadcrumbs'>
             <Link onClick={() => toFormSelection()}>{title}</Link>
             {' > '}
             {selectedForm.title}
@@ -92,6 +95,7 @@ const App = ({ title }: IDeviationAppProps) => {
             <div className={styles.forms}>
               {context.config.forms.map((form, i) => {
                 const buttonId = `callout-button-${i}`;
+                const screenReaderTextId = `callout-screen-reader-text-${i}`;
                 return (
                   <>
                     {form.description && calloutProps.display && calloutProps.button === buttonId &&
@@ -104,7 +108,7 @@ const App = ({ title }: IDeviationAppProps) => {
                       </Callout>}
                     <DefaultButton
                       id={buttonId}
-                      ariaDescription={extractContent(form.description?.content)}
+                      aria-describedby={screenReaderTextId}
                       text={form.title}
                       onClick={() => setSelectedForm(form)}
                       onFocus={() => setCalloutProps({ display: true, button: buttonId })}
@@ -112,6 +116,12 @@ const App = ({ title }: IDeviationAppProps) => {
                       onMouseEnter={() => setCalloutProps({ display: true, button: buttonId })}
                       onMouseLeave={() => setCalloutProps(defaultCalloutProps)}
                     />
+                    <span
+                      style={{ height: '1px', width: '1px', position: 'absolute', overflow: 'hidden', margin: '-1px', padding: '0px', border: '0px' }}
+                      id={screenReaderTextId}
+                      aria-hidden='true'>
+                      {extractContent(form.description?.content)}
+                    </span>
                   </>
                 );
               })}

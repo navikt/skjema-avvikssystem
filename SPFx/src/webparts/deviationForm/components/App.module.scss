@@ -6,12 +6,17 @@
 
   .content {
     @include ms-font-xl;
+
     >header {
       margin: 20px;
       max-width: 40vw;
 
       h1 {
         @include ms-font-xxl;
+      }
+
+      h2 {
+        @include ms-font-xl;
       }
 
       button {

@@ -137,9 +137,6 @@
                     ],
                     "required": "true",
                     "defaultValue": "Min enhet",
-                    "disabledOptions": [
-                        "Annen enhet"
-                    ],
                     "additionalData": [
                         {
                             "key": "Min enhet",
