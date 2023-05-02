@@ -22,13 +22,29 @@ import {
     TooltipHost,
     VirtualizedComboBox
 } from 'office-ui-fabric-react';
+
 import * as React from 'react';
 import { useState, useEffect, useRef, useContext } from 'react';
 import ActionsHandler from '../../../../config/ActionsHandler';
 import { DeviationFormContext } from '../../DeviationFormContext';
-import { IDeviationForm, IDeviationFormAction, IDeviationFormField, DeviationFormPageType, DeviationActionType, DeviationActionIconPosition, IDeviationPageConfirmation, IDeviationFormMessage, IDeviationFormState } from '../../types';
+import {
+    IDeviationForm,
+    IDeviationFormAction,
+    IDeviationFormField,
+    DeviationFormPageType,
+    DeviationActionType,
+    DeviationActionIconPosition,
+    IDeviationPageConfirmation,
+    IDeviationFormMessage,
+    IDeviationFormState
+} from '../../types';
+
 import TimeSpanField from '../TimeSpanField/TimeSpanField';
 import styles from './DeviationForm.module.scss';
+import dayjs from 'dayjs';
+import * as customParseFormat from 'dayjs/plugin/customParseFormat';
+
+dayjs.extend(customParseFormat.default);
 
 export interface IDeviationFormProps {
     form: IDeviationForm;
@@ -96,6 +112,22 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
 
         prevPageRef.current = state.currentPageNumber;
     }, [state.values, state.currentPageNumber]);
+
+    const onParseDateFromString = (value: string): Date => {
+        const formats = ['DD/MM/YYYY', 'DD.MM.YYYY', 'DD-MM-YYYY', 'DD.MM.YY', 'DD-MM-YY', 'DD/MM/YY', 'D/M/YYYY', 'D/M/YY', 'D.M.YY', 'D.M.YYYY', 'D-M-YY', 'D-M-YYYY'];
+        let date: dayjs.Dayjs = null;
+        let valid = false;
+
+        formats.forEach(format => {
+            if (!valid) {
+                date = dayjs(value, format, 'no', true);
+                valid = date.isValid();
+            } else return;
+        });
+
+        if (valid) return date.toDate();
+        else return null;
+    };
 
 
     const renderField = (field: IDeviationFormField) => {
@@ -252,10 +284,11 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                 case 'Date':
                     return (
                         <DatePicker
-                            strings={context.config.calendarString}
+                            strings={context.config.datePickerStrings}
                             allowTextInput
+                            parseDateFromString={onParseDateFromString}
                             firstDayOfWeek={DayOfWeek.Monday}
-                            formatDate={date => date.toLocaleDateString('nb-NO')}
+                            formatDate={date => !date ? '' : date.toLocaleDateString('nb-NO')}
                             maxDate={new Date()}
                             minDate={eval(field.minDate) || null}
                             disabled={eval(field.disabled)}
@@ -270,9 +303,11 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                         <div className={styles.dateTimeWrapper}>
                             <div className={styles.dateTimeField}>
                                 <DatePicker
-                                    strings={context.config.calendarString}
+                                    strings={context.config.datePickerStrings}
+                                    allowTextInput
+                                    parseDateFromString={onParseDateFromString}
                                     firstDayOfWeek={DayOfWeek.Monday}
-                                    formatDate={date => date.toLocaleDateString('nb-NO')}
+                                    formatDate={date => !date ? '' : date.toLocaleDateString('nb-NO')}
                                     maxDate={new Date()}
                                     minDate={eval(field.minDate) || null}
                                     disabled={eval(field.disabled)}
@@ -342,8 +377,8 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
         const getValue = (field: any) => {
             if (field.value instanceof Date) {
                 if (fieldTypes.get(field.fieldName) === 'DateTime') {
-                    return `${field.value.toLocaleDateString()} Kl. ${field.value.toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })}`;
-                } else return field.value.toLocaleDateString();
+                    return `${field.value.toLocaleDateString('no')} Kl. ${field.value.toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })}`;
+                } else return field.value.toLocaleDateString('no');
             }
             return field.value;
         };

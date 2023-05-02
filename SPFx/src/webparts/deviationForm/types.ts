@@ -1,4 +1,4 @@
-import { ICalendarStrings, IIconProps } from "office-ui-fabric-react";
+import { IDatePickerStrings, IIconProps } from "office-ui-fabric-react";
 
 export enum DeviationFormPageType {
     Input = "Input",
@@ -118,7 +118,7 @@ export interface ISearchResult {
 }
 export interface IAppConfig {
     forms: IDeviationForm[];
-    calendarString: ICalendarStrings;
+    datePickerStrings: IDatePickerStrings;
     searchResult: ISearchResult;
 }
 
