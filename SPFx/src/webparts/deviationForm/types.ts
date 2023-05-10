@@ -70,6 +70,7 @@ export interface IDeviationFormField {
     valid?: string;
     errorMessage?: string;
     defaultValue?: string;
+    dynamicValue?: IDynamicValue;
     disabledOptions?: string[];
     additionalData?: IDeviationFieldAdditionalData[];
 }
@@ -120,6 +121,12 @@ export interface IAppConfig {
     forms: IDeviationForm[];
     datePickerStrings: IDatePickerStrings;
     searchResult: ISearchResult;
+}
+
+export interface IDynamicValue {
+    variable: string;
+    condition: string;
+    value: string;
 }
 
 export interface IDeviationFormState {

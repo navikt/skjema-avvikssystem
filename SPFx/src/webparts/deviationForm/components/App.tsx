@@ -132,7 +132,13 @@ const App = ({ title }: IDeviationAppProps) => {
             <DefaultButton
               className={styles.searchButton}
               text={strings.SearchCaseButtonText}
-              iconProps={{ iconName: 'Search' }}
+              iconProps={{ iconName: 'Contact' }}
+              onClick={() => setSearchState({ ...searchState, search: true })}
+            />
+            <DefaultButton
+              className={styles.searchButton}
+              text={strings.SearchCaseSafetyRepresentativeButtonText}
+              iconProps={{ iconName: 'ContactLock' }}
               onClick={() => setSearchState({ ...searchState, search: true })}
             />
           </>

@@ -71,7 +71,6 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
     const parentUnitsBody = `{
                                "query": "query { orgEnheter(where: { nomNivaa: ARBEIDSOMRAADE }){ orgEnhet{ id navn nomNivaa gyldigFom gyldigTom organiseringer(retning: over){ orgEnhet { navn nomNivaa orgEnhetsType gyldigFom gyldigTom organiseringer(retning: over){ orgEnhet{ navn nomNivaa orgEnhetsType gyldigFom gyldigTom organiseringer(retning: over){ orgEnhet{ navn nomNivaa orgEnhetsType gyldigFom gyldigTom } } } } } } } } }"
                              }`;
-
     const nomClient = await this.context.aadHttpClientFactory.getClient('api://prod-gcp.nom.nom-api');
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');

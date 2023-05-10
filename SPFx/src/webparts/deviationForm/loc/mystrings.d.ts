@@ -6,6 +6,7 @@ declare interface IDeviationFormWebPartStrings {
   SummaryConfirmationPersonaldata: string
   SummaryConfirmation: string;
   SearchCaseButtonText: string;
+  SearchCaseSafetyRepresentativeButtonText: string;
   SearchCaseHeaderText: string;
 }
 

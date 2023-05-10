@@ -254,6 +254,15 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                             }
                         });
                     }
+                    if (field.dynamicValue) {
+                        const { variable, value, condition } = field.dynamicValue;
+                        if (eval(condition.replace('{variable}', variable))) {
+                            const [option] = (options as IChoiceGroupOption[]).filter(o => o.text === value);
+                            if (state.values[field.key] !== option.key) {
+                                setState({ ...state, values: { ...state.values, [field.key]: option.key } });
+                            }
+                        }
+                    }
                     return (
                         <div className={styles.field}>
                             <ChoiceGroup
@@ -261,6 +270,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                                 label={field.label}
                                 selectedKey={state.values[field.key]}
                                 required={eval(field.required)}
+                                disabled={eval(field.disabled)}
                                 options={options}
                                 onChange={(_, option) => {
                                     setState({ ...state, values: { ...state.values, [field.key]: option.key } });
@@ -365,7 +375,14 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                             onChange={(_, value) => setState({ ...state, values: { ...state.values, [field.key]: value } })}
                         />
                     );
-
+                case 'Checkbox':
+                    return (
+                        <Checkbox
+                            label={field.label}
+                            checked={state.values[field.key] || eval(field.defaultValue)}
+                            onChange={(_, checked) => setState({ ...state, values: { ...state.values, [field.key]: checked } })}
+                        />
+                    );
                 default:
                     break;
             }

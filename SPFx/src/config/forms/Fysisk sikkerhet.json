@@ -128,6 +128,12 @@
             "type": "Input",
             "fields": [
                 {
+                    "key": "anonymous",
+                    "label": "Anonym innmelding",
+                    "type": "Checkbox",
+                    "defaultValue": "false"
+                },
+                {
                     "key": "unit",
                     "label": "Hvilken enhet gjelder hendelsen?",
                     "type": "ChoiceGroup",
@@ -137,6 +143,12 @@
                     ],
                     "required": "true",
                     "defaultValue": "Min enhet",
+                    "dynamicValue": {
+                        "variable": "state.values.anonymous",
+                        "condition": "{variable} === true",
+                        "value": "Annen enhet"
+                    },
+                    "disabled": "state.values.anonymous === true",
                     "additionalData": [
                         {
                             "key": "Min enhet",
