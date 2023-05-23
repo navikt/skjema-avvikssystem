@@ -73,6 +73,7 @@ export interface IDeviationFormField {
     dynamicValue?: IDynamicValue;
     disabledOptions?: string[];
     additionalData?: IDeviationFieldAdditionalData[];
+    infoText?: string;
 }
 
 export interface IDeviationPageConfirmation {

@@ -13,6 +13,7 @@ import {
     Dropdown,
     IChoiceGroupOption,
     IconButton,
+    IDropdownOption,
     mergeStyles,
     MessageBar,
     MessageBarType,
@@ -198,23 +199,23 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                     } else options = field.options.map(o => ({ key: values.has(o) ? values.get(o) : o, text: o, disabled: field.disabledOptions?.length > 0 && field.disabledOptions.indexOf(o) !== -1 }));
                     if (field.choiceInfoTexts) {
                         field.choiceInfoTexts.forEach((choiceText, i) => {
-                            const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
+                            const checkboxRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
                             const [replaceOption] = options.filter(o => o.key === choiceText.key);
-                            const screenReaderTextId = `screenReaderText-${field.key}-choice-tooltip-${i}`;
+                            const screenReaderCheckboxTextId = `screenReaderText-${field.key}-choice-tooltip-${i}`;
 
                             if (options.indexOf(replaceOption) !== -1) {
                                 const option: IChoiceGroupOption = {
                                     key: choiceText.key,
                                     text: choiceText.key,
-                                    "aria-describedby": screenReaderTextId,
+                                    "aria-describedby": screenReaderCheckboxTextId,
 
                                     onRenderField: (props, render) => {
                                         return (
-                                            <div className={optionRootClass}>
+                                            <div className={checkboxRootClass}>
                                                 {render!(props)}
                                                 <span
                                                     style={{ height: '1px', width: '1px', position: 'absolute', overflow: 'hidden', margin: '-1px', padding: '0px', border: '0px' }}
-                                                    id={screenReaderTextId}
+                                                    id={screenReaderCheckboxTextId}
                                                     aria-hidden='true'
                                                 >
                                                     {choiceText.text}
@@ -232,23 +233,25 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                     }
                     if (field.additionalData) {
                         field.additionalData.forEach((additionalData, i) => {
-                            const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '20px' });
+                            // const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '20px' });
                             const [replaceOption] = options.filter(o => o.text === additionalData.key);
                             const value = eval(additionalData.value);
                             if (options.indexOf(replaceOption) !== -1) {
                                 const option = {
-                                    key: eval(additionalData.value),
+                                    key: value,
                                     text: additionalData.key,
-                                    onRenderField: (props, render) => {
-                                        return (
-                                            <div className={optionRootClass}>
-                                                {render!(props)}
-                                                {value ? <span className={styles.additionalDataValue}>{value}</span>
-                                                    : <MessageBar messageBarType={MessageBarType.error}>Klarte ikke hente nødvendig data.</MessageBar>
-                                                }
-                                            </div>
-                                        );
-                                    }
+                                    // Removed label displaying unit name. Commented out in case it needs to be reintroduced.
+
+                                    /*                                     onRenderField: (props, render) => {
+                                                                            return (
+                                                                                <div className={optionRootClass}>
+                                                                                    {render!(props)}
+                                                                                    {value ? <span className={styles.additionalDataValue}>{value}</span>
+                                                                                        : <MessageBar messageBarType={MessageBarType.error}>Klarte ikke hente nødvendig data.</MessageBar>
+                                                                                    }
+                                                                                </div>
+                                                                            );
+                                                                        } */
                                 };
                                 options.splice(options.indexOf(replaceOption), 1, option);
                             }
@@ -376,7 +379,29 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                         />
                     );
                 case 'Checkbox':
-                    return (
+                    const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
+                    const screenReaderTextId = `screenReaderText-${field.key}-tooltip`;
+                    if (field.infoText) {
+                        return (
+                            <div className={optionRootClass}>
+                                <Checkbox
+                                    label={field.label}
+                                    checked={state.values[field.key] || eval(field.defaultValue)}
+                                    onChange={(_, checked) => setState({ ...state, values: { ...state.values, [field.key]: checked } })}
+                                />
+                                <span
+                                    style={{ height: '1px', width: '1px', position: 'absolute', overflow: 'hidden', margin: '-1px', padding: '0px', border: '0px' }}
+                                    id={screenReaderTextId}
+                                    aria-hidden='true'
+                                >
+                                    {field.infoText}
+                                </span>
+                                <TooltipHost content={field.infoText} id={`${field.key}-choice-tooltip`}>
+                                    <IconButton tabIndex={-1} aria-hidden='true' styles={{ rootHovered: { background: 'none' }, rootPressed: { background: 'none' } }} iconProps={{ iconName: 'Info' }} />
+                                </TooltipHost>
+                            </div>
+                        );
+                    } else return (
                         <Checkbox
                             label={field.label}
                             checked={state.values[field.key] || eval(field.defaultValue)}
@@ -421,7 +446,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
         );
     };
 
-    const getFunctionParams = (params: any) => {
+    const getFunctionParams = (params: any, action: string) => {
         let functionParams = {};
         if (params) {
             for (const key in params) {
@@ -433,12 +458,13 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                     functionParams = { ...functionParams, stateVariable: params[key], state };
                 } else functionParams[key] = params[key];
             }
+            if (action === 'submit') functionParams = { ...functionParams, fieldsToInclude: flatten(form.pages.map(p => p.fields).filter(Boolean)).filter(f => !eval(f.hidden)).map(f => f.key) };
             return functionParams;
         } else return null;
     };
 
     const renderAction = (action: IDeviationFormAction) => {
-        let params = getFunctionParams(action.invoke.params);
+        let params = getFunctionParams(action.invoke.params, action.key);
         const iconRightStyles = { flexContainer: { flexDirection: 'row-reverse' } };
         if (action.type === DeviationActionType.Default)
             return <DefaultButton

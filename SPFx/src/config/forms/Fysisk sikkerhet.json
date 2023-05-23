@@ -8,7 +8,7 @@
     },
     "description": {
         "type": "html",
-        "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Ulåste dører/vinduer</li> <li>Bruker i skjermede områder</li> <li>Mangler på bygg og utstyr</li> <li>Brann, branntilløp og brannforebygging</li> <li>Hærverk</li> <li>Innbrudd</li> <li>Strømbrudd</li> <li>Vannskade</li> <li>Ytre miljø/forurensing</li> <li>Brudd på lov, forskrifter og rutiner</li> <li>Andre uønskede hendelser</li> </ul> </div>"
+        "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Ulåste dører/vinduer</li> <li>Brukere i skjermede områder</li> <li>Mangler på bygg og utstyr</li> <li>Brann, branntilløp og brannforebygging</li> <li>Hærverk</li> <li>Innbrudd</li> <li>Strømbrudd</li> <li>Vannskade</li> <li>Ytre miljø/forurensing</li> <li>Brudd på lov, forskrifter og rutiner</li> <li>Andre uønskede hendelser</li> </ul> </div>"
     },
     "pages": [
         {
@@ -21,7 +21,7 @@
                     "type": "ChoiceGroup",
                     "options": [
                         "Ulåste dører/vinduer",
-                        "Bruker i skjermede områder",
+                        "Brukere i skjermede områder",
                         "Mangler på bygg og utstyr",
                         "Brann, branntilløp og brannforebygging",
                         "Hærverk",
@@ -131,7 +131,8 @@
                     "key": "anonymous",
                     "label": "Anonym innmelding",
                     "type": "Checkbox",
-                    "defaultValue": "false"
+                    "defaultValue": "false",
+                    "infoText": "Kryss av her dersom du ønsker å melde avvik anonymt. Vi vil da ikke knytte opplysninger om deg til avviksmeldingen. Når du velger å være anonym, må du i feltet \"Velg enhet\" velge den Nav-enheten som skal motta og følge opp avviksmeldingen. For å sikre full anonymitet er det viktig at du ikke registrerer opplysninger som kan knyttes til deg i fritekstfeltene i avviksskjemaet. Ulempen ved anonym innmelding, er at du ikke vil få tilsendt saksnummer og ikke vil kunne følge opp avviket."
                 },
                 {
                     "key": "unit",
@@ -158,7 +159,7 @@
                 },
                 {
                     "key": "unitOther",
-                    "label": "Hvis annen enhet: Velg enhet",
+                    "label": "Velg enhet",
                     "type": "Choice",
                     "combobox": "true",
                     "options": "context.orgUnits",

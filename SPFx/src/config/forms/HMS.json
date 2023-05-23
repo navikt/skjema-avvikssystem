@@ -309,6 +309,13 @@
             "type": "Input",
             "fields": [
                 {
+                    "key": "anonymous",
+                    "label": "Anonym innmelding",
+                    "type": "Checkbox",
+                    "defaultValue": "false",
+                    "infoText": "Kryss av her dersom du ønsker å melde avvik anonymt. Vi vil da ikke knytte opplysninger om deg til avviksmeldingen. Når du velger å være anonym, må du i feltet \"Velg enhet\" velge den Nav-enheten som skal motta og følge opp avviksmeldingen. For å sikre full anonymitet er det viktig at du ikke registrerer opplysninger som kan knyttes til deg i fritekstfeltene i avviksskjemaet. Ulempen ved anonym innmelding, er at du ikke vil få tilsendt saksnummer og ikke vil kunne følge opp avviket."
+                },
+                {
                     "key": "unit",
                     "label": "Hvilken enhet gjelder hendelsen?",
                     "type": "ChoiceGroup",
@@ -318,6 +325,12 @@
                     ],
                     "required": "true",
                     "defaultValue": "Min enhet",
+                    "dynamicValue": {
+                        "variable": "state.values.anonymous",
+                        "condition": "{variable} === true",
+                        "value": "Annen enhet"
+                    },
+                    "disabled": "state.values.anonymous === true",
                     "additionalData": [
                         {
                             "key": "Min enhet",
@@ -327,7 +340,7 @@
                 },
                 {
                     "key": "unitOther",
-                    "label": "Hvis annen enhet: Velg enhet",
+                    "label": "Velg enhet",
                     "type": "Choice",
                     "combobox": "true",
                     "options": "context.orgUnits",
@@ -340,13 +353,12 @@
                     "type": "Choice",
                     "options": [
                         "Telefon/SMS",
-                        "Modia/e-post/brev",
+                        "Innlogget skriftlig tjeneste/e-post/brev",
                         "Publikumsmottak",
                         "Samtalerom",
-                        "Chat",
+                        "Uinnlogget chat/chatbot",
                         "Utenfor NAV's lokale/ offentlig sted",
                         "Sosiale medier",
-                        "Anonyme tilbakemeldingskanaler",
                         "Medarbeiders private område",
                         "Brukers private bopel/hjemme hos bruker",
                         "Annet"

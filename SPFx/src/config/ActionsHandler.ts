@@ -1,3 +1,5 @@
+import { includes } from 'lodash';
+
 export default class ActionsHandler {
     private _setState;
     private _setForm;
@@ -23,8 +25,13 @@ export default class ActionsHandler {
         this._setState({ ...state, [stateVariable]: currentPageNumber - 1 });
     }
 
-    private async Submit({ values, functionUrl, stateVariable, state, resultVariable }) {
+    private async Submit({ values, functionUrl, stateVariable, state, resultVariable, fieldsToInclude }) {
         this._setState({ ...state, [stateVariable]: true });
+        for (const key in values) {
+            if (!includes(fieldsToInclude, key)) {
+                delete values[key];
+            }
+        }
         const body = JSON.stringify(values);
         const response = await fetch(`${functionUrl}&mode=post`, {
             method: 'POST',
