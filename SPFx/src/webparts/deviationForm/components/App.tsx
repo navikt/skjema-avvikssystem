@@ -109,7 +109,7 @@ const App = ({ title }: IDeviationAppProps) => {
                     <DefaultButton
                       id={buttonId}
                       aria-describedby={screenReaderTextId}
-                      text={form.title}
+                      text={strings[form.title] || form.title}
                       onClick={() => setSelectedForm(form)}
                       onFocus={() => setCalloutProps({ display: true, button: buttonId })}
                       onBlur={() => setCalloutProps(defaultCalloutProps)}

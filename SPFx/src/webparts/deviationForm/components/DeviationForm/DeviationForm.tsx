@@ -138,8 +138,8 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
             switch (field.type) {
                 case 'Choice':
                     if (typeof field.options === 'string') {
-                        options = eval(field.options).map(o => ({ key: o, text: o }));
-                    } else options = field.options.map(o => ({ key: o, text: o }));
+                        options = eval(field.options).map(o => ({ key: o, text: strings[o] || o }));
+                    } else options = field.options.map(o => ({ key: o, text: strings[o] || o }));
                     const multiSelect = eval(field.multiselect) || false;
                     if (eval(field.combobox)) {
                         return (
@@ -179,10 +179,10 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                                     if (multiSelect) {
                                         const vals = state.values[field.key] || [];
                                         if (option.selected) {
-                                            selectedValues = [...vals, option.text];
-                                        } else selectedValues = vals.filter(v => v !== option.text);
+                                            selectedValues = [...vals, option.key];
+                                        } else selectedValues = vals.filter(v => v !== option.key);
                                     }
-                                    setState({ ...state, values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.text } });
+                                    setState({ ...state, values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.key } });
                                 }}
                             />
                         </div>
@@ -195,8 +195,8 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                         });
                     }
                     if (typeof field.options === 'string') {
-                        options = eval(field.options).map(o => ({ key: values.has(o) ? values.get(o) : o, text: o }));
-                    } else options = field.options.map(o => ({ key: values.has(o) ? values.get(o) : o, text: o, disabled: field.disabledOptions?.length > 0 && field.disabledOptions.indexOf(o) !== -1 }));
+                        options = eval(field.options).map(o => ({ key: values.has(o) ? values.get(o) : o, text: strings[o] || o }));
+                    } else options = field.options.map(o => ({ key: values.has(o) ? values.get(o) : o, text: strings[o] || o, disabled: field.disabledOptions?.length > 0 && field.disabledOptions.indexOf(o) !== -1 }));
                     if (field.choiceInfoTexts) {
                         field.choiceInfoTexts.forEach((choiceText, i) => {
                             const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
@@ -206,7 +206,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                             if (options.indexOf(replaceOption) !== -1) {
                                 const option: IChoiceGroupOption = {
                                     key: choiceText.key,
-                                    text: choiceText.key,
+                                    text: strings[choiceText.key] || choiceText.key,
                                     "aria-describedby": screenReaderTextId,
 
                                     onRenderField: (props, render) => {
@@ -427,7 +427,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                     return `${field.value.toLocaleDateString('no')} Kl. ${field.value.toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })}`;
                 } else return field.value.toLocaleDateString('no');
             }
-            return field.value;
+            return strings[field.value] || field.value;
         };
         return (
             <div className={styles.summaryFields}>
@@ -529,13 +529,13 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
         const formatString = (string: string, ...args: string[]) => {
             return string.replace(/{(\d+)}/g, (match, number) => {
                 return typeof args[number] != 'undefined'
-                    ? args[number]
-                    : match;
+                    ? strings[args[number]].toLowerCase() || args[number].toLowerCase()
+                    : strings[match].toLocaleLowerCase() || match.toLocaleLowerCase();
             });
         };
         if (!format || format.length === 0) return <div role='banner' aria-label={content} dangerouslySetInnerHTML={{ __html: content }} />;
         try {
-            const resolvedVariables = format.map(f => f.indexOf('state.') !== -1 || f.indexOf('context.') !== -1 ? (eval(f) as string).toLowerCase() : f);
+            const resolvedVariables = format.map(f => f.indexOf('state.') !== -1 || f.indexOf('context.') !== -1 ? (eval(f) as string) : f);
             if (resolvedVariables.indexOf(undefined) !== -1) throw new Error('Klarte ikke hente nødvendig data.');
             const formattedContent = formatString(content, ...resolvedVariables);
             return (

@@ -1,32 +1,32 @@
 {
-    "title": "HMS",
+    "title": "HSE",
     "conditionalOptions": {
-        "Vold, trusler og trakassering fra bruker eller andre utenfor NAV": [
-            "Truende atferd/trussel",
-            "Trussel om selvskading/ selvdrap",
-            "Verbal utskjelling",
-            "Sjikane/trakassering",
-            "Uønsket kontakt, adferd eller kommunikasjon",
-            "Fysisk angrep på person",
-            "Brudd på etablert sikkerhetstiltak",
-            "Hatytringer mot NAV",
-            "Annet"
+        "Violence, threats and harassment by users or others outside of NAV": [
+            "Threatening behaviour/threat",
+            "Threat of self-harm/suicide",
+            "Verbal insult",
+            "Harassment",
+            "Unwanted contact, behaviour or communication",
+            "Physical attack on person",
+            "Violation of established safetypolicy",
+            "Hate speech towards NAV",
+            "Other"
         ],
-        "Organisatoriske og psykososiale arbeidsmiljøforhold": [
-            "Arbeidsbelastning",
-            "Mestring, informasjon og opplæring",
-            "Mellommenneskelige og sosiale forhold",
-            "Emosjonell belastning",
-            "Involvering, medvirkning og medbestemmelse",
-            "Organisering og tilrettelegging av arbeidet",
-            "Brudd på lov, forskrifter og rutiner",
-            "Annet"
+        "Organizational and psychosocial working environment conditions": [
+            "Workload",
+            "Coping, infromation and training",
+            "Interpersonal relationships",
+            "Emotional stress",
+            "Involvement, participation and co-determination",
+            "Organization and facilitation of work",
+            "Violation of laws, regulations and routines",
+            "Other"
         ],
-        "Fysiske arbeidsmiljøforhold": [
-            "Inneklima (temperatur, lys, støv)",
-            "Ergonomiske forhold ved eller på arbeidsplassen",
-            "Støy",
-            "Annet"
+        "Physical working environment conditions": [
+            "Indoor climate",
+            "Ergonomic conditions at the workplace",
+            "Noise",
+            "Other"
         ]
     },
     "description": {
@@ -59,7 +59,7 @@
                     "content": "Vennligst kontakt din leder for å rette din registrerte stilling."
                 },
                 {
-                    "display": "state.values.stateOrMunicipality !== 'Statlig' && state.values.orgConfirmation === 'Ja'",
+                    "display": "state.values.stateOrMunicipality !== 'State' && state.values.orgConfirmation === 'Ja'",
                     "type": "info",
                     "content": "For øyeblikket kan kun statlig ansatte rapportere HMS-avvik."
                 }
@@ -84,7 +84,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "(!state.values.stateOrMunicipality || state.values.orgConfirmation !== 'Ja') || state.values.stateOrMunicipality !== 'Statlig'",
+                    "disabled": "(!state.values.stateOrMunicipality || state.values.orgConfirmation !== 'Ja') || state.values.stateOrMunicipality !== 'State'",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
@@ -104,40 +104,36 @@
                     "key": "category",
                     "type": "ChoiceGroup",
                     "options": [
-                        "Vold, trusler og trakassering fra bruker eller andre utenfor NAV",
-                        "Organisatoriske og psykososiale arbeidsmiljøforhold",
-                        "Fysiske arbeidsmiljøforhold",
-                        "Kjemiske og biologiske faktorer",
-                        "Nestenulykke/ personskade",
-                        "Andre uønskede hendelser"
+                        "Violence, threats and harassment by users or others outside of NAV",
+                        "Organizational and psychosocial working environment conditions",
+                        "Physical working environment conditions",
+                        "Chemical and biological factors",
+                        "Almost accidents/personnel injury",
+                        "Other unwanted incidents"
                     ],
                     "choiceInfoTexts": [
                         {
-                            "key": "Vold, trusler og trakassering fra bruker eller andre utenfor NAV",
+                            "key": "Violence, threats and harassment by users or others outside of NAV",
                             "text": "Hendelser der medarbeideren blir trakassert, truet, utskjelt eller angrepet i sin arbeidssituasjon, og som innebærer en åpenlys eller antydet trussel mot deres sikkerhet og velvære eller helse."
                         },
                         {
-                            "key": "Organisatoriske og psykososiale arbeidsmiljøforhold",
+                            "key": "Organizational and psychosocial working environment conditions",
                             "text": "Handler om hvordan arbeidet er organisert, arbeidsinnhold og de sosiale relasjonene på arbeidsplassen."
                         },
                         {
-                            "key": "Fysiske arbeidsmiljøforhold",
+                            "key": "Physical working environment conditions",
                             "text": "Handler om temperatur- og lysforhold, ergonomiske forhold eller støy på arbeidsplassen."
                         },
                         {
-                            "key": "Kjemiske og biologiske faktorer",
+                            "key": "Chemical and biological factors",
                             "text": "Eksponeringer for kjemiske og biologiske faktorer som kan gi helseskade, som for eksempel rengjøringsmidler, oljer, desinfiksjonsmidler, eksos, virus og bakterier."
                         },
                         {
-                            "key": "Ytre miljø/forurensing",
-                            "text": "Forurensing fra virksomheten til luft, vann og jord."
-                        },
-                        {
-                            "key": "Nestenulykke/ personskade",
+                            "key": "Almost accidents/personnel injury",
                             "text": "Plutselig eller uventa hendelse man utsettes for i arbeidet. Ved melding av avvik på andre kategorier vil leder sammen med medarbeider ta stilling til om hendelsen kan gi personskade på kort eller lang sikt."
                         },
                         {
-                            "key": "Andre uønskede hendelser",
+                            "key": "Other unwanted incidents",
                             "text": "Andre faktorer eller hendelser som kan gi helseskade på sikt, og bør forbedres."
                         }
                     ],
@@ -193,75 +189,75 @@
                     "hidden": "!(form.conditionalOptions[state.values.category])",
                     "choiceInfoTexts": [
                         {
-                            "key": "Truende atferd/trussel",
+                            "key": "Threatening behaviour/threat",
                             "text": "Kan være ikke-verbal truende oppførsel som å vise knyttneven, gi fingeren eller verbal trussel som «jeg vet hvor du bor» eller «jeg skal bombe dere»."
                         },
                         {
-                            "key": "Trussel om selvskading/ selvdrap",
+                            "key": "Threat of self-harm/suicide",
                             "text": "Når bruker sier eller antyder skade eller drap på seg selv eller andre i nære relasjoner."
                         },
                         {
-                            "key": "Verbal utskjelling",
+                            "key": "Verbal insult",
                             "text": "Ytringer med spesielt negativt innhold, skremmende og kraftfulle utsagn som oppleves belastende for den ansatte eller for arbeidsmiljøet på kortere eller lengre sikt."
                         },
                         {
-                            "key": "Sjikane/trakassering",
+                            "key": "Harassment",
                             "text": "Å bli snakket hetsende eller nedsettende til om personlige forhold som religion, hudfarge, funksjonsevne eller seksuell legning."
                         },
                         {
-                            "key": "Emosjonell belastning",
+                            "key": "Emotional stress",
                             "text": "Belastning gjennom dialog med brukere som står i en svært vanskelig livssituasjon, eller at du må formidle budskap du ikke er enig i og undertrykke egne meninger. Eller når du har mange slike situasjoner over tid, og kjenner at det er påvirker deg negativt."
                         },
                         {
-                            "key": "Uønsket kontakt, adferd eller kommunikasjon",
+                            "key": "Unwanted contact, behaviour or communication",
                             "text": "Kan for eksempel være at bruker ringer eller kontakter deg privat, eller bryter andre formelle eller uformelle retningslinjer."
                         },
                         {
-                            "key": "Fysisk angrep på person",
+                            "key": "Physical attack on person",
                             "text": "Fysisk angrep på personer, egne ansatte, brukere eller andre."
                         },
                         {
-                            "key": "Brudd på etablert sikkerhetstiltak",
+                            "key": "Violation of established safetypolicy",
                             "text": "Brudd på beslutning om fysisk utestengelse, brudd på telefonisk utestengelse, brudd på to ansatte i samtale, eller andre sikkerhetstiltak knyttet til bruker"
                         },
                         {
-                            "key": "Hatytringer mot NAV",
+                            "key": "Hate speech towards NAV",
                             "text": " Krenkende eller fiendtlige ytringer som retter seg mot NAV som sådan, også anonymt via etatens tilbakemeldingskanaler."
                         },
                         {
-                            "key": "Arbeidsbelastning",
+                            "key": "Workload",
                             "text": "Kan være for mange oppgaver og/eller brukere å følge opp, motstridende krav og forventninger, manglende prioriteringer, stadig opplæring av nye mm."
                         },
                         {
-                            "key": "Mestring, informasjon og opplæring",
+                            "key": "Coping, infromation and training",
                             "text": "Kan være manglende opplæring eller mangelfull informasjon i forbindelse med endringsprosesser."
                         },
                         {
-                            "key": "Mellommenneskelige og sosiale forhold",
+                            "key": "Interpersonal relationships",
                             "text": "Begynnende uro, konflikt i arbeidsmiljøet mellom ansatte eller grupper av ansatte. Varslingssaker meldes i linjen for å sikre konfidensialitet"
                         },
                         {
-                            "key": "Involvering, medvirkning og medbestemmelse",
+                            "key": "Involvement, participation and co-determination",
                             "text": "Kan være manglende involvering, medvirkning og medbestemmelse i omstillings- og endringsprosesser og/eller at MBA og AMU ikke fungerer etter lov- og avtaleverk sine bestemmelser."
                         },
                         {
-                            "key": "Organisering og tilrettelegging av arbeidet",
+                            "key": "Organization and facilitation of work",
                             "text": "Kan være manglende prioriteringer, ikke innvilget tilrettelegging eller ikke benyttet handlingsrommet i en hybrid arbeidshverdag."
                         },
                         {
-                            "key": "Brudd på lov, forskrifter og rutiner",
+                            "key": "Violation of laws, regulations and routines ",
                             "text": "Kan være brudd på arbeidsmiljøloven, som manglende risikovurdering eller brudd på overtidsbestemmelsene. Det kan være brudd på interne HMS-rutiner, som manglende oppfølging etter alvorlige hendelser."
                         },
                         {
-                            "key": "Inneklima (temperatur, lys, støv)",
+                            "key": "Indoor climate",
                             "text": "Temperatur, luftfuktighet, ventilasjon, støv, trekk og varmestråling."
                         },
                         {
-                            "key": "Ergonomiske forhold ved eller på arbeidsplassen",
+                            "key": "Ergonomic conditions at the workplace",
                             "text": "Feilbelastninger eller unødvendig slitasje som kan komme av bruken av ulike arbeidsredskaper eller maskiner."
                         },
                         {
-                            "key": "Støy",
+                            "key": "Noise",
                             "text": "Uønsket lyd som oppfattes plagsomt."
                         }
                     ]
@@ -353,27 +349,28 @@
                     "label": "Hvor skjedde hendelsen?",
                     "type": "Choice",
                     "options": [
-                        "Telefon/SMS",
-                        "Innlogget skriftlig tjeneste/e-post/brev",
-                        "Publikumsmottak",
-                        "Samtalerom",
-                        "Uinnlogget chat/chatbot",
-                        "Utenfor NAV's lokale/ offentlig sted",
-                        "Sosiale medier",
-                        "Medarbeiders private område",
-                        "Brukers private bopel/hjemme hos bruker",
-                        "Annet"
+                        "Phone/SMS",
+                        "Logged in written service/e-mail/letter",
+                        "Audience reception",
+                        "Conversation room",
+                        "Unauthenticated chat/chatbot",
+                        "Outside the office",
+                        "At other service providers or partners locations",
+                        "Social media",
+                        "Employee's private area",
+                        "User's private residence",
+                        "Other"
                     ],
-                    "hidden": "state.values.category !== 'Vold, trusler og trakassering fra bruker eller andre utenfor NAV'",
-                    "required": "state.values.category === 'Vold, trusler og trakassering fra bruker eller andre utenfor NAV'"
+                    "hidden": "state.values.category !== 'Violence, threats and harassment by users or others outside of NAV'",
+                    "required": "state.values.category === 'Violence, threats and harassment by users or others outside of NAV'"
                 },
                 {
                     "key": "locationDetails",
                     "label": "Du valgte \"Annet\". Vennligst spesifiser: ",
                     "type": "Text",
                     "multiline": "true",
-                    "hidden": "!(state.values.location === 'Annet')",
-                    "required": "state.values.location === 'Annet'"
+                    "hidden": "!(state.values.location === 'Other')",
+                    "required": "state.values.location === 'Other'"
                 },
                 {
                     "key": "timeOfIncident",
@@ -407,17 +404,17 @@
                     "type": "Choice",
                     "multiselect": "true",
                     "options": [
-                        "Leder",
-                        "Leder ved annen enhet",
-                        "AMK",
-                        "Politi",
-                        "Brannvesen",
-                        "Verneombud",
-                        "Kommunikasjonsansvarlige",
-                        "Andre virksomheter i bygget",
-                        "Andre offentlige samarbeidspartnere",
-                        "Ingen",
-                        "Annet"
+                        "Manager",
+                        "Manager at another unit",
+                        "Medical emergency communication channel",
+                        "Police",
+                        "Fire department",
+                        "Safety representative",
+                        "Communication unit",
+                        "Other businesses in the building",
+                        "Other public partners",
+                        "None",
+                        "Other"
                     ],
                     "required": "true"
                 },
@@ -426,8 +423,8 @@
                     "label": "Du valgte \"annet\". Vennligst spesifiser:",
                     "type": "Text",
                     "multiline": "true",
-                    "hidden": "!(state.values.notifiedOfIncident === 'Annet')",
-                    "required": "state.values.notifiedOfIncident === 'Annet'"
+                    "hidden": "!(state.values.notifiedOfIncident === 'Other')",
+                    "required": "state.values.notifiedOfIncident === 'Other'"
                 }
             ],
             "actions": [

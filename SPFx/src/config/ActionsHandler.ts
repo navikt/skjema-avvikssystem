@@ -26,12 +26,16 @@ export default class ActionsHandler {
     }
 
     private async Submit({ values, functionUrl, stateVariable, state, resultVariable, fieldsToInclude }) {
+
+        fieldsToInclude = [...fieldsToInclude, 'stateOrMunicipality', 'reporterEmail', 'reporterNAVIdentId', 'form'];
         this._setState({ ...state, [stateVariable]: true });
         for (const key in values) {
             if (!includes(fieldsToInclude, key)) {
                 delete values[key];
             }
         }
+
+        console.log(values);
         const body = JSON.stringify(values);
         const response = await fetch(`${functionUrl}&mode=post`, {
             method: 'POST',
