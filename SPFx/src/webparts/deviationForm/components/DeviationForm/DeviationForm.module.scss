@@ -18,6 +18,16 @@
 
     }
 
+    .checkboxContainer {
+        display: flex;
+        flex-direction: column;
+
+        .checkBoxDescription {
+            @include ms-font-s;
+            margin-top: 5px;
+        }
+    }
+
 
     .field {
         margin: 15px 0;

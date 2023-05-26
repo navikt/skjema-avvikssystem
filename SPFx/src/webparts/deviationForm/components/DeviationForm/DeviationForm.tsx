@@ -199,23 +199,23 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                     } else options = field.options.map(o => ({ key: values.has(o) ? values.get(o) : o, text: o, disabled: field.disabledOptions?.length > 0 && field.disabledOptions.indexOf(o) !== -1 }));
                     if (field.choiceInfoTexts) {
                         field.choiceInfoTexts.forEach((choiceText, i) => {
-                            const checkboxRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
+                            const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
                             const [replaceOption] = options.filter(o => o.key === choiceText.key);
-                            const screenReaderCheckboxTextId = `screenReaderText-${field.key}-choice-tooltip-${i}`;
+                            const screenReaderTextId = `screenReaderText-${field.key}-choice-tooltip-${i}`;
 
                             if (options.indexOf(replaceOption) !== -1) {
                                 const option: IChoiceGroupOption = {
                                     key: choiceText.key,
                                     text: choiceText.key,
-                                    "aria-describedby": screenReaderCheckboxTextId,
+                                    "aria-describedby": screenReaderTextId,
 
                                     onRenderField: (props, render) => {
                                         return (
-                                            <div className={checkboxRootClass}>
+                                            <div className={optionRootClass}>
                                                 {render!(props)}
                                                 <span
                                                     style={{ height: '1px', width: '1px', position: 'absolute', overflow: 'hidden', margin: '-1px', padding: '0px', border: '0px' }}
-                                                    id={screenReaderCheckboxTextId}
+                                                    id={screenReaderTextId}
                                                     aria-hidden='true'
                                                 >
                                                     {choiceText.text}
@@ -379,26 +379,31 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                         />
                     );
                 case 'Checkbox':
-                    const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
-                    const screenReaderTextId = `screenReaderText-${field.key}-tooltip`;
+                    const checkboxRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
+                    const screenReaderCheckboxTextId = `screenReaderText-${field.key}-tooltip`;
                     if (field.infoText) {
                         return (
-                            <div className={optionRootClass}>
-                                <Checkbox
-                                    label={field.label}
-                                    checked={state.values[field.key] || eval(field.defaultValue)}
-                                    onChange={(_, checked) => setState({ ...state, values: { ...state.values, [field.key]: checked } })}
-                                />
-                                <span
-                                    style={{ height: '1px', width: '1px', position: 'absolute', overflow: 'hidden', margin: '-1px', padding: '0px', border: '0px' }}
-                                    id={screenReaderTextId}
-                                    aria-hidden='true'
-                                >
-                                    {field.infoText}
-                                </span>
-                                <TooltipHost content={field.infoText} id={`${field.key}-choice-tooltip`}>
-                                    <IconButton tabIndex={-1} aria-hidden='true' styles={{ rootHovered: { background: 'none' }, rootPressed: { background: 'none' } }} iconProps={{ iconName: 'Info' }} />
-                                </TooltipHost>
+                            <div className={styles.checkboxContainer}>
+                                <div className={checkboxRootClass}>
+                                    <Checkbox
+                                        label={field.label}
+                                        checked={state.values[field.key] || eval(field.defaultValue)}
+                                        onChange={(_, checked) => setState({ ...state, values: { ...state.values, [field.key]: checked } })}
+                                    />
+                                    <span
+                                        style={{ height: '1px', width: '1px', position: 'absolute', overflow: 'hidden', margin: '-1px', padding: '0px', border: '0px' }}
+                                        id={screenReaderCheckboxTextId}
+                                        aria-hidden='true'
+                                    >
+                                        {field.infoText}
+                                    </span>
+                                    <TooltipHost content={field.infoText} id={`${field.key}-choice-tooltip`}>
+                                        <IconButton tabIndex={-1} aria-hidden='true' styles={{ rootHovered: { background: 'none' }, rootPressed: { background: 'none' } }} iconProps={{ iconName: 'Info' }} />
+                                    </TooltipHost>
+                                </div>
+                                {field.description &&
+                                    <span className={styles.checkBoxDescription}>{field.description}</span>
+                                }
                             </div>
                         );
                     } else return (
