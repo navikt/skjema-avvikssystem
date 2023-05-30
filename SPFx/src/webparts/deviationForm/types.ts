@@ -138,3 +138,9 @@ export interface IDeviationFormState {
     submitting: boolean;
     submitResult: string;
 }
+
+export interface IGetCaseParameters {
+    reporterNAVIdentId: string;
+    avvikNumber: string;
+    isSafetyRepresentative?: boolean;
+}

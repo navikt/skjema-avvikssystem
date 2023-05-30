@@ -1,54 +1,54 @@
 {
-    "title": "Personvern",
+    "title": "Privacy",
     "conditionalOptions": {
-        "Behandlingsgrunnlag": [
-            "Manglende, utilstrekkelig eller feil bruk av behandlingsgrunnlag",
-            "Feil bruk av samtykke (ugyldig samtykke)",
-            "Overskuddsinformasjon/ innhenting og lagring av flere opplysninger enn nødvendig",
-            "Annet"
+        "Basis for processing": [
+            "Lack of, insufficient or incorrect use of basis for processing",
+            "Invalid/ incorrect use of consent",
+            "Surplus information",
+            "Other"
         ],
-        "Registrertes rettigheter": [
-            "Rett til informasjon",
-            "Rett til informasjon ved automatisering og profilering",
-            "Rett til innsyn",
-            "Rett til retting og sletting",
-            "Rett til begrensning av behandling",
-            "Rett til dataportabilitet",
-            "Rett til å protestere",
-            "Annet"
+        "The rights of the registered": [
+            "Right to information",
+            "Right to information in the case of automation and profiling",
+            "Right to access own data",
+            "Right to correction and deletion",
+            "Right to restriction of data processing",
+            "Right to data portability",
+            "Right to protest",
+            "Other"
         ],
-        "Databehandleravtaler": [
-            "Manglende databehandleravtale",
-            "Databehandler følger ikke avtalens instrukser",
-            "Annet"
+        "Data management agreements": [
+            "Lack of data processor agreement",
+            "The data processor does not follow the agreement's instructions",
+            "Other"
         ],
-        "Overføring til tredjeland": [
-            "Manglende gyldig overføringsgrunnlag",
-            "Manglende tiltak for å sikre tilstrekkelig beskyttelse av personopplysningene",
-            "Brudd på NAV's retningslinjer og prinsipper",
-            "Annet"
+        "Transfer to third countries": [
+            "Lack of valid transfer basis",
+            "Lack of measures to ensure adequate protection of personal data",
+            "Breach of NAV's guidelines and principles",
+            "Other"
         ],
-        "Lagring/sletting": [
-            "Det er ikke fastsatt lagringstid",
-            "Det er ikke rutiner for sletting/personopplysningene slettes ikke",
-            "Annet"
+        "Storage/deletion": [
+            "Storage time is not specified",
+            "Lack of routines for deletion/personal information is not deleted",
+            "Other"
         ],
-        "Manglende oversikter, vurderinger og dokumentasjon": [
-            "Behandlingen er ikke registrert/oppdatert i Behandlingskatalogen",
-            "Ikke gjennomført vurdering av personvernkonsekvenser (PVK)",
-            "Tiltak fra vurdering av personvernkonsekvenser ikke fulgt opp",
-            "Dokumentasjon av etterlevelseskrav ikke gjennomført",
-            "Annet"
+        "Lack of overview, assessments and documentation": [
+            "The process is not registered/updated in the process catalogue",
+            "Not completed privacy impact assessment",
+            "Measures from privacy impact assessment not followed up",
+            "Documentation of compliance requirements not completed",
+            "Other"
         ],
-        "Bruk av bilder, lyd- og videoopptak": [
-            "Kameraovervåkning på arbeidsplass",
-            "Publisering av bilder, lyd- og videoopptak",
-            "Annet"
+        "Usage of pictures, sound- and videorecording": [
+            "Surveillance at the workplace",
+            "Illegal use of pictures, sound- and videorecording",
+            "Other"
         ],
-        "Overvåking/kontroll av ansatte": [
-            "Uberettiget innsyn i arbeidstakers e-postkasse, private filer mm.",
-            "Ulovlig overvåkning/kontroll av ansatte",
-            "Annet"
+        "Monitoring/control of employees": [
+            "Unauthorized access to employees e-mail, private files etc.",
+            "Illegal surveillance/ control of employees",
+            "Other"
         ]
     },
     "description": {
@@ -65,18 +65,18 @@
                     "key": "stateOrMunicipality",
                     "type": "ChoiceGroup",
                     "options": [
-                        "Statlig",
-                        "Kommunal",
-                        "Vet ikke"
+                        "State",
+                        "Municipal",
+                        "Unsure"
                     ],
                     "required": "true",
                     "choiceInfoTexts": [
                         {
-                            "key": "Statlig",
+                            "key": "State",
                             "text": "Omfatter statlige arbeids- og velferdstjenester som arbeid, trygd, familie, pensjon, tiltak og hjelpemidler mfl."
                         },
                         {
-                            "key": "Kommunal",
+                            "key": "Municipal",
                             "text": "Omfatter sosiale tjenester og andre kommunale tjenester i NAV-kontoret"
                         }
                     ]
@@ -84,7 +84,7 @@
             ],
             "messages": [
                 {
-                    "display": "state.values.stateOrMunicipality && state.values.stateOrMunicipality !== 'Statlig'",
+                    "display": "state.values.stateOrMunicipality && state.values.stateOrMunicipality !== 'State'",
                     "type": "info",
                     "content": "For øyeblikket kan kun avvik for statlige tjenester rapporteres."
                 }
@@ -109,7 +109,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.values.stateOrMunicipality || state.values.stateOrMunicipality !== 'Statlig'",
+                    "disabled": "!state.values.stateOrMunicipality || state.values.stateOrMunicipality !== 'State'",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
@@ -129,44 +129,44 @@
                     "key": "category",
                     "type": "ChoiceGroup",
                     "options": [
-                        "Behandlingsgrunnlag",
-                        "Registrertes rettigheter",
-                        "Databehandleravtaler",
-                        "Overføring til tredjeland",
-                        "Lagring/sletting",
-                        "Manglende oversikter, vurderinger og dokumentasjon",
-                        "Bruk av bilder, lyd- og videoopptak",
-                        "Overvåking/kontroll av ansatte",
-                        "Fødselsnummer/biometriske kjennetegn",
-                        "Andre uønskede hendelser"
+                        "Basis for processing",
+                        "The rights of the registered",
+                        "Data management agreements",
+                        "Transfer to third countries",
+                        "Storage/deletion",
+                        "Lack of overview, assessments and documentation",
+                        "Usage of pictures, sound- and videorecording",
+                        "Monitoring/control of employees",
+                        "Birth number/biometric identifiers",
+                        "Other unwanted incidents"
                     ],
                     "choiceInfoTexts": [
                         {
-                            "key": "Behandlingsgrunnlag",
+                            "key": "Basis for processing",
                             "text": "Brudd knyttet til at all bruk av personopplysninger skal ha et behandlingsgrunnlag for å være lovlig."
                         },
                         {
-                            "key": "Registrertes rettigheter",
+                            "key": "The rights of the registered",
                             "text": "Brudd knyttet til at NAV ikke ivaretar rettigheter den registrerte har, eller ikke har behandlet krav fra den registrerte innen gjeldende frister. Registrertes rettigheter omfatter rett til informasjon, innsyn i egne personopplysninger, rett til sletting eller endring av personopplysninger, rett til begrensning, dataportabilitet og retten til å protestere."
                         },
                         {
-                            "key": "Overføring til tredjeland",
+                            "key": "Transfer to third countries",
                             "text": "Brudd knyttet til overføring av personopplysninger til tredjeland (land utenfor EU/EØS som ikke er forhåndsgodkjent av EU-kommisjonen)"
                         },
                         {
-                            "key": "Lagring/sletting",
+                            "key": "Storage/deletion",
                             "text": "Brudd knyttet til at lagringstid ikke er fastsatt eller at personopplysninger lagres lengre enn fastsatt lagringstid."
                         },
                         {
-                            "key": "Manglende oversikter, vurderinger og dokumentasjon",
+                            "key": "Lack of overview, assessments and documentation",
                             "text": "Brudd på krav til dokumentasjon, eks. personvernkonsekvensvurdering, etterlevelseskrav og behandlingskatalog"
                         },
                         {
-                            "key": "Fødselsnummer/biometriske kjennetegn",
+                            "key": "Birth number/biometric identifiers",
                             "text": "Ulovlig eller unødvendig bruk av fødselsnummer eller andre biometriske kjennetegn som fingeravtrykk, ansikt- og stemmegjenkjenning, DNA o.l."
                         },
                         {
-                            "key": "Andre uønskede hendelser",
+                            "key": "Other unwanted incidents",
                             "text": "Andre personvernbrudd som ikke er kategorisert her eller som faller inn under mer enn en kategori."
                         }
                     ],
@@ -223,95 +223,95 @@
                     "hidden": "!(form.conditionalOptions[state.values.category])",
                     "choiceInfoTexts": [
                         {
-                            "key": "Feil bruk av samtykke (ugyldig samtykke)",
+                            "key": "Invalid/ incorrect use of consent",
                             "text": "Samtykke oppfyller ikke særskilte krav til bruk av samtykke eller personopplysninger er blitt brukt utover det som samtykket dekker."
                         },
                         {
-                            "key": "Overskuddsinformasjon/ innhenting og lagring av flere opplysninger enn nødvendig",
+                            "key": "Surplus information",
                             "text": "Det innhentes og lagres flere personopplysninger enn det som dekkes av behandlingsgrunnlaget eller det brukes flere personopplysninger enn det som er nødvendig for behandlingen."
                         },
                         {
-                            "key": "Rett til informasjon",
+                            "key": "Right to information",
                             "text": "Det er ikke gitt tilstrekkelig informasjon om hvordan personopplysningene behandles, hvilke konsekvenser behandlingen skal ha, hvilke rettigheter registrerte har og hvordan de kan tas i bruk."
                         },
                         {
-                            "key": "Rett til informasjon ved automatisering og profilering",
+                            "key": "Right to information in the case of automation and profiling",
                             "text": "Brudd på retten til særskilt informasjon om helautomatisert behandling og bruk av profilering."
                         },
                         {
-                            "key": "Rett til innsyn",
+                            "key": "Right to access own data",
                             "text": "Bruker eller NAV-ansatt får ikke tilstrekkelig innsyn i egne personopplysninger og informasjon om hva personopplysningene brukes til."
                         },
                         {
-                            "key": "Rett til retting og sletting",
+                            "key": "Right to correction and deletion",
                             "text": "Bruker eller NAV-ansatt får ikke rettet eller slettet uriktig personopplysninger."
                         },
                         {
-                            "key": "Rett til begrensning av behandling",
+                            "key": "Right to restriction of data processing",
                             "text": "Bruker eller NAV-ansatt får ikke stanset bruk av personopplysninger."
                         },
                         {
-                            "key": "Rett til dataportabilitet",
+                            "key": "Right to data portability",
                             "text": "Brudd på rett til å få utlevert eller flyttet personopplysninger til en annen virksomhet."
                         },
                         {
-                            "key": "Rett til å protestere",
+                            "key": "Right to protest",
                             "text": "Brudd på retten til å protestere mot en behandling av personopplysninger."
                         },
                         {
-                            "key": "Manglende databehandleravtale",
+                            "key": "Lack of data processor agreement",
                             "text": "Eksterne leverandører og ev. underleverandører behandler personopplysninger for NAV, uten at det er inngått en skriftlig databehandleravtale."
                         },
                         {
-                            "key": "Databehandler følger ikke avtalens instrukser",
+                            "key": "The data processor does not follow the agreement's instructions",
                             "text": "Brudd på avtalens instrukser om behandling av personopplysninger"
                         },
                         {
-                            "key": "Manglende gyldig overføringsgrunnlag",
+                            "key": "Lack of valid transfer basis",
                             "text": "Brudd på kravene til gyldig overføringsgrunnlag for å overføre personopplysninger til et tredjeland (land utenfor EUEØS)."
                         },
                         {
-                            "key": "Brudd på NAV's retningslinjer og prinsipper",
+                            "key": "Breach of NAV's guidelines and principles",
                             "text": "Brudd knyttet til at NAV sine retningslinjer og prinsipper for overføring av personopplysninger ikke er blitt fulgt."
                         },
                         {
-                            "key": "Det er ikke fastsatt lagringstid",
+                            "key": "Storage time is not specified",
                             "text": "Det er ikke vurdert hvor lenge personopplysningene skal lagres. Det er ikke vurdert om personopplysningene skal bevares eller kasseres."
                         },
                         {
-                            "key": "Det er ikke rutiner for sletting/personopplysningene slettes ikke",
+                            "key": "Lack of routines for deletion/personal information is not deleted",
                             "text": "Det er fastsatt lagringstider, men ikke etablert rutiner som sikrer at personopplysningene faktisk slettes."
                         },
                         {
-                            "key": "Behandlingen er ikke registrert/oppdatert i Behandlingskatalogen",
+                            "key": "The process is not registered/updated in the process catalogue",
                             "text": "Behandlingskatalogen er NAVs protokoll over behandlingsaktiviteter. Katalogen skal til enhver tid være oppdatert med NAVs behandling av personopplysninger."
                         },
                         {
-                            "key": "Ikke gjennomført vurdering av personvernkonsekvenser (PVK)",
+                            "key": "Not completed privacy impact assessment",
                             "text": "Brudd på kravet om at PVK skal gjennomføres ved høy risiko for personvernet. "
                         },
                         {
-                            "key": "Tiltak fra vurdering av personvernkonsekvenser ikke fulgt opp",
+                            "key": "Measures from privacy impact assessment not followed up",
                             "text": "Tiltak som er satt i PVK skal gjennomføres innen fastsatte frister."
                         },
                         {
-                            "key": "Dokumentasjon av etterlevelseskrav ikke gjennomført",
+                            "key": "Documentation of compliance requirements not completed",
                             "text": "Personvernkrav skal etterleves og dokumenteres."
                         },
                         {
-                            "key": "Kameraovervåkning på arbeidsplass",
+                            "key": "Surveillance at the workplace",
                             "text": "Det foretas kameraovervåking på arbeidsplass som er ulovlig eller ulovlig lagring av kameraopptak. "
                         },
                         {
-                            "key": "Publisering av bilder, lyd- og videoopptak",
+                            "key": "Illegal use of pictures, sound- and videorecording",
                             "text": "Arbeidsgiver, brukere eller andre publiserer ulovlig bilder, lyd- eller videopptak på nettsider, media o.l."
                         },
                         {
-                            "key": "Uberettiget innsyn i arbeidstakers e-postkasse, private filer mm.",
+                            "key": "Unauthorized access to employees e-mail, private files etc.",
                             "text": "Arbeidsgiver foretar innsyn i ansattes e-post kasse, private filer mv. som ikke er berettiget, krav til innsynsprosedyrer ikke fulgt mv."
                         },
                         {
-                            "key": "Ulovlig overvåkning/kontroll av ansatte",
+                            "key": "Illegal surveillance/ control of employees",
                             "text": "Det foretas f.eks. ulovlig produksjonskontroll, overvåking telefonbruk, sporing m.m. av ansatte som er ulovlig."
                         }
                     ]

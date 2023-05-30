@@ -1,8 +1,8 @@
 {
-    "title": "Fysisk sikkerhet",
+    "title": "Physical security",
     "conditionalOptions": {
-        "Brudd på lov, forskrifter og rutiner": [
-            "Brudd på minimumsstandarden med krav til fysisk utforming og sikring av NAV-kontor",
+        "Violation of laws, regulations and routines": [
+            "Breach of minimum standard for physical design and safety of NAV offices",
             "Øvrige"
         ]
     },
@@ -20,21 +20,21 @@
                     "key": "category",
                     "type": "ChoiceGroup",
                     "options": [
-                        "Ulåste dører/vinduer",
-                        "Brukere i skjermede områder",
-                        "Mangler på bygg og utstyr",
-                        "Brann, branntilløp og brannforebygging",
-                        "Hærverk",
-                        "Innbrudd",
-                        "Strømbrudd",
-                        "Vannskade",
-                        "Ytre miljø/forurensing",
-                        "Brudd på lov, forskrifter og rutiner",
-                        "Andre uønskede hendelser"
+                        "Unlocked doors/windows",
+                        "User in sheltered areas",
+                        "Deficiency on construction and equipment",
+                        "Fire and fire prevention",
+                        "Vandalism",
+                        "Burglary",
+                        "Power failure",
+                        "Water damage",
+                        "Environmental/pollution",
+                        "Violation of laws, regulations and routines",
+                        "Other unwanted incidents"
                     ],
                     "choiceInfoTexts": [
                         {
-                            "key": "Brudd på lov, forskrifter og rutiner",
+                            "key": "Violation of laws, regulations and routines",
                             "text": "Herunder brudd på krav til fysisk sikring og minimumsstandarden for NAV-kontor."
                         }
                     ],
@@ -205,16 +205,14 @@
                     "type": "Choice",
                     "multiselect": "true",
                     "options": [
-                        "Leder",
-                        "AMK",
-                        "Politi",
-                        "Brannvesen",
-                        "Verneombud",
-                        "Kommunikasjonsansvarlige",
-                        "Andre virksomheter i bygget",
-                        "Andre offentlige samarbeidspartnere",
-                        "Ingen",
-                        "Annet"
+                        "Police",
+                        "Fire department",
+                        "Safety representative",
+                        "Communication unit",
+                        "Other businesses in the building",
+                        "Other public partners",
+                        "None",
+                        "Other"
                     ],
                     "required": "true"
                 },
@@ -223,8 +221,8 @@
                     "label": "Du valgte \"annet\". Vennligst spesifiser:",
                     "type": "Text",
                     "multiline": "true",
-                    "hidden": "!(state.values.notifiedOfIncident === 'Annet')",
-                    "required": "state.values.notifiedOfIncident === 'Annet'"
+                    "hidden": "!(state.values.notifiedOfIncident === 'Other')",
+                    "required": "state.values.notifiedOfIncident === 'Other'"
                 }
             ],
             "actions": [

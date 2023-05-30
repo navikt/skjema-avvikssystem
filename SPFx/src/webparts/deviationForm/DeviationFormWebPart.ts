@@ -105,13 +105,13 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
     const user = await res.json();
     switch (user.companyName) {
       case 'NAV Kommunal':
-        this.organization = 'Kommunal';
+        this.organization = 'Municipal';
         break;
       case 'NAV Statlig':
-        this.organization = 'Statlig';
+        this.organization = 'State';
         break;
       case 'Ikke NAV':
-        this.organization = 'Ekstern';
+        this.organization = 'External';
         break;
       default:
         break;

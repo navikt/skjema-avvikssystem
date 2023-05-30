@@ -1,19 +1,19 @@
 {
-    "title": "Informasjonssikkerhet",
+    "title": "Information security",
     "conditionalOptions": {
-        "Personopplysninger på avveie": [
-            "Brev er sendt til feil mottakere",
-            "Brev er sendt til feil arbeidsgiver",
-            "Opplysninger som følger med i brev til annen bruker",
-            "E-post og SMS sendt til feil mottager",
-            "Opplysninger som er registrert på feil bruker",
-            "Dokumenter er skannet inn på feil bruker",
-            "Feil i et IT-system",
-            "Avvik begått av databehandler",
-            "Tap av utstyr, telefoner, bærbar pc",
-            "Overhøring av samtaler som inneholder taushetsbelagte personopplysninger",
-            "Oppslag uten tjenstlig behov",
-            "Annet"
+        "Personal information": [
+            "Letter sent to the wrong recipient",
+            "Letter sent to the wrong employer",
+            "Information accompanies letter sent to another user",
+            "E-mail or SMS sent to the wrong recipient",
+            "Information registered on the wrong user",
+            "Documents are scanned and registered on the wrong user",
+            "Error in an IT system",
+            "Deviations committed by the data processor",
+            "Loss of equipment, phone, computer",
+            "Overhearing conversations with confidential personal information",
+            "Lookup without official need",
+            "Other"
         ]
     },
     "description": {
@@ -30,18 +30,18 @@
                     "key": "stateOrMunicipality",
                     "type": "ChoiceGroup",
                     "options": [
-                        "Statlig",
-                        "Kommunal",
-                        "Vet ikke"
+                        "State",
+                        "Municipal",
+                        "Unsure"
                     ],
                     "required": "true",
                     "choiceInfoTexts": [
                         {
-                            "key": "Statlig",
+                            "key": "State",
                             "text": "Omfatter statlige arbeids- og velferdstjenester som arbeid, trygd, familie, pensjon, tiltak og hjelpemidler mfl."
                         },
                         {
-                            "key": "Kommunal",
+                            "key": "Municipal",
                             "text": "Omfatter sosiale tjenester og andre kommunale tjenester i NAV-kontoret"
                         }
                     ]
@@ -49,7 +49,7 @@
             ],
             "messages": [
                 {
-                    "display": "state.values.stateOrMunicipality && state.values.stateOrMunicipality !== 'Statlig'",
+                    "display": "state.values.stateOrMunicipality && state.values.stateOrMunicipality !== 'State'",
                     "type": "info",
                     "content": "For øyeblikket kan kun avvik for statlige tjenester rapporteres."
                 }
@@ -74,7 +74,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.values.stateOrMunicipality || state.values.stateOrMunicipality !== 'Statlig'",
+                    "disabled": "!state.values.stateOrMunicipality || state.values.stateOrMunicipality !== 'State'",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
@@ -94,9 +94,9 @@
                     "key": "category",
                     "type": "ChoiceGroup",
                     "options": [
-                        "Personopplysninger på avveie",
-                        "Brudd på policy/retningslinjer",
-                        "Andre uønskede hendelser"
+                        "Personal information",
+                        "Violation of policies",
+                        "Other unwanted incidents"
                     ],
                     "required": "true"
                 }
@@ -150,7 +150,7 @@
                     "hidden": "!(form.conditionalOptions[state.values.category])",
                     "choiceInfoTexts": [
                         {
-                            "key": "Feil i et IT-system",
+                            "key": "Error in an IT system",
                             "text": "Feil som medfører at personopplysninger blir synlige for personer som ikke skal se de. Andre feil kan være at personopplysningene er blitt uriktig endret, slettet, eller vært utilgjengelige."
                         }
                     ]
@@ -257,8 +257,8 @@
                         "Ja",
                         "Nei"
                     ],
-                    "required": "state.values.category === 'Personopplysninger på avveie'",
-                    "hidden": "state.values.category !== 'Personopplysninger på avveie'"
+                    "required": "state.values.category === 'Personal information'",
+                    "hidden": "state.values.category !== 'Personal information'"
                 },
                 {
                     "key": "externalReporter",
@@ -273,8 +273,8 @@
                     "key": "affectedPeopleCount",
                     "label": "Antall berørte:",
                     "type": "Number",
-                    "hidden": "state.values.category !== 'Personopplysninger på avveie'",
-                    "required": "state.values.category === 'Personopplysninger på avveie'"
+                    "hidden": "state.values.category !== 'Personal information'",
+                    "required": "state.values.category === 'Personal information'"
                 },
                 {
                     "key": "affectedPeople",
@@ -282,16 +282,16 @@
                     "type": "Text",
                     "multiline": "true",
                     "placeholder": "Oppgi navn og personnummer, ett per linje",
-                    "hidden": "state.values.category !== 'Personopplysninger på avveie'",
-                    "required": "state.values.category === 'Personopplysninger på avveie'"
+                    "hidden": "state.values.category !== 'Personal information'",
+                    "required": "state.values.category === 'Personal information'"
                 },
                 {
                     "key": "informationType",
                     "label": "Hvilken type personopplysninger er berørt?",
                     "type": "Text",
                     "multiline": "true",
-                    "hidden": "state.values.category !== 'Personopplysninger på avveie'",
-                    "required": "state.values.category === 'Personopplysninger på avveie'"
+                    "hidden": "state.values.category !== 'Personal information'",
+                    "required": "state.values.category === 'Personal information'"
                 },
                 {
                     "key": "incidentDescription",
