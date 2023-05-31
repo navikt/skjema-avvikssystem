@@ -26,8 +26,8 @@ export default class ActionsHandler {
     }
 
     private async Submit({ values, functionUrl, stateVariable, state, resultVariable, fieldsToInclude }) {
-
-        fieldsToInclude = [...fieldsToInclude, 'stateOrMunicipality', 'reporterEmail', 'reporterNAVIdentId', 'form'];
+        fieldsToInclude = [...fieldsToInclude, 'stateOrMunicipality', 'form'];
+        if (!values.anonymous) fieldsToInclude = [...fieldsToInclude, 'reporterEmail', 'reporterNAVIdentId'];
         this._setState({ ...state, [stateVariable]: true });
         for (const key in values) {
             if (!includes(fieldsToInclude, key)) {
