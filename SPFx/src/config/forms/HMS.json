@@ -309,8 +309,8 @@
                     "label": "Anonym innmelding",
                     "type": "Checkbox",
                     "defaultValue": "false",
-                    "description": "OBS! Ved anonym innmelding vil du ikke få tilsendt saksnummer og vil ikke kunne følge opp avviket.",
-                    "infoText": "Kryss av her dersom du ønsker å melde avvik anonymt. Vi vil da ikke knytte opplysninger om deg til avviksmeldingen. Når du velger å være anonym, må du i feltet \"Velg enhet\" velge den Nav-enheten som skal motta og følge opp avviksmeldingen. For å sikre full anonymitet er det viktig at du ikke registrerer opplysninger som kan knyttes til deg i fritekstfeltene i avviksskjemaet."
+                    "description": "Obs! Ved anonym innmelding vil du ikke få tilsendt saksnummer og ikke ha mulighet til innsyn i avviket.",
+                    "infoText": "Ved anonym innmelding vil det ikke bli knyttet noen opplysninger om deg til avviksmeldingen. Det vil ikke være mulig for saksbehandler å etterspørre mer informasjon, og det er derfor viktig at informasjonen som fylles inn er så utfyllende som mulig. Når du velger å være anonym, må du i feltet \"Velg enhet\" velge den Nav-enheten som du vil skal motta og følge opp avviksmeldingen."
                 },
                 {
                     "key": "unit",
