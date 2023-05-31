@@ -5,7 +5,7 @@ import { DeviationFormContext } from '../DeviationFormContext';
 import { Callout, DefaultButton, DirectionalHint, Link, PrimaryButton, SearchBox, Spinner, SpinnerSize } from 'office-ui-fabric-react';
 import DeviationForm from './DeviationForm/DeviationForm';
 import strings from 'DeviationFormWebPartStrings';
-import { DescriptionType } from '../types';
+import { DescriptionType, IGetCaseParameters } from '../types';
 import SearchResult from './SearchResult/SearchResult';
 
 export interface IDeviationAppProps {
@@ -15,7 +15,7 @@ export interface IDeviationAppProps {
 const App = ({ title }: IDeviationAppProps) => {
   const context = useContext(DeviationFormContext);
   const defaultCalloutProps = { display: false, button: null };
-  const initialSearchState = { search: false, caseId: null, result: null, searching: false };
+  const initialSearchState = { search: false, caseId: null, result: null, searching: false, isSafetyRepresentative: false };
   const [selectedForm, setSelectedForm] = useState(null);
   const [calloutProps, setCalloutProps] = useState(defaultCalloutProps);
   const [breadcrumbs, setBreadcrumbs] = useState([]);
@@ -29,10 +29,11 @@ const App = ({ title }: IDeviationAppProps) => {
 
   const getCase = async () => {
     setSearchState({ ...searchState, searching: true });
-    const values = {
+    let values: IGetCaseParameters = {
       reporterNAVIdentId: context.reporterNAVIdentId,
       avvikNumber: searchState.caseId
     };
+    if (searchState.isSafetyRepresentative) values.isSafetyRepresentative = true;
     const body = JSON.stringify(values);
     const response = await fetch(`${context.functionUrl}&mode=get`, {
       method: 'POST',
@@ -78,11 +79,11 @@ const App = ({ title }: IDeviationAppProps) => {
           <header role='banner' aria-label='breadcrumbs'>
             <Link onClick={() => toFormSelection()}>{title}</Link>
             {' > '}
-            {selectedForm.title}
+            {strings[selectedForm.title] || selectedForm.title}
             {breadcrumbs.length > 0 &&
               <>
                 {' > '}
-                {breadcrumbs.join(' > ')}
+                {breadcrumbs.map(b => (strings[b] || b)).join(' > ')}
               </>
             }
           </header>
@@ -139,7 +140,7 @@ const App = ({ title }: IDeviationAppProps) => {
               className={styles.searchButton}
               text={strings.SearchCaseSafetyRepresentativeButtonText}
               iconProps={{ iconName: 'ContactLock' }}
-              onClick={() => setSearchState({ ...searchState, search: true })}
+              onClick={() => setSearchState({ ...searchState, search: true, isSafetyRepresentative: true })}
             />
           </>
           :
