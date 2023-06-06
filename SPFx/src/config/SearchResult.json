@@ -1,14 +1,9 @@
 {
     "fields": [
         {
-            "name": "Avvik_IncidentNumber__c",
-            "displayName": "Avviksnummer",
+            "name": "Avviksnummer",
+            "displayName": "Avvik_IncidentNumber__c",
             "type": "string"
-        },
-        {
-            "name": "Owner",
-            "displayName": "Sakseier",
-            "type": "user"
         },
         {
             "name": "Status",
@@ -16,59 +11,274 @@
             "type": "string"
         },
         {
-            "name": "CreatedDate",
-            "displayName": "Dato åpnet",
+            "name": "Sakseier",
+            "displayName": "OwnerId",
+            "type": "string"
+        },
+        {
+            "name": "Dato/tid åpnet",
+            "displayName": "CreatedDate",
             "type": "date"
         },
         {
-            "name": "Avvik_IncidentDate__c",
-            "displayName": "Avviksdato",
+            "name": "Dato/tid lukket",
+            "displayName": "ClosedDate",
             "type": "date"
         },
         {
-            "name": "Avvik_SuperordinateCategory__c",
-            "displayName": "Hovedkategori",
-            "type": "string"
-        },
-        {
-            "name": "Avvik_BasicCategory__c",
-            "displayName": "Underkategori",
-            "type": "string"
-        },
-        {
-            "name": "Avvik_SubordinateCategory__c",
-            "displayName": "Subkategori",
-            "type": "string"
-        },
-        {
-            "name": "Avvik_IncidentDescription__c",
-            "displayName": "Beskrivelse",
-            "type": "string"
-        },
-        {
-            "name": "Description",
-            "displayName": "Saksbeskrivelse",
-            "type": "string"
-        },
-        {
-            "name": "Avvik_PlannedActions__c",
-            "displayName": "Planlagte tiltak",
-            "type": "string"
-        },
-        {
-            "name": "Avvik_IsActionCompleted__c",
-            "displayName": "Er tiltak gjennomført?",
+            "name": "Anonym",
+            "displayName": "Avvik_IsAnonymous__c",
             "type": "boolean"
         },
         {
-            "name": "Avvik_DeadlineForAction__c",
-            "displayName": "Frist for gjennomførelse av tiltak",
+            "name": "Hovedkategori",
+            "displayName": "Avvik_SuperordinateCategory__c",
+            "type": "string"
+        },
+        {
+            "name": "Underkategori",
+            "displayName": "Avvik_BasicCategory__c",
+            "type": "string"
+        },
+        {
+            "name": "Subkategori",
+            "displayName": "Avvik_SubordinateCategory__c",
+            "type": "string"
+        },
+        {
+            "name": "Avviksdate",
+            "displayName": "Avvik_IncidentDate__c",
             "type": "date"
         },
         {
-            "name": "ClosedDate",
-            "displayName": "Dato lukket",
+            "name": "Oppdagelsestidspunkt",
+            "displayName": "Avvik_IncidentDateDiscovered",
             "type": "date"
+        },
+        {
+            "name": "Berørt enhet",
+            "displayName": "Avvik_InvolvedUnit__c",
+            "type": "string"
+        },
+        {
+            "name": "Ansatt sektor",
+            "displayName": "Avvik_EmployeeSector__c",
+            "type": "string"
+        },
+        {
+            "name": "Type tjeneste",
+            "displayName": "Avvik_TypeOfService__c",
+            "type": "string"
+        },
+        {
+            "name": "Hendelsessted",
+            "displayName": "Avvik_IncidentLocation__c",
+            "type": "string"
+        },
+        {
+            "name": "Annet hendelsessted",
+            "displayName": "Avvik_IncidentLocationOther__c",
+            "type": "string"
+        },
+        {
+            "name": "Antall berørte",
+            "displayName": "Avvik_NumberOfAffectedPeople__c",
+            "type": "number"
+        },
+        {
+            "name": "Type personopplysninger",
+            "displayName": "Avvik_TypeOfPersonalInformation__c",
+            "type": "string"
+        },
+        {
+            "name": "Saksbeskrivelse ",
+            "displayName": "Description",
+            "type": "string"
+        },
+        {
+            "name": "Iverksatte strakstiltak",
+            "displayName": "Avvik_ImmediateActions__c",
+            "type": "string"
+        },
+        {
+            "name": "Tiltaksforslag",
+            "displayName": "Avvik_SuggestedActions__c",
+            "type": "string"
+        },
+        {
+            "name": "Roller som er informert",
+            "displayName": "Avvik_RolesThatAreInformed__c",
+            "type": "stringmulti"
+        },
+        {
+            "name": "Andre som er informert",
+            "displayName": "Avvik_OthersWhoAreInformed__c",
+            "type": "string"
+        },
+        {
+            "name": "Oppdatert: Antall berørte",
+            "displayName": "Avvik_UpdatedNumberOfAffectedPeople__c",
+            "type": "string"
+        },
+        {
+            "name": "Oppdatert: Type personopplysninger",
+            "displayName": "Avvik_TypeOfPersonalInformationUpdated__c",
+            "type": "string"
+        },
+        {
+            "name": "Utvidet saksbeskrivelse",
+            "displayName": "Avvik_IncidentDescription__c",
+            "type": "string"
+        },
+        {
+            "name": "Varighet",
+            "displayName": "Avvik_IncidentDuration__c",
+            "type": "date"
+        },
+        {
+            "name": "Har hendelsen ført til skade/belastning?",
+            "displayName": "Avvik_IsInjuryOrStrainInvolved__c",
+            "type": "boolean"
+        },
+        {
+            "name": "Er det sendt melding om yrkesskade?",
+            "displayName": "Avvik_InjuryReport__c",
+            "type": "string"
+        },
+        {
+            "name": "Er Arbeidstilsynet varslet?",
+            "displayName": "Avvik_ArbeidstilsynetNotified__c",
+            "type": "string"
+        },
+        {
+            "name": "Involverte retningslinjer",
+            "displayName": "Avvik_PoliciesInvolved__c",
+            "type": "string"
+        },
+        {
+            "name": "Berørte verdier",
+            "displayName": "Avvik_AffectedValues__c",
+            "type": "string"
+        },
+        {
+            "name": "Vurdering av bruddet ",
+            "displayName": "Avvik_EvaluationOfBreach__c",
+            "type": "string"
+        },
+        {
+            "name": "Behov for endring",
+            "displayName": "Avvik_NeedForChange__c",
+            "type": "string"
+        },
+        {
+            "name": "Hvilke læringspunkter gir avviket?",
+            "displayName": "Avvik_LearningPoints__c",
+            "type": "string"
+        },
+        {
+            "name": "Konsekvens av bruddet",
+            "displayName": "Avvik_ConsequencesOfBreach__c",
+            "type": "string"
+        },
+        {
+            "name": "Mulig hovedårsak",
+            "displayName": "Avvik_MainCauseIncident__c",
+            "type": "string"
+        },
+        {
+            "name": "Annen mulig hovedårsak",
+            "displayName": "Avvik_MainCauseIncidentOther__c",
+            "type": "string"
+        },
+        {
+            "name": "Alvorlighetsgrad",
+            "displayName": "Avvik_Severity__c",
+            "type": "string"
+        },
+        {
+            "name": "Sannsynlighet for at det skjer igjen",
+            "displayName": "Avvik_ProbabilityNewIncident__c",
+            "type": "string"
+        },
+        {
+            "name": "Reaksjon mot bruker",
+            "displayName": "Avvik_ReactionTowardsUser__c",
+            "type": "stringmulti"
+        },
+        {
+            "name": "Annen type reaksjon",
+            "displayName": "Avvik_ReactionTowardsUserOther__c",
+            "type": "string"
+        },
+        {
+            "name": "Tiltak for oppfølging av berørt ansatt ",
+            "displayName": "Avvik_ActionsFollowUpEmployee__c",
+            "type": "stringmulti"
+        },
+        {
+            "name": "Er bruker(e) varslet?",
+            "displayName": "Avvik_IsAffectedUserNotified__c",
+            "type": "boolean"
+        },
+        {
+            "name": "Hvordan er bruker(e) varslet?",
+            "displayName": "Avvik_HowisUserNotified__c",
+            "type": "string"
+        },
+        {
+            "name": "Varslet på annen måte",
+            "displayName": "avvik_OtherWaysUserIsNotified__c",
+            "type": "string"
+        },
+        {
+            "name": "Begrunnelse om bruker ikke er varslet",
+            "displayName": "Avvik_ReasonNotNotified__c",
+            "type": "string"
+        },
+        {
+            "name": "Planlagte tiltak",
+            "displayName": "Avvik_PlannedActions__c",
+            "type": "string"
+        },
+        {
+            "name": "Frist for gjennomførelse av tiltak",
+            "displayName": "Avvik_DeadlineForAction__c",
+            "type": "date"
+        },
+        {
+            "name": "Er tiltak gjennomført? ",
+            "displayName": "Avvik_IsActionsCompleted__c",
+            "type": "boolean"
+        },
+        {
+            "name": "Begrunnelse for redigering av innmelding",
+            "displayName": "Avvik_ReasonForEditing__c",
+            "type": "string"
+        },
+        {
+            "name": "Begrunnelse for eskalering",
+            "displayName": "Avvik_ReasonForEscalation__c",
+            "type": "string"
+        },
+        {
+            "name": "Sikkerhetsseksjonens vurdering",
+            "displayName": "Avvik_SafetyUnitsEvaluation__c",
+            "type": "string"
+        },
+        {
+            "name": "Vurdering av meldeplikt",
+            "displayName": "Avvik_DutyToNotify__c",
+            "type": "string"
+        },
+        {
+            "name": "Begrunnelse ved ikke meldeplikt",
+            "displayName": "Avvik_ReasonNotNotifiable__c",
+            "type": "string"
+        },
+        {
+            "name": "Referansenummer",
+            "displayName": "Avvik_ReferenceNumber__c",
+            "type": "string"
         }
     ]
 }
