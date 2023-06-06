@@ -426,7 +426,6 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
     const renderSummary = (values: any) => {
         const fields = flatten(form.pages.filter(p => p.type === DeviationFormPageType.Input).map(p => p.fields.filter(f => !eval(f.hidden)).map(f => ({ fieldName: f.key, field: f.label || p.title, value: values[f.key], options: f.options, optionType: f.optionType }))));
         const getValue = (field: any) => {
-            console.log(field);
             if (field.value instanceof Date) {
                 if (fieldTypes.get(field.fieldName) === 'DateTime') {
                     return `${field.value.toLocaleDateString('no')} Kl. ${field.value.toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })}`;
@@ -435,6 +434,8 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                 if (typeof field.options === 'string') field.options = eval(field.options);
                 const [option] = field.options.filter(o => o[field.optionType.key] === field.value);
                 return strings[option[field.optionType.text]] || option[field.optionType.text];
+            } else if (field.value instanceof Array) {
+                return field.value.map(v => strings[v]).join(', ');
             }
             return strings[field.value] || field.value;
         };
