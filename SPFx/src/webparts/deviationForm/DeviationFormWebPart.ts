@@ -12,7 +12,7 @@ import * as strings from 'DeviationFormWebPartStrings';
 import App from './components/App';
 import config from '../../config/config';
 import { DeviationFormContext, IDeviationFormContext } from './DeviationFormContext';
-import { IAppConfig } from './types';
+import { IAppConfig, IOrgUnit, IOrgUnitOption } from './types';
 import { AadHttpClient } from '@microsoft/sp-http';
 import { uniq } from '@microsoft/sp-lodash-subset';
 
@@ -21,24 +21,12 @@ export interface IDeviationFormWebPartProps {
   functionUrl: string;
 }
 
-interface OrgUnit {
-  orgEnhet: {
-    id?: string;
-    navn: string;
-    nomNivaa: string | null;
-    orgEnhetsType?: string | null;
-    gyldigFom: string;
-    gyldigTom: string | null;
-    organiseringer?: OrgUnit[];
-  };
-}
-
 export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviationFormWebPartProps> {
   private organization: string;
   private unit: string;
   private reporterEmail: string;
   private reporterNAVIdentId: string;
-  private orgUnits: string[];
+  private orgUnits: IOrgUnitOption[];
 
   public render(): void {
     const value: IDeviationFormContext = {
@@ -78,11 +66,11 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
     headers.append('target-client-id', '3e962532-1cd2-4bb4-8222-515c83df854a');
     const response = await nomClient.post('https://org-ekstern-proxy.nav.no/graphql', AadHttpClient.configurations.v1, { body, headers });
     const json = await response.json();
-    const rawUnits: OrgUnit[] = json.data.orgEnheter;
+    const rawUnits: IOrgUnit[] = json.data.orgEnheter;
 
     const parentUnitsResponse = await nomClient.post('https://org-ekstern-proxy.nav.no/graphql', AadHttpClient.configurations.v1, { body: parentUnitsBody, headers });
     const parentsJson = await parentUnitsResponse.json();
-    const rawUnitsOver: OrgUnit[] = parentsJson.data.orgEnheter;
+    const rawUnitsOver: IOrgUnit[] = parentsJson.data.orgEnheter;
 
     const filteredUnits = this.filterUnits(rawUnits);
     const filteredUnitsOver = this.filterUnits(rawUnitsOver);
@@ -93,12 +81,12 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
       if (u.length > 0) subUnits = subUnits.concat(u);
     });
 
-    let parentUnits: OrgUnit[] = [];
+    let parentUnits: IOrgUnit[] = [];
     filteredUnitsOver.forEach(unit => {
       this.extractOrgUnits(unit, parentUnits);
     });
 
-    const allUnitNames = uniq(filteredUnits.map(unit => unit.orgEnhet.navn).concat(subUnits.map(unit => unit.orgEnhet.navn)).concat(parentUnits.map(unit => unit.orgEnhet.navn)));
+    const unitOptions: IOrgUnitOption[] = uniq(filteredUnits.map(unit => ({ id: unit.orgEnhet.id, name: unit.orgEnhet.navn })).concat(subUnits.map(unit => ({ id: unit.orgEnhet.id, name: unit.orgEnhet.navn })).concat(parentUnits.map(unit => ({ id: unit.orgEnhet.id, name: unit.orgEnhet.navn })))));
 
     const client: AadHttpClient = await this.context.aadHttpClientFactory.getClient('https://graph.microsoft.com');
     const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName,department,mail,onPremisesSamAccountName', AadHttpClient.configurations.v1);
@@ -117,18 +105,18 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
         break;
     }
 
-    this.orgUnits = allUnitNames.sort();
+    this.orgUnits = unitOptions.sort();
     this.unit = user.department;
     this.reporterEmail = user.mail;
     this.reporterNAVIdentId = user.onPremisesSamAccountName;
   }
 
-  private filterUnits(rawUnits: OrgUnit[]) {
+  private filterUnits(rawUnits: IOrgUnit[]) {
     return rawUnits.filter(unit => ((new Date(unit.orgEnhet.gyldigTom) > new Date() || !unit.orgEnhet.gyldigTom) && unit.orgEnhet.nomNivaa === "ARBEIDSOMRAADE"
       && unit.orgEnhet.organiseringer.length > 0));
   }
 
-  private extractOrgUnits(unit: OrgUnit, result: OrgUnit[]): void {
+  private extractOrgUnits(unit: IOrgUnit, result: IOrgUnit[]): void {
     if (unit.orgEnhet && unit.orgEnhet.organiseringer) {
       for (const org of unit.orgEnhet.organiseringer) {
         result.push(org);

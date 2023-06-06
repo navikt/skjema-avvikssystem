@@ -52,6 +52,12 @@ export interface IDeviationFieldAdditionalData {
     value: string;
 }
 
+export interface IChoiceFieldOptionType {
+    type: string;
+    key?: string;
+    text?: string;
+}
+
 export interface IDeviationFormField {
     key: string;
     type: string;
@@ -59,6 +65,7 @@ export interface IDeviationFormField {
     placeholder?: string;
     description?: string;
     options?: string[] | string;
+    optionType?: IChoiceFieldOptionType;
     multiselect?: string;
     choiceInfoTexts?: IChoiceInfoText[];
     required?: string;
@@ -143,4 +150,21 @@ export interface IGetCaseParameters {
     reporterNAVIdentId: string;
     avvikNumber: string;
     isSafetyRepresentative?: boolean;
+}
+
+export interface IOrgUnit {
+    orgEnhet: {
+        id?: string;
+        navn: string;
+        nomNivaa: string | null;
+        orgEnhetsType?: string | null;
+        gyldigFom: string;
+        gyldigTom: string | null;
+        organiseringer?: IOrgUnit[];
+    };
+}
+
+export interface IOrgUnitOption {
+    id: string;
+    name: string;
 }

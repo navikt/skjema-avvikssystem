@@ -164,6 +164,11 @@
                     "type": "Choice",
                     "combobox": "true",
                     "options": "context.orgUnits",
+                    "optionType": {
+                        "type": "object",
+                        "key": "id",
+                        "text": "name"
+                    },
                     "hidden": "!(state.values.unit === 'Annen enhet')",
                     "required": "state.values.unit === 'Annen enhet'"
                 },
@@ -214,6 +219,9 @@
                         "None",
                         "Other"
                     ],
+                    "optionType": {
+                        "type": "string"
+                    },
                     "required": "true"
                 },
                 {

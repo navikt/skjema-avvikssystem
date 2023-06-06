@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { IAppConfig } from './types';
+import { IAppConfig, IOrgUnitOption } from './types';
 
 export interface IDeviationFormContext {
     config: IAppConfig;
@@ -8,7 +8,7 @@ export interface IDeviationFormContext {
     reporterEmail: string;
     reporterNAVIdentId: string;
     functionUrl: string;
-    orgUnits: string[];
+    orgUnits: IOrgUnitOption[];
 }
 
 export const DeviationFormContext = createContext<IDeviationFormContext>(null);

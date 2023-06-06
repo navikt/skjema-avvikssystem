@@ -133,12 +133,16 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
 
     const renderField = (field: IDeviationFormField) => {
         let options: any[];
-
         if (!eval(field.hidden)) {
             switch (field.type) {
                 case 'Choice':
                     if (typeof field.options === 'string') {
-                        options = eval(field.options).map(o => ({ key: o, text: strings[o] || o }));
+                        if (field.optionType?.type === 'object') {
+                            const objects = eval(field.options);
+                            options = objects.map(o => ({ key: o[field.optionType.key], text: strings[o[field.optionType.text]] || o[field.optionType.text] }));
+                        } else if (field.optionType?.type === 'string') {
+                            options = eval(field.options).map(o => ({ key: o, text: strings[o] || o }));
+                        }
                     } else options = field.options.map(o => ({ key: o, text: strings[o] || o }));
                     const multiSelect = eval(field.multiselect) || false;
                     if (eval(field.combobox)) {
@@ -156,10 +160,10 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                                         if (multiSelect) {
                                             const vals = state.values[field.key] || [];
                                             if (option.selected) {
-                                                selectedValues = [...vals, option.text];
-                                            } else selectedValues = vals.filter(v => v !== option.text);
+                                                selectedValues = [...vals, option.key];
+                                            } else selectedValues = vals.filter(v => v !== option.key);
                                         }
-                                        setState({ ...state, values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.text } });
+                                        setState({ ...state, values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.key } });
                                     }}
                                 />
                             </div>
@@ -420,12 +424,17 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
     };
 
     const renderSummary = (values: any) => {
-        const fields = flatten(form.pages.filter(p => p.type === DeviationFormPageType.Input).map(p => p.fields.filter(f => !eval(f.hidden)).map(f => ({ fieldName: f.key, field: f.label || p.title, value: values[f.key] }))));
+        const fields = flatten(form.pages.filter(p => p.type === DeviationFormPageType.Input).map(p => p.fields.filter(f => !eval(f.hidden)).map(f => ({ fieldName: f.key, field: f.label || p.title, value: values[f.key], options: f.options, optionType: f.optionType }))));
         const getValue = (field: any) => {
+            console.log(field);
             if (field.value instanceof Date) {
                 if (fieldTypes.get(field.fieldName) === 'DateTime') {
                     return `${field.value.toLocaleDateString('no')} Kl. ${field.value.toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })}`;
                 } else return field.value.toLocaleDateString('no');
+            } else if (field.optionType?.type === 'object') {
+                if (typeof field.options === 'string') field.options = eval(field.options);
+                const [option] = field.options.filter(o => o[field.optionType.key] === field.value);
+                return strings[option[field.optionType.text]] || option[field.optionType.text];
             }
             return strings[field.value] || field.value;
         };

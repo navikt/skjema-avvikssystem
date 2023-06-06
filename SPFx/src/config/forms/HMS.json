@@ -341,6 +341,11 @@
                     "type": "Choice",
                     "combobox": "true",
                     "options": "context.orgUnits",
+                    "optionType": {
+                        "type": "object",
+                        "key": "id",
+                        "text": "name"
+                    },
                     "hidden": "!(state.values.unit === 'Annen enhet')",
                     "required": "state.values.unit === 'Annen enhet'"
                 },
@@ -361,6 +366,9 @@
                         "User's private residence",
                         "Other"
                     ],
+                    "optionType": {
+                        "type": "string"
+                    },
                     "hidden": "state.values.category !== 'Violence, threats and harassment by users or others outside of NAV'",
                     "required": "state.values.category === 'Violence, threats and harassment by users or others outside of NAV'"
                 },
@@ -416,6 +424,9 @@
                         "None",
                         "Other"
                     ],
+                    "optionType": {
+                        "type": "string"
+                    },
                     "required": "true"
                 },
                 {
