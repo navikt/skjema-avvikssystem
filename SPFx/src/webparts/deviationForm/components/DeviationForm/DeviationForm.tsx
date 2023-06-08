@@ -195,7 +195,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                     let values = new Map<string, string>();
                     if (field.additionalData) {
                         field.additionalData.forEach(d => {
-                            values.set(d.key, eval(d.value));
+                            values.set(d.key, eval(d.value) || d.key);
                         });
                     }
                     if (typeof field.options === 'string') {
@@ -206,10 +206,15 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                             const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
                             const [replaceOption] = options.filter(o => o.key === choiceText.key);
                             const screenReaderTextId = `screenReaderText-${field.key}-choice-tooltip-${i}`;
+                            let key = choiceText.key;
+                            if (field.additionalData) {
+                                const [match] = field.additionalData.filter(d => d.key === choiceText.key);
+                                key = match?.key ? eval(match.value) : choiceText.key;
+                            }
 
                             if (options.indexOf(replaceOption) !== -1) {
                                 const option: IChoiceGroupOption = {
-                                    key: choiceText.key,
+                                    key: key,
                                     text: strings[choiceText.key] || choiceText.key,
                                     "aria-describedby": screenReaderTextId,
 
@@ -235,32 +240,34 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                             }
                         });
                     }
-                    if (field.additionalData) {
-                        field.additionalData.forEach((additionalData, i) => {
-                            // const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '20px' });
-                            const [replaceOption] = options.filter(o => o.text === additionalData.key);
-                            const value = eval(additionalData.value);
-                            if (options.indexOf(replaceOption) !== -1) {
-                                const option = {
-                                    key: value,
-                                    text: additionalData.key,
-                                    // Removed label displaying unit name. Commented out in case it needs to be reintroduced.
 
-                                    /*                                     onRenderField: (props, render) => {
-                                                                            return (
-                                                                                <div className={optionRootClass}>
-                                                                                    {render!(props)}
-                                                                                    {value ? <span className={styles.additionalDataValue}>{value}</span>
-                                                                                        : <MessageBar messageBarType={MessageBarType.error}>Klarte ikke hente nødvendig data.</MessageBar>
-                                                                                    }
-                                                                                </div>
-                                                                            );
-                                                                        } */
-                                };
-                                options.splice(options.indexOf(replaceOption), 1, option);
-                            }
-                        });
-                    }
+                    // Removed label displaying unit name. Commented out in case it needs to be reintroduced.
+                    /*                     if (field.additionalData) {
+                                            field.additionalData.forEach((additionalData, i) => {
+                                                const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '20px' });
+                                                const [replaceOption] = options.filter(o => o.text === additionalData.key);
+                                                const value = eval(additionalData.value) || additionalData.key;
+                                                if (options.indexOf(replaceOption) !== -1) {
+                                                    const option = {
+                                                        key: value,
+                                                        text: additionalData.key,
+                    
+                                                                                            onRenderField: (props, render) => {
+                                                                                                return (
+                                                                                                    <div className={optionRootClass}>
+                                                                                                        {render!(props)}
+                                                                                                        {value ? <span className={styles.additionalDataValue}>{value}</span>
+                                                                                                            : <MessageBar messageBarType={MessageBarType.error}>Klarte ikke hente nødvendig data.</MessageBar>
+                                                                                                        }
+                                                                                                    </div>
+                                                                                                );
+                                                                                            } 
+                                                    };
+                                                    options.splice(options.indexOf(replaceOption), 1, option);
+                                                }
+                                            });
+                                        } */
+
                     if (field.dynamicValue) {
                         const { variable, value, condition } = field.dynamicValue;
                         if (eval(condition.replace('{variable}', variable))) {
@@ -270,6 +277,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                             }
                         }
                     }
+
                     return (
                         <div className={styles.field}>
                             <ChoiceGroup

@@ -333,6 +333,13 @@
                             "key": "Min enhet",
                             "value": "context.unit"
                         }
+                    ],
+                    "choiceInfoTexts": [
+                        {
+                            "key": "Min enhet",
+                            "dynamicKey": "context.unit",
+                            "text": "For HMS vil avviket bli håndtert av din personalleder"
+                        }
                     ]
                 },
                 {
