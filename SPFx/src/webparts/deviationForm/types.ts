@@ -45,6 +45,7 @@ export interface IDeviationFormAction {
 export interface IChoiceInfoText {
     key: string;
     text: string;
+    dynamicKey?: string;
 }
 
 export interface IDeviationFieldAdditionalData {

@@ -11,6 +11,7 @@ import {
     Dialog,
     DialogFooter,
     Dropdown,
+    getEdgeChromiumNoHighContrastAdjustSelector,
     IChoiceGroupOption,
     IconButton,
     IDropdownOption,
@@ -204,7 +205,8 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                     if (field.choiceInfoTexts) {
                         field.choiceInfoTexts.forEach((choiceText, i) => {
                             const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
-                            const [replaceOption] = options.filter(o => o.key === choiceText.key);
+                            const choiceKey = choiceText.dynamicKey ? eval(choiceText.dynamicKey) || choiceText.key : choiceText.key;
+                            const [replaceOption] = options.filter(o => o.key === choiceKey);
                             const screenReaderTextId = `screenReaderText-${field.key}-choice-tooltip-${i}`;
                             let key = choiceText.key;
                             if (field.additionalData) {
