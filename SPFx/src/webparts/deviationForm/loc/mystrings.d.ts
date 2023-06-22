@@ -8,6 +8,8 @@ declare interface IDeviationFormWebPartStrings {
   SearchCaseButtonText: string;
   SearchCaseSafetyRepresentativeButtonText: string;
   SearchCaseHeaderText: string;
+  Yes: string;
+  No: string;
 }
 
 declare module 'DeviationFormWebPartStrings' {

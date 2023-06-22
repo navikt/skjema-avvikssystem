@@ -51,6 +51,7 @@ export interface IChoiceInfoText {
 export interface IDeviationFieldAdditionalData {
     key: string;
     value: string;
+    fallback?: string;
 }
 
 export interface IChoiceFieldOptionType {
@@ -138,13 +139,18 @@ export interface IDynamicValue {
     value: string;
 }
 
+export interface ISubmitResult {
+    status: number;
+    text: string;
+}
+
 export interface IDeviationFormState {
     currentPageNumber: number;
     values: any;
     valid: boolean;
     summaryConfirmed: boolean;
     submitting: boolean;
-    submitResult: string;
+    submitResult: ISubmitResult;
 }
 
 export interface IGetCaseParameters {

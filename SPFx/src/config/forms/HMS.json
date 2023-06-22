@@ -331,7 +331,8 @@
                     "additionalData": [
                         {
                             "key": "Min enhet",
-                            "value": "context.unit"
+                            "value": "context.unit",
+                            "fallback": "Min enhet"
                         }
                     ],
                     "choiceInfoTexts": [

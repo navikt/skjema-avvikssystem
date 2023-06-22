@@ -1,6 +1,6 @@
 import { PrimaryButton } from '@microsoft/office-ui-fabric-react-bundle';
 import strings from 'DeviationFormWebPartStrings';
-import { flatten, range, padStart } from 'lodash';
+import { flatten, range, padStart, clone } from 'lodash';
 import {
     Checkbox,
     ChoiceGroup,
@@ -11,10 +11,8 @@ import {
     Dialog,
     DialogFooter,
     Dropdown,
-    getEdgeChromiumNoHighContrastAdjustSelector,
     IChoiceGroupOption,
     IconButton,
-    IDropdownOption,
     mergeStyles,
     MessageBar,
     MessageBarType,
@@ -38,7 +36,8 @@ import {
     DeviationActionIconPosition,
     IDeviationPageConfirmation,
     IDeviationFormMessage,
-    IDeviationFormState
+    IDeviationFormState,
+    ISubmitResult
 } from '../../types';
 
 import TimeSpanField from '../TimeSpanField/TimeSpanField';
@@ -77,39 +76,61 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
     const hours = range(0, 24).map(key => ({ key, text: `${padStart(key.toString(), 2, '0')}` }));
     const minutes = range(0, 60).map(key => ({ key, text: `${padStart(key.toString(), 2, '0')}` }));
 
+    const isFirstRender = useRef(true);
+
     useEffect(() => {
         const types = fieldTypes;
-        form.pages.forEach(page => {
-            if (page.type === DeviationFormPageType.Input) {
-                page.fields.forEach(field => {
-                    let values = new Map<string, string>();
-                    if (field.additionalData) {
-                        field.additionalData.forEach(d => {
-                            values.set(d.key, eval(d.value));
-                        });
-                    }
-                    if (!types.has(field.key)) {
-                        types.set(field.key, field.type);
-                    }
-                    if (field.defaultValue) {
-                        setState({ ...state, values: { ...state.values, [field.key]: field.additionalData && values.has(field.defaultValue) ? values.get(field.defaultValue) : field.defaultValue } });
-                    }
-                });
-            }
+        setState(prevState => {
+            let stateValues = clone(prevState.values);
+            form.pages.forEach(page => {
+                if (page.type === DeviationFormPageType.Input) {
+                    page.fields.forEach(field => {
+                        let values = new Map<string, string>();
+                        if (field.additionalData) {
+                            field.additionalData.forEach(d => {
+                                values.set(d.key, eval(d.value) || d.fallback);
+                            });
+                        }
+                        if (!types.has(field.key)) {
+                            types.set(field.key, field.type);
+                        }
+                        if (field.defaultValue) {
+                            stateValues = {
+                                ...stateValues,
+                                [field.key]:
+                                    field.additionalData && values.has(field.defaultValue)
+                                        ? values.get(field.defaultValue)
+                                        : eval(field.defaultValue),
+                            };
+                        }
+                    });
+                }
+            });
+            return { ...prevState, values: stateValues };
         });
-
         setFieldTypes(types);
     }, []);
 
+
     useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return; // Skip the second useEffect on the first render
+        }
         const [page] = form.pages.filter(p => p.key === state.currentPageNumber);
         if (page.type === DeviationFormPageType.Input) {
-            const valid = page.fields.filter(f => eval(f.required)).every(f => state.values[f.key] && (f.valid !== undefined ? eval(f.valid) : true));
-            setState({ ...state, valid });
+            const valid = page.fields
+                .filter(f => eval(f.required))
+                .every(f => state.values[f.key] && (f.valid !== undefined ? eval(f.valid) : true));
+
+            let updatedState = { ...state, valid };
+
             if (page.fields.every(f => eval(f.hidden))) {
                 const nextPageNumber = prevPageRef.current < state.currentPageNumber ? state.currentPageNumber + 1 : state.currentPageNumber - 1;
-                setState({ ...state, currentPageNumber: nextPageNumber });
+                updatedState = { ...updatedState, currentPageNumber: nextPageNumber };
             }
+
+            setState(updatedState);
         }
 
         prevPageRef.current = state.currentPageNumber;
@@ -211,7 +232,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                             let key = choiceText.key;
                             if (field.additionalData) {
                                 const [match] = field.additionalData.filter(d => d.key === choiceText.key);
-                                key = match?.key ? eval(match.value) : choiceText.key;
+                                key = match?.key ? eval(match.value) || choiceText.key : choiceText.key;
                             }
 
                             if (options.indexOf(replaceOption) !== -1) {
@@ -279,7 +300,6 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                             }
                         }
                     }
-
                     return (
                         <div className={styles.field}>
                             <ChoiceGroup
@@ -401,7 +421,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                                 <div className={checkboxRootClass}>
                                     <Checkbox
                                         label={field.label}
-                                        checked={state.values[field.key] || eval(field.defaultValue)}
+                                        checked={state.values[field.key]}
                                         onChange={(_, checked) => setState({ ...state, values: { ...state.values, [field.key]: checked } })}
                                     />
                                     <span
@@ -423,7 +443,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                     } else return (
                         <Checkbox
                             label={field.label}
-                            checked={state.values[field.key] || eval(field.defaultValue)}
+                            checked={state.values[field.key]}
                             onChange={(_, checked) => setState({ ...state, values: { ...state.values, [field.key]: checked } })}
                         />
                     );
@@ -447,12 +467,15 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
             } else if (field.value instanceof Array) {
                 return field.value.map(v => strings[v]).join(', ');
             }
+            else if (typeof field.value === 'boolean') {
+                return field.value ? strings.Yes : strings.No;
+            }
             return strings[field.value] || field.value;
         };
         return (
             <div className={styles.summaryFields}>
                 {fields.map(f => {
-                    if (f.value) {
+                    if (f.value !== undefined) {
                         return (
                             <div className={styles.summaryField}>
                                 <div className={styles.summaryFieldLabel}>{f.field}</div>
@@ -571,17 +594,25 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
         }
     };
 
+    const getSubmitResultSubtext = (result: ISubmitResult) => {
+        if (!result) return;
+        const { status, text } = result;
+        if (range(200, 299).indexOf(status) === -1) return `Innsending feilet. Prøv igjen senere eller meld feil i Porten. Feilmelding: ${text}`;
+        return text;
+    };
+
     return (
         <div className={state.submitting && styles.spinner}>
             {form.pages.filter(page => page.key === state.currentPageNumber)
                 .map(page => (
                     <div className={styles.page}>
                         <Dialog
-                            dialogContentProps={{ title: 'Registrer avvik', subText: state.submitResult, showCloseButton: true }}
+                            dialogContentProps={{ title: 'Registrer avvik', subText: getSubmitResultSubtext(state.submitResult), showCloseButton: true }}
                             hidden={!state.submitResult}
                             onDismiss={toFormSelection}>
                             <DialogFooter>
-                                <DefaultButton text='Lukk' onClick={toFormSelection} />
+                                <DefaultButton text='Lukk' onClick={state.submitResult?.status && range(200, 299).indexOf(state.submitResult.status) === -1 ? 
+                                () => setState({...state, submitResult: null}) : toFormSelection} />
                             </DialogFooter>
                         </Dialog>
                         {state.submitting ?

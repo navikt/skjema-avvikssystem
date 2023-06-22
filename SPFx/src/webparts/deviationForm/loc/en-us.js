@@ -9,6 +9,8 @@ define([], function () {
     "SearchCaseButtonText": "Egen sak",
     "SearchCaseSafetyRepresentativeButtonText": "Verneombud",
     "SearchCaseHeaderText": "Innsyn i avvik",
+    "Yes": "Ja",
+    "No": "Nei",
     "HSE": "HMS",
     "Physical security": "Fysisk sikkerhet",
     "Privacy": "Personvern",

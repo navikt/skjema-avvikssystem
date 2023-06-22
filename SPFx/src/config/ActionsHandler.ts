@@ -44,6 +44,6 @@ export default class ActionsHandler {
             body,
         });
         const result = await response.text();
-        this._setState({ ...state, [stateVariable]: false, [resultVariable]: result });
+        this._setState({ ...state, [stateVariable]: false, [resultVariable]: { status: response.status, text: result } });
     }
 }
