@@ -27,8 +27,6 @@ const renderItemField = (item: any, field: ISearchResultField) => {
     }
 };
 
-console.log('Test');
-
 const SearchResult = ({ result }: ISearchResultProps) => {
     const context = useContext(DeviationFormContext);
     const item = omit(result, ['attributes', 'id', 'OwnerId']);

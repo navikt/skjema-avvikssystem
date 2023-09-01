@@ -215,6 +215,7 @@
                     ],
                     "required": "true",
                     "defaultValue": "Min enhet",
+                    "showInSummary": "false",
                     "dynamicValue": {
                         "variable": "state.values.anonymous",
                         "condition": "{variable} === true",

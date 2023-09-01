@@ -111,7 +111,6 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
         setFieldTypes(types);
     }, []);
 
-
     useEffect(() => {
         if (isFirstRender.current) {
             isFirstRender.current = false;
@@ -454,7 +453,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
     };
 
     const renderSummary = (values: any) => {
-        const fields = flatten(form.pages.filter(p => p.type === DeviationFormPageType.Input).map(p => p.fields.filter(f => !eval(f.hidden)).map(f => ({ fieldName: f.key, field: f.label || p.title, value: values[f.key], options: f.options, optionType: f.optionType }))));
+        const fields = flatten(form.pages.filter(p => p.type === DeviationFormPageType.Input).map(p => p.fields.filter(f => !eval(f.hidden) && eval(f.showInSummary) !== false).map(f => ({ fieldName: f.key, field: f.label || p.title, value: values[f.key], options: f.options, optionType: f.optionType }))));
         const getValue = (field: any) => {
             if (field.value instanceof Date) {
                 if (fieldTypes.get(field.fieldName) === 'DateTime') {
@@ -472,6 +471,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
             }
             return strings[field.value] || field.value;
         };
+        console.log(state.values.category);
         return (
             <div className={styles.summaryFields}>
                 {fields.map(f => {
@@ -487,7 +487,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                 <Checkbox
                     className={styles.checkbox}
                     checked={state.summaryConfirmed}
-                    label={state.values.category === 'Personopplysninger på avveie' ? strings.SummaryConfirmationPersonaldata : strings.SummaryConfirmation}
+                    label={state.values.category === 'Personal information' ? strings.SummaryConfirmationPersonaldata : strings.SummaryConfirmation}
                     onChange={(_, checked) => setState({ ...state, summaryConfirmed: checked })}
                 />
             </div>
@@ -611,8 +611,8 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                             hidden={!state.submitResult}
                             onDismiss={toFormSelection}>
                             <DialogFooter>
-                                <DefaultButton text='Lukk' onClick={state.submitResult?.status && range(200, 299).indexOf(state.submitResult.status) === -1 ? 
-                                () => setState({...state, submitResult: null}) : toFormSelection} />
+                                <DefaultButton text='Lukk' onClick={state.submitResult?.status && range(200, 299).indexOf(state.submitResult.status) === -1 ?
+                                    () => setState({ ...state, submitResult: null }) : toFormSelection} />
                             </DialogFooter>
                         </Dialog>
                         {state.submitting ?

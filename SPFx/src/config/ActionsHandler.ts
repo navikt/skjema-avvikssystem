@@ -36,6 +36,7 @@ export default class ActionsHandler {
         }
 
         const body = JSON.stringify(values);
+        console.log(body);
         const response = await fetch(`${functionUrl}&mode=post`, {
             method: 'POST',
             headers: {

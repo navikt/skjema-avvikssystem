@@ -145,6 +145,7 @@
                     ],
                     "required": "true",
                     "defaultValue": "Min enhet",
+                    "showInSummary": "false",
                     "dynamicValue": {
                         "variable": "state.values.anonymous",
                         "condition": "{variable} === true",
@@ -182,7 +183,7 @@
                 {
                     "key": "timeOfDiscovery",
                     "label": "Når ble hendelsen oppdaget?",
-                    "type": "Date",
+                    "type": "DateTime",
                     "required": "true"
                 },
                 {

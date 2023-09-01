@@ -70,6 +70,7 @@ export interface IDeviationFormField {
     optionType?: IChoiceFieldOptionType;
     multiselect?: string;
     choiceInfoTexts?: IChoiceInfoText[];
+    showInSummary?: string;
     required?: string;
     disabled?: string;
     combobox?: string;
