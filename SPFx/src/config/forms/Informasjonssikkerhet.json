@@ -27,7 +27,7 @@
             "type": "Input",
             "fields": [
                 {
-                    "key": "stateOrMunicipality",
+                    "key": "stateOrMunicipalitySector",
                     "type": "ChoiceGroup",
                     "options": [
                         "State",
@@ -49,7 +49,7 @@
             ],
             "messages": [
                 {
-                    "display": "state.values.stateOrMunicipality && state.values.stateOrMunicipality !== 'State'",
+                    "display": "state.values.stateOrMunicipalitySector && state.values.stateOrMunicipalitySector === 'Municipal'",
                     "type": "info",
                     "content": "For øyeblikket kan kun avvik for statlige tjenester rapporteres."
                 }
@@ -74,7 +74,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.values.stateOrMunicipality || state.values.stateOrMunicipality !== 'State'",
+                    "disabled": "!state.values.stateOrMunicipalitySector || state.values.stateOrMunicipalitySector === 'Municipal'",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {

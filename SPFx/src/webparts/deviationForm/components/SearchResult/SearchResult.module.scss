@@ -16,5 +16,8 @@
         .label {
             @include ms-font-l;
         }
+        span {
+            @include ms-font-m;
+        }
     }
 }

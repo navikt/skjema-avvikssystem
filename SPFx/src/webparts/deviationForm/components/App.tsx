@@ -15,7 +15,7 @@ export interface IDeviationAppProps {
 const App = ({ title }: IDeviationAppProps) => {
   const context = useContext(DeviationFormContext);
   const defaultCalloutProps = { display: false, button: null };
-  const initialSearchState = { search: false, caseId: null, result: null, searching: false, isSafetyRepresentative: false };
+  const initialSearchState = { search: false, caseId: null, result: null, searching: false, isVerneombud: false };
   const [selectedForm, setSelectedForm] = useState(null);
   const [calloutProps, setCalloutProps] = useState(defaultCalloutProps);
   const [breadcrumbs, setBreadcrumbs] = useState([]);
@@ -31,9 +31,10 @@ const App = ({ title }: IDeviationAppProps) => {
     setSearchState({ ...searchState, searching: true });
     let values: IGetCaseParameters = {
       reporterNAVIdentId: context.reporterNAVIdentId,
-      avvikNumber: searchState.caseId
+      avvikNumber: searchState.caseId,
+      isVerneombud: searchState.isVerneombud
     };
-    if (searchState.isSafetyRepresentative) values.isSafetyRepresentative = true;
+    
     const body = JSON.stringify(values);
     const response = await fetch(`${context.functionUrl}&mode=get`, {
       method: 'POST',
@@ -140,7 +141,7 @@ const App = ({ title }: IDeviationAppProps) => {
               className={styles.searchButton}
               text={strings.SearchCaseSafetyRepresentativeButtonText}
               iconProps={{ iconName: 'ContactLock' }}
-              onClick={() => setSearchState({ ...searchState, search: true, isSafetyRepresentative: true })}
+              onClick={() => setSearchState({ ...searchState, search: true, isVerneombud: true })}
             />
           </>
           :

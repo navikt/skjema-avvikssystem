@@ -1,36 +1,31 @@
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
 import * as React from 'react';
-import { useState, useContext } from 'react';
-import { DeviationFormContext } from '../../DeviationFormContext';
+import strings from 'DeviationFormWebPartStrings';
 import styles from './SearchResult.module.scss';
-import { omit } from 'lodash';
-import { ISearchResultField } from '../../types';
+import { ResultField, mapResultFields } from './ResultFields';
 
 export interface ISearchResultProps {
     result: any;
 }
 
-const renderItemField = (item: any, field: ISearchResultField) => {
-    let value = item[field.name];
-    switch (field.type) {
-        case "string":
-            return <span>{value}</span>;
+const renderItemField = (field: ResultField) => {
+    switch (field.Type) {
         case "date":
-            value = new Date(value);
-            return <span>{value.toLocaleDateString()}</span>;
+            field.Value = new Date(field.Value);
+            return <span>{field.Value.toLocaleDateString()}</span>;
+        case "datetime":
+            field.Value = new Date(field.Value);
+            return <span>{field.Value.toLocaleString()}</span>;
         case "boolean":
-            return <span>{value ? "Ja" : "Nei"}</span>;
-        case "user":
-            return <span>{value.Name}</span>;
+            return <span>{eval(field.Value) ? "Ja" : "Nei"}</span>;
         default:
-            break;
+            return <span>{strings[field.Value] || field.Value}</span>;
     }
 };
 
 const SearchResult = ({ result }: ISearchResultProps) => {
-    const context = useContext(DeviationFormContext);
-    const item = omit(result, ['attributes', 'id', 'OwnerId']);
-    
+    const fields = mapResultFields(result);
+
     return (
         <>
             {result &&
@@ -38,13 +33,15 @@ const SearchResult = ({ result }: ISearchResultProps) => {
                     {result.status === 'Failed' ?
                         <MessageBar className={styles.messageBar} messageBarType={MessageBarType.error}>{result?.message}</MessageBar> :
                         <div>
-                            {context.config.searchResult.fields.map(field => {
-                                if (item.hasOwnProperty(field.name)) return (
-                                    <div className={styles.searchResult}>
-                                        <label className={styles.label}>{field.displayName}</label>
-                                        {renderItemField(item, field)}
-                                    </div>
-                                );
+                            {fields.map(field => {
+                                if (field.Value) {
+                                    return (
+                                        <div className={styles.searchResult}>
+                                            <label className={styles.label}>{field.DisplayName}</label>
+                                            {renderItemField(field)}
+                                        </div>
+                                    );
+                                }
                             })}
                         </div>
                     }

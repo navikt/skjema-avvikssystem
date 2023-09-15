@@ -120,18 +120,9 @@ export interface IDeviationForm {
     pages: IDeviationFormPage[];
     conditionalOptions?: IDeviationFormConditionalOptions;
 }
-export interface ISearchResultField {
-    name: string;
-    displayName: string;
-    type: string;
-}
-export interface ISearchResult {
-    fields: ISearchResultField[];
-}
 export interface IAppConfig {
     forms: IDeviationForm[];
     datePickerStrings: IDatePickerStrings;
-    searchResult: ISearchResult;
 }
 
 export interface IDynamicValue {
@@ -157,7 +148,7 @@ export interface IDeviationFormState {
 export interface IGetCaseParameters {
     reporterNAVIdentId: string;
     avvikNumber: string;
-    isSafetyRepresentative?: boolean;
+    isVerneombud?: boolean;
 }
 
 export interface IOrgUnit {

@@ -59,7 +59,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
     const [state, setState] = useState<IDeviationFormState>({
         currentPageNumber: 1,
         values: {
-            stateOrMunicipality: context.organization || null,
+            stateOrMunicipality: form.title === 'HSE' ? context.organization : null,
             reporterEmail: context.reporterEmail,
             reporterNAVIdentId: context.reporterNAVIdentId,
             form: form.title
@@ -77,6 +77,8 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
     const minutes = range(0, 60).map(key => ({ key, text: `${padStart(key.toString(), 2, '0')}` }));
 
     const isFirstRender = useRef(true);
+
+    console.log(state);
 
     useEffect(() => {
         const types = fieldTypes;

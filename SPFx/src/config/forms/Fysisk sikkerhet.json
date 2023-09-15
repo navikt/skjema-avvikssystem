@@ -231,8 +231,8 @@
                     "label": "Du valgte \"annet\". Vennligst spesifiser:",
                     "type": "Text",
                     "multiline": "true",
-                    "hidden": "!(state.values.notifiedOfIncident === 'Other')",
-                    "required": "state.values.notifiedOfIncident === 'Other'"
+                    "hidden": "state.values.notifiedOfIncident ? state.values.notifiedOfIncident.indexOf('Other') === -1 : true",
+                    "required": "state.values.notifiedOfIncident ? state.values.notifiedOfIncident.indexOf('Other') !== -1 : true"
                 }
             ],
             "actions": [
