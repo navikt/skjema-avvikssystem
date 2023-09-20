@@ -51,4 +51,6 @@ let syncVersionsSubtask = build.subTask('version-sync', function (gulp, buildOpt
 let syncVersionTask = build.task('version-sync', syncVersionsSubtask);
 build.rig.addPreBuildTask(syncVersionTask);
 
+build.tslintCmd.enabled = false;
+
 build.initialize(gulp);

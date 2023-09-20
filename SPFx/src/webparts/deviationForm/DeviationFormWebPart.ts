@@ -14,7 +14,11 @@ import config from '../../config/config';
 import { DeviationFormContext, IDeviationFormContext } from './DeviationFormContext';
 import { IAppConfig, IOrgUnit, IOrgUnitOption } from './types';
 import { AadHttpClient } from '@microsoft/sp-http';
-import { uniq } from '@microsoft/sp-lodash-subset';
+import { spfi, SPFx } from '@pnp/sp';
+import "@pnp/sp/webs";
+import "@pnp/sp/lists";
+import "@pnp/sp/items";
+import "@pnp/sp/items/get-all";
 
 export interface IDeviationFormWebPartProps {
   webpartTitle: string;
@@ -52,41 +56,45 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
 
   protected async onInit(): Promise<void> {
     await super.onInit();
+    const sp = spfi().using(SPFx(this.context));
 
-    const body = `{
-                        "query": "query { orgEnheter(where: {nomNivaa: ARBEIDSOMRAADE}){ orgEnhet{ id navn nomNivaa gyldigFom gyldigTom organiseringer(retning: under){ orgEnhet{ navn nomNivaa orgEnhetsType gyldigFom gyldigTom } } } } }"
-                      }`;
-    const parentUnitsBody = `{
-                                   "query": "query { orgEnheter(where: { nomNivaa: ARBEIDSOMRAADE }){ orgEnhet{ id navn nomNivaa gyldigFom gyldigTom organiseringer(retning: over){ orgEnhet { navn nomNivaa orgEnhetsType gyldigFom gyldigTom organiseringer(retning: over){ orgEnhet{ navn nomNivaa orgEnhetsType gyldigFom gyldigTom organiseringer(retning: over){ orgEnhet{ navn nomNivaa orgEnhetsType gyldigFom gyldigTom } } } } } } } } }"
-                                 }`;
-    const nomClient = await this.context.aadHttpClientFactory.getClient('api://prod-gcp.nom.nom-api');
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('target-app', 'nom-api');
-    headers.append('target-client-id', '3e962532-1cd2-4bb4-8222-515c83df854a');
-    const response = await nomClient.post('https://org-ekstern-proxy.nav.no/graphql', AadHttpClient.configurations.v1, { body, headers });
-    const json = await response.json();
-    const rawUnits: IOrgUnit[] = json.data.orgEnheter;
+    const units = await sp.web.lists.getByTitle('Enheter').items.select('NOMId', 'Title').getAll();
 
-    const parentUnitsResponse = await nomClient.post('https://org-ekstern-proxy.nav.no/graphql', AadHttpClient.configurations.v1, { body: parentUnitsBody, headers });
-    const parentsJson = await parentUnitsResponse.json();
-    const rawUnitsOver: IOrgUnit[] = parentsJson.data.orgEnheter;
-
-    const filteredUnits = this.filterUnits(rawUnits);
-    const filteredUnitsOver = this.filterUnits(rawUnitsOver);
-
-    let subUnits = [];
-    filteredUnits.forEach(unit => {
-      let u = unit.orgEnhet.organiseringer.filter(org => org.orgEnhet.orgEnhetsType === "DIR");
-      if (u.length > 0) subUnits = subUnits.concat(u);
-    });
-
-    let parentUnits: IOrgUnit[] = [];
-    filteredUnitsOver.forEach(unit => {
-      this.extractOrgUnits(unit, parentUnits);
-    });
-
-    const unitOptions: IOrgUnitOption[] = uniq(filteredUnits.map(unit => ({ id: unit.orgEnhet.id, name: unit.orgEnhet.navn })).concat(subUnits.map(unit => ({ id: unit.orgEnhet.id, name: unit.orgEnhet.navn })).concat(parentUnits.map(unit => ({ id: unit.orgEnhet.id, name: unit.orgEnhet.navn })))));
+    /*     const body = `{
+                            "query": "query { orgEnheter(where: {nomNivaa: ARBEIDSOMRAADE}){ orgEnhet{ id navn nomNivaa gyldigFom gyldigTom organiseringer(retning: under){ orgEnhet{ navn nomNivaa orgEnhetsType gyldigFom gyldigTom } } } } }"
+                          }`;
+        const parentUnitsBody = `{
+                                       "query": "query { orgEnheter(where: { nomNivaa: ARBEIDSOMRAADE }){ orgEnhet{ id navn nomNivaa gyldigFom gyldigTom organiseringer(retning: over){ orgEnhet { navn nomNivaa orgEnhetsType gyldigFom gyldigTom organiseringer(retning: over){ orgEnhet{ navn nomNivaa orgEnhetsType gyldigFom gyldigTom organiseringer(retning: over){ orgEnhet{ navn nomNivaa orgEnhetsType gyldigFom gyldigTom } } } } } } } } }"
+                                     }`;
+        const nomClient = await this.context.aadHttpClientFactory.getClient('api://prod-gcp.nom.nom-api');
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('target-app', 'nom-api');
+        headers.append('target-client-id', '3e962532-1cd2-4bb4-8222-515c83df854a');
+        const response = await nomClient.post('https://org-ekstern-proxy.nav.no/graphql', AadHttpClient.configurations.v1, { body, headers });
+        const json = await response.json();
+        const rawUnits: IOrgUnit[] = json.data.orgEnheter;
+    
+        const parentUnitsResponse = await nomClient.post('https://org-ekstern-proxy.nav.no/graphql', AadHttpClient.configurations.v1, { body: parentUnitsBody, headers });
+        const parentsJson = await parentUnitsResponse.json();
+        const rawUnitsOver: IOrgUnit[] = parentsJson.data.orgEnheter;
+    
+        const filteredUnits = this.filterUnits(rawUnits);
+        const filteredUnitsOver = this.filterUnits(rawUnitsOver);
+    
+        let subUnits = [];
+        filteredUnits.forEach(unit => {
+          let u = unit.orgEnhet.organiseringer.filter(org => org.orgEnhet.orgEnhetsType === "DIR");
+          if (u.length > 0) subUnits = subUnits.concat(u);
+        });
+    
+        let parentUnits: IOrgUnit[] = [];
+        filteredUnitsOver.forEach(unit => {
+          this.extractOrgUnits(unit, parentUnits);
+        });
+    
+        const unitOptions: IOrgUnitOption[] = uniq(filteredUnits.map(unit => ({ id: unit.orgEnhet.id, name: unit.orgEnhet.navn })).concat(subUnits.map(unit => ({ id: unit.orgEnhet.id, name: unit.orgEnhet.navn })).concat(parentUnits.map(unit => ({ id: unit.orgEnhet.id, name: unit.orgEnhet.navn })))));
+     */
 
     const client: AadHttpClient = await this.context.aadHttpClientFactory.getClient('https://graph.microsoft.com');
     const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName,department,mail,onPremisesSamAccountName', AadHttpClient.configurations.v1);
@@ -105,7 +113,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
         break;
     }
 
-    this.orgUnits = unitOptions.sort();
+    this.orgUnits = units.map(unit => ({ id: unit.NOMId, name: unit.Title })); //unitOptions.sort();
     this.unit = user.department;
     this.reporterEmail = user.mail;
     this.reporterNAVIdentId = user.onPremisesSamAccountName;
