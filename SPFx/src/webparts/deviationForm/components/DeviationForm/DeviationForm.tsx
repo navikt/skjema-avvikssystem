@@ -471,7 +471,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
             }
             return strings[field.value] || field.value;
         };
-        console.log(state.values.category);
+        
         return (
             <div className={styles.summaryFields}>
                 {fields.map(f => {
@@ -572,7 +572,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
         const formatString = (string: string, ...args: string[]) => {
             return string.replace(/{(\d+)}/g, (match, number) => {
                 return typeof args[number] != 'undefined'
-                    ? strings[args[number]].toLowerCase() || args[number].toLowerCase()
+                    ? strings[args[number]]?.toLowerCase() || args[number]?.toLowerCase()
                     : strings[match].toLocaleLowerCase() || match.toLocaleLowerCase();
             });
         };

@@ -228,7 +228,7 @@
                 },
                 {
                     "key": "othersNotifiedDescription",
-                    "label": "Du valgte \"annet\". Vennligst spesifiser:",
+                    "label": "Du valgte \"annet\". Vennligst spesifiser ved å oppgi rolle eller funksjon, ikke personnavn:",
                     "type": "Text",
                     "multiline": "true",
                     "hidden": "state.values.notifiedOfIncident ? state.values.notifiedOfIncident.indexOf('Other') === -1 : true",
