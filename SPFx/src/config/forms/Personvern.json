@@ -124,6 +124,7 @@
             "key": 2,
             "title": "Velg kategori",
             "type": "Input",
+            "informationMessages": ["Brudd på personopplysningssikkerhet hører inn under tema Informasjonssikkerhet."],
             "fields": [
                 {
                     "key": "category",
@@ -187,8 +188,7 @@
                             "state_pageNumber": "currentPageNumber",
                             "setstate": "currentPageNumber"
                         }
-                    },
-                    "addtobreadcrumbs": "state.values.category"
+                    }
                 },
                 {
                     "key": "next",

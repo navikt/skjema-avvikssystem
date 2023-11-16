@@ -471,7 +471,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
             }
             return strings[field.value] || field.value;
         };
-        
+
         return (
             <div className={styles.summaryFields}>
                 {fields.map(f => {
@@ -619,6 +619,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                             <Spinner size={SpinnerSize.large} label='Sender inn...' />
                             :
                             <>
+                                {page.informationMessages?.map(message => <MessageBar messageBarType={MessageBarType.info}>{message}</MessageBar>)}
                                 {page.title &&
                                     <header role='banner' aria-label={page.title}>
                                         <h2>{page.title}</h2>

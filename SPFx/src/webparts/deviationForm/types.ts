@@ -100,6 +100,7 @@ export interface IDeviationFormMessage {
 export interface IDeviationFormPage {
     key: number;
     title: string;
+    informationMessages?: string[];
     type: DeviationFormPageType;
     fields: IDeviationFormField[];
     content: string;
