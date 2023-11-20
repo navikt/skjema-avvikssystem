@@ -78,8 +78,6 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
 
     const isFirstRender = useRef(true);
 
-    console.log(state.values);
-
     useEffect(() => {
         const types = fieldTypes;
         setState(prevState => {
