@@ -59,12 +59,12 @@
                     "content": "Vennligst kontakt din leder for å rette din registrerte stilling."
                 },
                 {
-                    "display": "state.values.stateOrMunicipality === 'Municipal' && state.values.orgConfirmation === 'Ja'",
+                    "display": "state.values.stateOrMunicipalitySector === 'Municipal' && state.values.orgConfirmation === 'Ja'",
                     "type": "info",
                     "content": "For øyeblikket kan kun statlig ansatte rapportere HMS-avvik."
                 },
                 {
-                    "display": "state.values.stateOrMunicipality === 'External' && state.values.orgConfirmation === 'Ja'",
+                    "display": "state.values.stateOrMunicipalitySector === 'External' && state.values.orgConfirmation === 'Ja'",
                     "type": "info",
                     "content": "Du er registrert som ekstern og kan ikke registrere HMS-avvik. Ta kontakt med din kontaktperson i NAV."
                 }
@@ -89,7 +89,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "(!state.values.stateOrMunicipality || state.values.orgConfirmation !== 'Ja') || state.values.stateOrMunicipality !== 'State'",
+                    "disabled": "(!state.values.stateOrMunicipalitySector || state.values.orgConfirmation !== 'Ja') || state.values.stateOrMunicipalitySector !== 'State'",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {

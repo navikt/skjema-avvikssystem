@@ -62,7 +62,7 @@
             "type": "Input",
             "fields": [
                 {
-                    "key": "stateOrMunicipalitySector",
+                    "key": "stateOrMunicipalityService",
                     "type": "ChoiceGroup",
                     "options": [
                         "State",
@@ -84,7 +84,7 @@
             ],
             "messages": [
                 {
-                    "display": "state.values.stateOrMunicipalitySector && state.values.stateOrMunicipalitySector === 'Municipal'",
+                    "display": "state.values.stateOrMunicipalityService && state.values.stateOrMunicipalityService === 'Municipal'",
                     "type": "info",
                     "content": "For øyeblikket kan kun avvik for statlige tjenester rapporteres."
                 }
@@ -109,7 +109,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.values.stateOrMunicipalitySector || state.values.stateOrMunicipalitySector === 'Municipal'",
+                    "disabled": "!state.values.stateOrMunicipalityService || state.values.stateOrMunicipalityService === 'Municipal'",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
@@ -124,7 +124,7 @@
             "key": 2,
             "title": "Velg kategori",
             "type": "Input",
-            "informationMessages": ["Brudd på personopplysningssikkerhet hører inn under tema Informasjonssikkerhet."],
+            "informationMessages": ["Avvik knyttet til personopplysninger på avveie skal meldes under hovedkategori informasjonssikkerhet."],
             "fields": [
                 {
                     "key": "category",
