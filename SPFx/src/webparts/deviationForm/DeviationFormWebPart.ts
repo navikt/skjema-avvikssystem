@@ -110,7 +110,6 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
         this.organization = 'External';
         break;
       default:
-        this.organization = 'State'
         break;
     }
 

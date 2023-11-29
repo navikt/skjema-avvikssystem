@@ -3,7 +3,7 @@
     "solution": {
         "name": "nav-deviation-form",
         "id": "5d51865f-5fb6-4b14-b35e-2a164758f891",
-        "version": "1.9.5.0",
+        "version": "1.9.6.0",
         "includeClientSideAssets": true,
         "isDomainIsolated": false,
         "developer": {

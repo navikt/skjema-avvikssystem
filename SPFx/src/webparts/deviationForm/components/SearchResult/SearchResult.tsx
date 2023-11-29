@@ -18,6 +18,10 @@ const renderItemField = (field: ResultField) => {
             return <span>{field.Value.toLocaleString()}</span>;
         case "boolean":
             return <span>{eval(field.Value) ? "Ja" : "Nei"}</span>;
+        case "choice": {
+            const values = field.Value.split(";");
+            return <span>{values.map(value => <span>{strings[value] || value}<br /></span>)}</span>;
+        }
         default:
             return <span>{strings[field.Value] || field.Value}</span>;
     }
