@@ -421,6 +421,7 @@
                     "key": "incidentDescription",
                     "label": "Hva har skjedd? Beskriv avviket, mulig årsak og eventuelle konsekvenser",
                     "type": "Text",
+                    "maxLength": 3000,
                     "multiline": "true",
                     "required": "true"
                 },
@@ -428,12 +429,14 @@
                     "key": "imediateMeasuresDescription",
                     "label": "Beskriv eventuelle iverksatte strakstiltak:",
                     "type": "Text",
+                    "maxLength": 3000,
                     "multiline": "true"
                 },
                 {
                     "key": "measureSuggestionsDescription",
                     "label": "Har du forslag til tiltak for å unngå at noe slikt skjer igjen?",
                     "type": "Text",
+                    "maxLength": 3000,
                     "multiline": "true",
                     "required": "true"
                 }

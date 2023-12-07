@@ -271,6 +271,7 @@
                     "key": "externalReporter",
                     "label": "Oppgi navn og telefonnummer på ekstern innmelder",
                     "type": "Text",
+                    "maxLength": 255,
                     "placeholder": "Ola Normann, 47101112",
                     "multiline": "true",
                     "hidden": "!(state.values.isExternalReporter === 'Ja')",
@@ -287,6 +288,7 @@
                     "key": "affectedPeople",
                     "label": "Hvem er de berørte?",
                     "type": "Text",
+                    "maxLength": 1000,
                     "multiline": "true",
                     "placeholder": "Oppgi navn og personnummer, ett per linje",
                     "hidden": "state.values.category !== 'Personal information'",
@@ -296,6 +298,7 @@
                     "key": "informationType",
                     "label": "Hvilken type personopplysninger er berørt?",
                     "type": "Text",
+                    "maxLength": 255,
                     "multiline": "true",
                     "hidden": "state.values.category !== 'Personal information'",
                     "required": "state.values.category === 'Personal information'"
@@ -304,6 +307,7 @@
                     "key": "incidentDescription",
                     "label": "Hva har skjedd?",
                     "type": "Text",
+                    "maxLength": 3000,
                     "placeholder": "Beskriv avviket, mulig årsak og eventuelle konsekvenser",
                     "multiline": "true",
                     "required": "true"
@@ -312,12 +316,14 @@
                     "key": "imediateMeasuresDescription",
                     "label": "Beskriv eventuelle iverksatte strakstiltak:",
                     "type": "Text",
+                    "maxLength": 3000,
                     "multiline": "true"
                 },
                 {
                     "key": "measureSuggestionsDescription",
                     "label": "Har du forslag til tiltak for å unngå at noe slikt skjer igjen?",
                     "type": "Text",
+                    "maxLength": 3000,
                     "multiline": "true",
                     "required": "true"
                 }

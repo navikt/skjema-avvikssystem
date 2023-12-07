@@ -321,6 +321,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                             description={field.description}
                             styles={{ description: { fontSize: '14px' } }}
                             placeholder={field.placeholder}
+                            maxLength={field.maxLength}
                             value={state.values[field.key]}
                             required={eval(field.required)}
                             onChange={(_, value) => setState({ ...state, values: { ...state.values, [field.key]: value } })}

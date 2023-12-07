@@ -8,7 +8,7 @@
   "manifestVersion": 2,
 
   "requiresCustomScript": false,
-  "supportedHosts": ["SharePointFullPage"],
+  "supportedHosts": ["SharePointWebPart", "SharePointFullPage"],
   "supportsThemeVariants": true,
 
   "preconfiguredEntries": [{

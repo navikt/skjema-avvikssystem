@@ -390,6 +390,7 @@
                     "key": "locationDetails",
                     "label": "Du valgte \"annet\". Vennligst spesifiser ved å oppgi rolle eller funksjon, ikke personnavn: ",
                     "type": "Text",
+                    "maxLength": 255,
                     "multiline": "true",
                     "hidden": "!(state.values.location === 'Other')",
                     "required": "state.values.location === 'Other'"
@@ -404,6 +405,7 @@
                     "key": "incidentDescription",
                     "label": "Hva har skjedd? Beskriv hendelsen, mulig årsak og eventuelle konsekvenser",
                     "type": "Text",
+                    "maxLength": 3000,
                     "multiline": "true",
                     "required": "true"
                 },
@@ -411,12 +413,14 @@
                     "key": "imediateMeasuresDescription",
                     "label": "Beskriv eventuelle iverksatte strakstiltak:",
                     "type": "Text",
+                    "maxLength": 3000,
                     "multiline": "true"
                 },
                 {
                     "key": "measureSuggestionsDescription",
                     "label": "Har du forslag til tiltak for å unngå at noe slikt skjer igjen?",
                     "type": "Text",
+                    "maxLength": 3000,
                     "multiline": "true",
                     "required": "true"
                 },
@@ -447,6 +451,7 @@
                     "key": "othersNotifiedDescription",
                     "label": "Du valgte \"annet\". Vennligst spesifiser ved å oppgi rolle eller funksjon, ikke personnavn:",
                     "type": "Text",
+                    "maxLength": 255,
                     "multiline": "true",
                     "hidden": "state.values.notifiedOfIncident ? state.values.notifiedOfIncident.indexOf('Other') === -1 : true",
                     "required": "state.values.notifiedOfIncident ? state.values.notifiedOfIncident.indexOf('Other') !== -1 : true"

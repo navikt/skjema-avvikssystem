@@ -98,7 +98,7 @@ define([], function () {
     "Illegal use of pictures, sound- and videorecording": "Publisering av bilder, lyd- og videoopptak",
     "Unauthorized access to employees e-mail, private files etc.": "Uberettiget innsyn i arbeidstakers e-postadresse, private filer mm.",
     "Illegal surveillance/ control of employees": "Ulovlig overvåking/kontroll av ansatte",
-    "Breach of minimum standard for physical design and safety of NAV offices": "Brudd på minimumsstandarden med krav til fysisk utforming og sikring av NAV-kontor",
+    "Breach of standard for safe user meetings": "Brudd på standard for trygge brukermøter",
     "Other": "Annet",
     "Municipal": "Kommunalt",
     "State": "Statlig",
@@ -114,7 +114,6 @@ define([], function () {
     "Social media": "Sosiale medier",
     "Employee's private area": "Medarbeiders private område",
     "User's private residence": "Hjemme hos bruker",
-    "Other": "Annet",
     "Manager": "Leder",
     "Manager at another unit": "Leder ved annen enhet",
     "Medical emergency communication channel": "AMK",
@@ -125,6 +124,150 @@ define([], function () {
     "Other businesses in the building": "Andre virksomheter i bygget",
     "Other public partners": "Andre offentlige samarbeidspartnere",
     "None": "Ingen",
-    "Other": "Annet"
+    "Verbal feedback on the incident": "Muntlig tilbakemelding på hendelsen",
+    "Written feedback on the incident": "Skriftlig tilbakemelding på hendelsen",
+    "The user gets a permanent contact person": "Brukeren får fast kontaktperson",
+    "The user must have at least two present during conversations": "Brukeren skal ha minst to tilstede ved samtaler",
+    "The user should only contact in writing/digitally": "Brukeren skal kun henvende seg skriftlig/digitalt",
+    "The incident is reported to the police": "Hendelsen politianmeldes",
+    "Warning of possible exclusion": "Advarsel om mulig utestengelse",
+    "Decision on exclusion": "Beslutning om utestengelse",
+    "Newspaper": "Avisoppslag",
+    "E-mail": "E-post",
+    "Phone": "Telefon",
+    "Personal letter": "Personlig brev",
+    "The company's website": "Virksomhetens nettside",
+    "Violation of regulations": "Brudd på regelverk",
+    "Lack of routines": "Manglende rutiner",
+    "Violation of routines": "Brudd på rutiner",
+    "Technical failure": "Teknisk svikt ",
+    "Human error": "Menneskelig svikt",
+    "Violation of law or regulatory requirements": "Brudd på lov- eller forskriftskrav",
+    "Violation of policies or routines": "Brudd på retningslinjer eller rutiner",
+    "Lack of training, instruction or competence": "Manglende opplæring, instruksjon eller kompetanse",
+    "Non-compliance with routines": "Manglende etterlevelse av gjeldende rutiner",
+    "Deficient routines": "Mangelfulle rutiner",
+    "Experienced time pressure": "Opplevd tidspress",
+    "Lack of communication and/or information": "Manglende kommunikasjon og/eller informasjon",
+    "Fault or deficiencies on equipment, materials or tools": "Feil eller mangler på utstyr, materiell eller verktøy",
+    "Insufficient staffing": "Utilstrekkelig bemanning",
+    "Mental illness/ Intoxication": "Psykisk lidelse/ruspåvirkning",
+    "Rejection on application": "Avslag på søknad",
+    "Disagreement regarding amount/service": "Uenighet om beløp/tjeneste",
+    "Difficult to understand decision": "Vanskelig å forstå vedtaket",
+    "Long waiting time for phone/STO/chat": "Lang ventetid på telefon/STO/chat",
+    "Difficult to get contact with supervisor": "Vanskelig å få kontakt med veileder",
+    "Difficult to get contact with NAV/Availability": "Vanskelig å få kontakt med NAV/tilgjenglighet",
+    "Long processing time": "Lang saksbehandlingstid",
+    "Lack of payment": "Manglende utbetaling",
+    "Deficient relation/cooperation": "Mangelfull relasjon/samarbeid",
+    "Communication issues": "Kommunikasjonsproblemer",
+    "Lack of follow-up": "Manglende oppfølging",
+    "Lack of training in handling conflict situations": "Manglende trening i å håndtere konfliktsituasjoner",
+    "Deficient routines for handling violence/threats": "Mangelfulle rutiner for håndtering av vold/trusler",
+    "Deficient securing": "Mangelfull sikring",
+    "Alone in meeting": "Alene i møte",
+    "High": "Høy",
+    "Medium": "Middels",
+    "Low": "Lav",
+    "High probability": "Svært sannsynlig",
+    "Medium probability": "Noe sannsynlig",
+    "Low probability": "Lite sannsynlig",
+    "Conversation with manager": "Samtale med leder",
+    "Debriefing": "Debrifing",
+    "Support by colleagues": "Kollegastøtte",
+    "Follow-up by bht": "Oppfølging av bht",
+    "Follow-up by doctor": "Oppfølging fastlege",
+    "Change of work tasks": "Endring av arbeidsoppgaver",
+    "No need for follow-up actions": "Ikke behov for oppfølging",
+    "No affected employees": "Ingen berørte ansatte",
+    "Undecided": "Uavklart",
+    "New": "Ny",
+    "In progress": "Under behandling",
+    "Actions initiated": "Tiltak påbegynt",
+    "Closed": "Lukket",
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

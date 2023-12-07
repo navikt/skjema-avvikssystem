@@ -76,6 +76,7 @@ export interface IDeviationFormField {
     combobox?: string;
     minDate?: string;
     multiline?: string;
+    maxLength?: number;
     hidden?: string;
     valid?: string;
     errorMessage?: string;
