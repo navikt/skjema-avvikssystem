@@ -113,7 +113,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
         break;
     }
 
-    this.orgUnits = units.map(unit => ({ id: unit.NOMId, name: unit.Title })); //unitOptions.sort();
+    this.orgUnits = units.map(unit => ({ id: unit.NOMId, name: unit.Title })).sort((a, b) => a.name > b.name ? 1 : -1); //unitOptions.sort();
     this.unit = user.department;
     this.reporterEmail = user.mail;
     this.reporterNAVIdentId = user.onPremisesSamAccountName;

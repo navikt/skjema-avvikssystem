@@ -8,13 +8,13 @@
             "Harassment",
             "Unwanted contact, behaviour or communication",
             "Physical attack on person",
-            "Violation of established safetypolicy",
+            "Violation of established safety policy",
             "Hate speech towards NAV",
             "Other"
         ],
         "Organizational and psychosocial working environment conditions": [
             "Workload",
-            "Coping, infromation and training",
+            "Coping, information and training",
             "Interpersonal relationships",
             "Emotional stress",
             "Involvement, participation and co-determination",
@@ -222,7 +222,7 @@
                             "text": "Fysisk angrep på personer, egne ansatte, brukere eller andre."
                         },
                         {
-                            "key": "Violation of established safetypolicy",
+                            "key": "Violation of established safety policy",
                             "text": "Brudd på beslutning om fysisk utestengelse, brudd på telefonisk utestengelse, brudd på to ansatte i samtale, eller andre sikkerhetstiltak knyttet til bruker"
                         },
                         {
@@ -234,7 +234,7 @@
                             "text": "Kan være for mange oppgaver og/eller brukere å følge opp, motstridende krav og forventninger, manglende prioriteringer, stadig opplæring av nye mm."
                         },
                         {
-                            "key": "Coping, infromation and training",
+                            "key": "Coping, information and training",
                             "text": "Kan være manglende opplæring eller mangelfull informasjon i forbindelse med endringsprosesser."
                         },
                         {
