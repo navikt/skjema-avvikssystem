@@ -2,6 +2,9 @@ declare interface IDeviationFormWebPartStrings {
   SettingsGroupName: string;
   WebpartTitleLabel: string;
   FunctionURLLabel: string;
+  EnvironmentSettingLabel: string;
+  EnvironmentProd: string;
+  EnvironmentTest: string;
   SelectFormText: string;
   SummaryConfirmationPersonaldata: string
   SummaryConfirmation: string;

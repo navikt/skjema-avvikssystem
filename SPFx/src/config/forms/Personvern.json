@@ -508,6 +508,7 @@
                         "params": {
                             "state_values": "values",
                             "context_functionUrl": "functionUrl",
+                            "context_environment": "environment",
                             "setstate": "submitting",
                             "resultVariable": "submitResult"
                         }

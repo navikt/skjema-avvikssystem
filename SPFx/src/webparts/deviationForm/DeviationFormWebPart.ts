@@ -3,6 +3,7 @@ import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
 import {
   IPropertyPaneConfiguration,
+  PropertyPaneDropdown,
   PropertyPaneLabel,
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane';
@@ -23,6 +24,7 @@ import "@pnp/sp/items/get-all";
 export interface IDeviationFormWebPartProps {
   webpartTitle: string;
   functionUrl: string;
+  environment: string;
 }
 
 export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviationFormWebPartProps> {
@@ -35,6 +37,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
   public render(): void {
     const value: IDeviationFormContext = {
       config: config as IAppConfig,
+      environment: this.properties.environment,
       organization: this.organization,
       unit: this.unit,
       orgUnits: this.orgUnits,
@@ -154,6 +157,10 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
                 }),
                 PropertyPaneTextField('functionUrl', {
                   label: strings.FunctionURLLabel
+                }),
+                PropertyPaneDropdown('environment', {
+                  label: strings.EnvironmentSettingLabel,
+                  options: [{key: 'Production', text: strings.EnvironmentProd}, {key: 'Test', text: strings.EnvironmentTest}],
                 }),
                 PropertyPaneLabel('', {
                   text: `v${this.manifest.version}`

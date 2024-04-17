@@ -25,7 +25,7 @@ export default class ActionsHandler {
         this._setState({ ...state, [stateVariable]: currentPageNumber - 1 });
     }
 
-    private async Submit({ values, functionUrl, stateVariable, state, resultVariable, fieldsToInclude }) {
+    private async Submit({ values, functionUrl, environment, stateVariable, state, resultVariable, fieldsToInclude }) {
         fieldsToInclude = [...fieldsToInclude, 'stateOrMunicipalitySector', 'form'];
         if (!values.anonymous) fieldsToInclude = [...fieldsToInclude, 'reporterEmail', 'reporterNAVIdentId'];
         this._setState({ ...state, [stateVariable]: true });
@@ -36,7 +36,7 @@ export default class ActionsHandler {
         }
 
         const body = JSON.stringify(values);
-        const response = await fetch(`${functionUrl}&mode=post`, {
+        const response = await fetch(`${functionUrl}&mode=post&environment=${environment}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

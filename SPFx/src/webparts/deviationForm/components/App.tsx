@@ -36,7 +36,7 @@ const App = ({ title }: IDeviationAppProps) => {
     };
     
     const body = JSON.stringify(values);
-    const response = await fetch(`${context.functionUrl}&mode=get`, {
+    const response = await fetch(`${context.functionUrl}&mode=get&environment=${context.environment}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

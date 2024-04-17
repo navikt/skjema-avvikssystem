@@ -3,6 +3,7 @@ import { IAppConfig, IOrgUnitOption } from './types';
 
 export interface IDeviationFormContext {
     config: IAppConfig;
+    environment: string;
     organization: string;
     unit: string;
     reporterEmail: string;
