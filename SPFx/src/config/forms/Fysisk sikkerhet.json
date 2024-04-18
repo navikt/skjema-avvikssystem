@@ -1,11 +1,6 @@
 {
     "title": "Physical security",
-    "conditionalOptions": {
-        "Violation of laws, regulations and routines": [
-            "Breach of standard for safe user meetings",
-            "Øvrige"
-        ]
-    },
+    "conditionalOptions": {},
     "description": {
         "type": "html",
         "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Ulåste dører/vinduer</li> <li>Brukere i skjermede områder</li> <li>Mangler på bygg og utstyr</li> <li>Brann, branntilløp og brannforebygging</li> <li>Hærverk</li> <li>Innbrudd</li> <li>Strømbrudd</li> <li>Vannskade</li> <li>Ytre miljø/forurensing</li> <li>Brudd på lov, forskrifter og rutiner</li> <li>Andre uønskede hendelser</li> </ul> </div>"
@@ -24,12 +19,14 @@
                         "User in sheltered areas",
                         "Deficiency on construction and equipment",
                         "Fire and fire prevention",
-                        "Vandalism",
-                        "Burglary",
+                        "Vandalism and/or burglary",
                         "Power failure",
-                        "Water damage",
-                        "Environmental/pollution",
+                        "Water damage, environmental aspects and pollution",
                         "Violation of laws, regulations and routines",
+                        "Missing or deficient alarm system",
+                        "Deficiencies or violations on access control",
+                        "Deficiencies or violations on emergeny exit",
+                        "Lack of possibility for notifiying/call for help",
                         "Other unwanted incidents"
                     ],
                     "required": "true"
