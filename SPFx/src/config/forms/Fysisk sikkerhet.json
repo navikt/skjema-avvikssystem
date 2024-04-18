@@ -32,12 +32,6 @@
                         "Violation of laws, regulations and routines",
                         "Other unwanted incidents"
                     ],
-                    "choiceInfoTexts": [
-                        {
-                            "key": "Violation of laws, regulations and routines",
-                            "text": "Herunder brudd på krav til fysisk sikring og minimumsstandarden for NAV-kontor."
-                        }
-                    ],
                     "required": "true"
                 }
             ],
