@@ -2,6 +2,8 @@
     "title": "Information security",
     "conditionalOptions": {
         "Personal information": [
+            "Personal information is lost or not available",
+            "Personal information has been unrightly edited",
             "Letter sent to the wrong recipient",
             "Letter sent to the wrong employer",
             "Information accompanies letter sent to another user",

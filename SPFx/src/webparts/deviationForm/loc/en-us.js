@@ -63,6 +63,8 @@ define([], function () {
     "Indoor climate": "Inneklima (temperatur, lys, støv)",
     "Ergonomic conditions at the workplace": "Ergonomiske forhold ved eller på arbeidsplassen",
     "Noise": "Støy",
+    "Personal information is lost or not available": "Personopplysninger er ikke tilgjengelig eller er tapt",
+    "Personal information has been unrightly edited": "Personopplysninger har uriktig blitt endret",
     "Letter sent to the wrong recipient": "Brev er sendt til feil mottakere",
     "Letter sent to the wrong employer": "Brev er sendt til feil arbeidsgiver",
     "Information accompanies letter sent to another user": "Opplysninger som følger med i brev til annen bruker",
