@@ -22,10 +22,12 @@
             "Violation of laws, regulations and routines",
             "Other"
         ],
-        "Physical working environment conditions": [
+        "Physical working environment conditions, chemical and biological factors": [
             "Indoor climate",
             "Ergonomic conditions at the workplace",
             "Noise",
+            "Chemical factors",
+            "Biological factors",
             "Other"
         ]
     },
@@ -111,8 +113,7 @@
                     "options": [
                         "Violence, threats and harassment by users or others outside of NAV",
                         "Organizational and psychosocial working environment conditions",
-                        "Physical working environment conditions",
-                        "Chemical and biological factors",
+                        "Physical working environment conditions, chemical and biological factors",
                         "Almost accidents/personnel injury",
                         "Other unwanted incidents"
                     ],
@@ -126,12 +127,8 @@
                             "text": "Handler om hvordan arbeidet er organisert, arbeidsinnhold og de sosiale relasjonene på arbeidsplassen."
                         },
                         {
-                            "key": "Physical working environment conditions",
+                            "key": "Physical working environment conditions, chemical and biological factors",
                             "text": "Handler om temperatur- og lysforhold, ergonomiske forhold eller støy på arbeidsplassen."
-                        },
-                        {
-                            "key": "Chemical and biological factors",
-                            "text": "Eksponeringer for kjemiske og biologiske faktorer som kan gi helseskade, som for eksempel rengjøringsmidler, oljer, desinfiksjonsmidler, eksos, virus og bakterier."
                         },
                         {
                             "key": "Almost accidents/personnel injury",
