@@ -58,6 +58,68 @@
     "pages": [
         {
             "key": 1,
+            "title": "Gjelder avviket personopplysninger på avveie?",
+            "type": "Input",
+            "fields": [
+                {
+                    "key": "personalInfoLost",
+                    "type": "ChoiceGroup",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "required": "true"
+                }
+            ],
+            "actions": [
+                {
+                    "key": "previous",
+                    "label": "Tilbake",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronLeft"
+                    },
+                    "invoke": {
+                        "functionName": "ToFormSelection"
+                    }
+                },
+                {
+                    "key": "next",
+                    "label": "Neste",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronRight"
+                    },
+                    "iconPosition": "right",
+                    "disabled": "!state.values.personalInfoLost",
+                   
+                    "invoke": {
+                        "functionName": "NextPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        },
+                        "conditionalInvoke": {
+                            "condition": "state.values.personalInfoLost === 'Yes'",
+                            "functionName": "SwitchForm",
+                            "params": {
+                                "formName": "Information security",
+                                "state_values": "values",
+                                "setstate": "values",
+                                "key": "category",
+                                "value": "Personal information",
+                                "skipPage": {
+                                    "page": 2,
+                                    "addtobreadcrumbs": "state.values.category"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "key": 2,
             "title": "Gjelder det en statlig eller kommunal tjeneste?",
             "type": "Input",
             "fields": [
@@ -121,10 +183,9 @@
             ]
         },
         {
-            "key": 2,
+            "key": 3,
             "title": "Velg kategori",
             "type": "Input",
-            "informationMessages": ["Avvik knyttet til personopplysninger på avveie skal meldes under hovedkategori informasjonssikkerhet."],
             "fields": [
                 {
                     "key": "category",
@@ -211,7 +272,7 @@
             ]
         },
         {
-            "key": 3,
+            "key": 4,
             "title": "Velg underkategori",
             "type": "Input",
             "fields": [
@@ -355,7 +416,7 @@
             ]
         },
         {
-            "key": 4,
+            "key": 5,
             "type": "Input",
             "fields": [
                 {
@@ -478,7 +539,7 @@
             ]
         },
         {
-            "key": 5,
+            "key": 6,
             "title": "Verifiser opplysningene som er registrert",
             "type": "Summary",
             "values": "state.values",

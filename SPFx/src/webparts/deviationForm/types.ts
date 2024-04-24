@@ -28,6 +28,12 @@ export interface IDeviationFormConditionalOptions {
 export interface IDeviationFormActionInvoke {
     functionName: string;
     params: any;
+    conditionalInvoke?: IConditionalInvoke;
+}
+export interface IConditionalInvoke {
+    condition: string;
+    functionName: string;
+    params: any;
 }
 
 export interface IDeviationFormAction {
@@ -138,6 +144,11 @@ export interface ISubmitResult {
     text: string;
 }
 
+export interface ISkipPage {
+    page: number;
+    addtobreadcrumbs: string;
+}
+
 export interface IDeviationFormState {
     currentPageNumber: number;
     values: any;
@@ -145,6 +156,7 @@ export interface IDeviationFormState {
     summaryConfirmed: boolean;
     submitting: boolean;
     submitResult: ISubmitResult;
+    skipPage?: ISkipPage;
 }
 
 export interface IGetCaseParameters {

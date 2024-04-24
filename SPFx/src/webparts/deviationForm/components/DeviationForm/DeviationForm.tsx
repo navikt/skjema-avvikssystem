@@ -71,7 +71,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
     });
     const [fieldTypes, setFieldTypes] = useState<Map<string, string>>(new Map<string, string>());
     const prevPageRef = useRef(state.currentPageNumber);
-    const actionsHandler = new ActionsHandler(setState, setSelectedForm);
+    const actionsHandler = new ActionsHandler(setState, setSelectedForm, context.config.forms);
 
     const hours = range(0, 24).map(key => ({ key, text: `${padStart(key.toString(), 2, '0')}` }));
     const minutes = range(0, 60).map(key => ({ key, text: `${padStart(key.toString(), 2, '0')}` }));
@@ -124,9 +124,10 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
 
             let updatedState = { ...state, valid };
 
-            if (page.fields.every(f => eval(f.hidden))) {
+            if (page.fields.every(f => eval(f.hidden)) || state?.skipPage?.page === state.currentPageNumber) {
                 const nextPageNumber = prevPageRef.current < state.currentPageNumber ? state.currentPageNumber + 1 : state.currentPageNumber - 1;
-                updatedState = { ...updatedState, currentPageNumber: nextPageNumber };
+                updatedState = { ...updatedState, currentPageNumber: nextPageNumber, skipPage: null };
+                if (state?.skipPage?.addtobreadcrumbs) breadcrumbState.setBreadcrumbs([...breadcrumbState.breadcrumbs, eval(state.skipPage.addtobreadcrumbs)])
             }
 
             setState(updatedState);
@@ -513,7 +514,16 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
     };
 
     const renderAction = (action: IDeviationFormAction) => {
-        let params = getFunctionParams(action.invoke.params, action.key);
+        let functionName, invokeParams;
+        if (action.invoke.conditionalInvoke && eval(action.invoke.conditionalInvoke.condition)) {
+            functionName = action.invoke.conditionalInvoke.functionName;
+            invokeParams = action.invoke.conditionalInvoke.params;
+        } else {
+            functionName = action.invoke.functionName;
+            invokeParams = action.invoke.params;
+        }
+
+        const params: any = getFunctionParams(invokeParams, action.key);
         const iconRightStyles = { flexContainer: { flexDirection: 'row-reverse' } };
         if (action.type === DeviationActionType.Default)
             return <DefaultButton
@@ -528,7 +538,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                         crumbs.splice(crumbs.length - 1, 1);
                         breadcrumbState.setBreadcrumbs(crumbs);
                     }
-                    actionsHandler.invoke(action.invoke.functionName, params);
+                    actionsHandler.invoke(functionName, params);
                 }}
             />;
         if (action.type === DeviationActionType.Primary)
@@ -543,7 +553,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                         crumbs.splice(crumbs.length - 1, 1);
                         breadcrumbState.setBreadcrumbs(crumbs);
                     }
-                    actionsHandler.invoke(action.invoke.functionName, params);
+                    actionsHandler.invoke(functionName, params);
                 }}
             />;
     };
