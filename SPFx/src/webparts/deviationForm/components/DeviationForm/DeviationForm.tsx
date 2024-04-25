@@ -38,13 +38,15 @@ import {
     IDeviationFormMessage,
     IDeviationFormState,
     ISubmitResult,
-    IBubbleState
+    IBubbleState,
+    Params
 } from '../../types';
 
 import TimeSpanField from '../TimeSpanField/TimeSpanField';
 import styles from './DeviationForm.module.scss';
 import dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
+import useFunctionParams from './useFunctionParams';
 
 dayjs.extend(customParseFormat.default);
 
@@ -497,36 +499,15 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
             </div>
         );
     };
-
-    const getFunctionParams = (params: any, action: string, functionName: string) => {
-        let functionParams = {};
-        if (params) {
-            for (const key in params) {
-                if (key.indexOf('state_') === 0) {
-                    functionParams[params[key]] = state[params[key]];
-                } else if (key.indexOf('context_') === 0) {
-                    functionParams[params[key]] = context[params[key]];
-                } else if (key === 'setstate') {
-                    functionParams = { ...functionParams, stateVariable: params[key], state };
-                } else functionParams[key] = params[key];
-            }
-            if (action === 'submit') functionParams = { ...functionParams, fieldsToInclude: flatten(form.pages.map(p => p.fields).filter(Boolean)).filter(f => !eval(f.hidden)).map(f => f.key) };
-            if (functionName === 'SwitchForm') functionParams = { ...functionParams, setBubbleState };
-            return functionParams;
-        } else return null;
-    };
-
     const renderAction = (action: IDeviationFormAction) => {
-        let functionName, invokeParams;
-        if (action.invoke.conditionalInvoke && eval(action.invoke.conditionalInvoke.condition)) {
-            functionName = action.invoke.conditionalInvoke.functionName;
-            invokeParams = action.invoke.conditionalInvoke.params;
-        } else {
-            functionName = action.invoke.functionName;
-            invokeParams = action.invoke.params;
-        }
+        const invoke = action.invoke.conditionalInvoke && eval(action.invoke.conditionalInvoke.condition)
+            ? action.invoke.conditionalInvoke
+            : action.invoke;
 
-        const params: any = getFunctionParams(invokeParams, action.key, functionName);
+        const functionName = invoke.functionName;
+        const invokeParams = invoke.params;
+
+        const params: Params = useFunctionParams(invokeParams, action.key, functionName, state, context, form, setBubbleState);
         const iconRightStyles = { flexContainer: { flexDirection: 'row-reverse' } };
         if (action.type === DeviationActionType.Default)
             return <DefaultButton

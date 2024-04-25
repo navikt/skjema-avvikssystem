@@ -25,15 +25,19 @@ export interface IDeviationFormConditionalOptions {
     [key: string]: string[];
 }
 
+export type Params = {
+    [key: string]: string;
+};
+
 export interface IDeviationFormActionInvoke {
     functionName: string;
-    params: any;
+    params: Params;
     conditionalInvoke?: IConditionalInvoke;
 }
 export interface IConditionalInvoke {
     condition: string;
     functionName: string;
-    params: any;
+    params: Params;
 }
 
 export interface IDeviationFormAction {
