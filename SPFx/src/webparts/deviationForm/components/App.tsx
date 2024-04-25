@@ -2,11 +2,12 @@ import * as React from 'react';
 import { useState, useContext } from 'react';
 import styles from './App.module.scss';
 import { DeviationFormContext } from '../DeviationFormContext';
-import { Callout, DefaultButton, DirectionalHint, Link, PrimaryButton, SearchBox, Spinner, SpinnerSize } from 'office-ui-fabric-react';
+import { Callout, DefaultButton, DirectionalHint, Link, PrimaryButton, SearchBox, Spinner, SpinnerSize, TeachingBubble } from 'office-ui-fabric-react';
 import DeviationForm from './DeviationForm/DeviationForm';
 import strings from 'DeviationFormWebPartStrings';
-import { DescriptionType, IGetCaseParameters } from '../types';
+import { DescriptionType, IBubbleState, IGetCaseParameters } from '../types';
 import SearchResult from './SearchResult/SearchResult';
+import { useId } from '@fluentui/react-hooks';
 
 export interface IDeviationAppProps {
   title: string;
@@ -20,10 +21,13 @@ const App = ({ title }: IDeviationAppProps) => {
   const [calloutProps, setCalloutProps] = useState(defaultCalloutProps);
   const [breadcrumbs, setBreadcrumbs] = useState([]);
   const [searchState, setSearchState] = useState(initialSearchState);
+  const [bubbleState, setBubbleState] = useState<IBubbleState>({ showBubble: false });
+  const breadcrumbsId = useId('breadcrumbs');
 
   const toFormSelection = () => {
     setSelectedForm(null);
     setBreadcrumbs([]);
+    setBubbleState({ showBubble: false });
     setSearchState(initialSearchState);
   };
 
@@ -34,7 +38,7 @@ const App = ({ title }: IDeviationAppProps) => {
       avvikNumber: searchState.caseId,
       isVerneombud: searchState.isVerneombud
     };
-    
+
     const body = JSON.stringify(values);
     const response = await fetch(`${context.functionUrl}&mode=get&environment=${context.environment}`, {
       method: 'POST',
@@ -77,17 +81,29 @@ const App = ({ title }: IDeviationAppProps) => {
     <div className={styles.wrapper}>
       <div role='main' aria-label='content' className={styles.content}>
         {selectedForm &&
-          <header role='banner' aria-label='breadcrumbs'>
-            <Link onClick={() => toFormSelection()}>{title}</Link>
-            {' > '}
-            {strings[selectedForm.title] || selectedForm.title}
-            {breadcrumbs.length > 0 &&
-              <>
-                {' > '}
-                {breadcrumbs.map(b => (strings[b] || b)).join(' > ')}
-              </>
+          <>
+            <header id={breadcrumbsId} role='banner' aria-label='breadcrumbs'>
+              <Link onClick={() => toFormSelection()}>{title}</Link>
+              {' > '}
+              {strings[selectedForm.title] || selectedForm.title}
+              {breadcrumbs.length > 0 &&
+                <>
+                  {' > '}
+                  {breadcrumbs.map(b => (strings[b] || b)).join(' > ')}
+                </>
+              }
+            </header>
+            {bubbleState.showBubble &&
+              <TeachingBubble
+                target={`#${breadcrumbsId}`}
+                primaryButtonProps={{ children: 'Ok', onClick: () => setBubbleState({ showBubble: false }) }}
+                onDismiss={() => setBubbleState({ showBubble: false })}
+                headline={bubbleState.bubbleTitle}
+              >
+                {bubbleState.bubbleText}
+              </TeachingBubble>
             }
-          </header>
+          </>
         }
         {!selectedForm ?
           <>
@@ -145,7 +161,13 @@ const App = ({ title }: IDeviationAppProps) => {
             />
           </>
           :
-          <DeviationForm form={selectedForm} setSelectedForm={setSelectedForm} toFormSelection={toFormSelection} breadcrumbState={{ breadcrumbs, setBreadcrumbs }} />
+          <DeviationForm
+            form={selectedForm}
+            setSelectedForm={setSelectedForm}
+            toFormSelection={toFormSelection}
+            breadcrumbState={{ breadcrumbs, setBreadcrumbs }}
+            setBubbleState={setBubbleState}
+          />
         }
       </div>
     </div>

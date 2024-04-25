@@ -20,10 +20,11 @@ export default class ActionsHandler {
         this._setForm(null);
     }
 
-    private SwitchForm({ formName, stateVariable, state, key, value, skipPage }) {
+    private SwitchForm({ formName, stateVariable, state, key, value, skipPage, bubble, setBubbleState }) {
         const [form] = this._forms.filter((f) => f.title === formName);
         this._setState({ ...state, currentPageNumber: 1, [stateVariable]: { ...state[stateVariable], form: formName, [key]: value }, skipPage: skipPage });
         this._setForm(form);
+        setBubbleState(bubble);
     }
 
     private NextPage({ currentPageNumber, stateVariable, state }) {

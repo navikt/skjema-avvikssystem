@@ -111,6 +111,11 @@
                                 "skipPage": {
                                     "page": 2,
                                     "addtobreadcrumbs": "state.values.category"
+                                },
+                                "bubble": {
+                                    "showBubble": true,
+                                    "bubbleTitle": "Endret skjema",
+                                    "bubbleText": "Ettersom avviket gjelder personopplysninger på avveie, har skjemaet blitt endret til informasjonssikkerhet. Dette er for å sikre at avviket blir behandlet på riktig måte."
                                 }
                             }
                         }

@@ -165,6 +165,12 @@ export interface IGetCaseParameters {
     isVerneombud?: boolean;
 }
 
+export interface IBubbleState {
+    showBubble: boolean;
+    bubbleTitle?: string;
+    bubbleText?: string;
+}
+
 export interface IOrgUnit {
     orgEnhet: {
         id?: string;

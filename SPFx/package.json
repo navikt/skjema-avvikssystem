@@ -10,6 +10,7 @@
     "test": "gulp test"
   },
   "dependencies": {
+    "@fluentui/react-hooks": "^8.8.1",
     "@microsoft/rush-stack-compiler-4.2": "^0.3.1",
     "@microsoft/sp-core-library": "1.13.1",
     "@microsoft/sp-lodash-subset": "1.13.1",

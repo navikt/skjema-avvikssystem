@@ -37,7 +37,8 @@ import {
     IDeviationPageConfirmation,
     IDeviationFormMessage,
     IDeviationFormState,
-    ISubmitResult
+    ISubmitResult,
+    IBubbleState
 } from '../../types';
 
 import TimeSpanField from '../TimeSpanField/TimeSpanField';
@@ -52,9 +53,10 @@ export interface IDeviationFormProps {
     setSelectedForm: (form: IDeviationForm) => void;
     toFormSelection: () => void;
     breadcrumbState: { breadcrumbs: string[], setBreadcrumbs: (breadcrumbs: string[]) => void };
+    setBubbleState: React.Dispatch<React.SetStateAction<IBubbleState>>;
 }
 
-const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection }: IDeviationFormProps) => {
+const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection, setBubbleState }: IDeviationFormProps) => {
     const context = useContext(DeviationFormContext);
     const [state, setState] = useState<IDeviationFormState>({
         currentPageNumber: 1,
@@ -496,7 +498,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
         );
     };
 
-    const getFunctionParams = (params: any, action: string) => {
+    const getFunctionParams = (params: any, action: string, functionName: string) => {
         let functionParams = {};
         if (params) {
             for (const key in params) {
@@ -509,6 +511,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                 } else functionParams[key] = params[key];
             }
             if (action === 'submit') functionParams = { ...functionParams, fieldsToInclude: flatten(form.pages.map(p => p.fields).filter(Boolean)).filter(f => !eval(f.hidden)).map(f => f.key) };
+            if (functionName === 'SwitchForm') functionParams = { ...functionParams, setBubbleState };
             return functionParams;
         } else return null;
     };
@@ -523,7 +526,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
             invokeParams = action.invoke.params;
         }
 
-        const params: any = getFunctionParams(invokeParams, action.key);
+        const params: any = getFunctionParams(invokeParams, action.key, functionName);
         const iconRightStyles = { flexContainer: { flexDirection: 'row-reverse' } };
         if (action.type === DeviationActionType.Default)
             return <DefaultButton
