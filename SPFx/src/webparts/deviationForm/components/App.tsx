@@ -8,6 +8,7 @@ import strings from 'DeviationFormWebPartStrings';
 import { DescriptionType, IBubbleState, IGetCaseParameters } from '../types';
 import SearchResult from './SearchResult/SearchResult';
 import { useId } from '@fluentui/react-hooks';
+import CategoryDescriptionCallout from './CategoryDescriptionCallout/CategoryDescriptionCallout';
 
 export interface IDeviationAppProps {
   title: string;
@@ -117,13 +118,7 @@ const App = ({ title }: IDeviationAppProps) => {
                 return (
                   <>
                     {form.description && calloutProps.display && calloutProps.button === buttonId &&
-                      <Callout
-                        target={`#${buttonId}`}
-                        directionalHint={DirectionalHint.rightCenter}
-                      >
-                        {form.description.type === DescriptionType.Text && <div>{form.description.content}</div>}
-                        {form.description.type === DescriptionType.HTML && <div dangerouslySetInnerHTML={{ __html: form.description.content }} />}
-                      </Callout>}
+                      <CategoryDescriptionCallout buttonId={buttonId} calloutProps={calloutProps} form={form} screenReaderTextId={screenReaderTextId} />}
                     <DefaultButton
                       id={buttonId}
                       aria-describedby={screenReaderTextId}
@@ -134,12 +129,6 @@ const App = ({ title }: IDeviationAppProps) => {
                       onMouseEnter={() => setCalloutProps({ display: true, button: buttonId })}
                       onMouseLeave={() => setCalloutProps(defaultCalloutProps)}
                     />
-                    <span
-                      style={{ height: '1px', width: '1px', position: 'absolute', overflow: 'hidden', margin: '-1px', padding: '0px', border: '0px' }}
-                      id={screenReaderTextId}
-                      aria-hidden='true'>
-                      {extractContent(form.description?.content)}
-                    </span>
                   </>
                 );
               })}
@@ -172,12 +161,6 @@ const App = ({ title }: IDeviationAppProps) => {
       </div>
     </div>
   );
-};
-
-const extractContent = (s) => {
-  var span = document.createElement('span');
-  span.innerHTML = s;
-  return span.textContent || span.innerText;
 };
 
 export default App;

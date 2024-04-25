@@ -32,7 +32,11 @@
     },
     "description": {
         "type": "html",
-        "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Vold, trusler og trakassering fra bruker eller andre utenfor NAV</li> <li>Organisatoriske og psykososiale arbeidsmiljøforhold</li> <li>Fysiske arbeidsmiljøforhold</li> <li>Kjemiske og biologiske faktorer</li> <li>Nestenulykke/ personskade</li> <li>Andre uønskede hendelser</li> </ul> </div>"
+        "categories": {
+            "page": 2,
+            "field": "category"
+        },
+        "contentTemplate": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> {categories} </ul> </div>"
     },
     "pages": [
         {

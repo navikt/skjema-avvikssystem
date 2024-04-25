@@ -21,7 +21,11 @@
     },
     "description": {
         "type": "html",
-        "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Personopplysninger på avveie</li> <li>Brudd på policy/retningslinjer</li> <li>Andre uønskede hendelser</li> </ul> </div>"
+        "categories": {
+            "page": 2,
+            "field": "category"
+        },
+        "contentTemplate": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> {categories} </ul> </div>"
     },
     "pages": [
         {

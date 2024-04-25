@@ -9,7 +9,11 @@
     },
     "description": {
         "type": "html",
-        "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Ulåste dører/vinduer</li> <li>Brukere i skjermede områder</li> <li>Mangler på bygg og utstyr</li> <li>Brann, branntilløp og brannforebygging</li> <li>Hærverk</li> <li>Innbrudd</li> <li>Strømbrudd</li> <li>Vannskade</li> <li>Ytre miljø/forurensing</li> <li>Brudd på lov, forskrifter og rutiner</li> <li>Andre uønskede hendelser</li> </ul> </div>"
+        "categories": {
+            "page": 1,
+            "field": "category"
+        },
+        "contentTemplate": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> {categories} </ul> </div>"
     },
     "pages": [
         {

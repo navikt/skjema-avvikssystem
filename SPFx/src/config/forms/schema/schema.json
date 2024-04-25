@@ -18,15 +18,35 @@
             "type": "object",
             "properties": {
                 "type": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "html"
+                    ]
                 },
-                "content": {
+                "categories": {
+                    "type": "object",
+                    "properties": {
+                        "page": {
+                            "type": "integer",
+                            "minimum": 1
+                        },
+                        "field": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "page",
+                        "field"
+                    ]
+                },
+                "contentTemplate": {
                     "type": "string"
                 }
             },
             "required": [
                 "type",
-                "content"
+                "categories",
+                "contentTemplate"
             ]
         },
         "pages": {

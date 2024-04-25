@@ -121,9 +121,15 @@ export interface IDeviationFormPage {
     actions: IDeviationFormAction[];
 }
 
+export interface ICalloutCategoryDefinition {
+    page: number;
+    field: string;
+}
+
 export interface IDeviationFormDescription {
     type: DescriptionType;
-    content: string;
+    categories: ICalloutCategoryDefinition;
+    contentTemplate: string;
 }
 
 export interface IDeviationForm {
