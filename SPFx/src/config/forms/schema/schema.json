@@ -1,0 +1,269 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "title": {
+            "type": "string"
+        },
+        "conditionalOptions": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        },
+        "description": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type",
+                "content"
+            ]
+        },
+        "pages": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "fields": {
+                        "type": "array",
+                        "items": {
+                            "allOf": [
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "key": {
+                                            "type": "string"
+                                        },
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "options": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                {
+                                                    "type": "string"
+                                                }
+                                            ]
+                                        },
+                                        "required": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "key",
+                                        "type"
+                                    ]
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "choiceInfoTexts": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "key": {
+                                                        "type": "string"
+                                                    },
+                                                    "text": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "key",
+                                                    "text"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "actions": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "key": {
+                                    "type": "string"
+                                },
+                                "label": {
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "type": "string"
+                                },
+                                "iconProps": {
+                                    "type": "object",
+                                    "properties": {
+                                        "iconName": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "iconName"
+                                    ]
+                                },
+                                "iconPosition": {
+                                    "type": "string"
+                                },
+                                "disabled": {
+                                    "type": "string"
+                                },
+                                "invoke": {
+                                    "type": "object",
+                                    "properties": {
+                                        "functionName": {
+                                            "type": "string"
+                                        },
+                                        "params": {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "conditionalInvoke": {
+                                            "type": "object",
+                                            "properties": {
+                                                "condition": {
+                                                    "type": "string"
+                                                },
+                                                "functionName": {
+                                                    "type": "string"
+                                                },
+                                                "params": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "formName": {
+                                                            "type": "string"
+                                                        },
+                                                        "state_values": {
+                                                            "type": "string"
+                                                        },
+                                                        "setstate": {
+                                                            "type": "string"
+                                                        },
+                                                        "key": {
+                                                            "type": "string"
+                                                        },
+                                                        "value": {
+                                                            "type": "string"
+                                                        },
+                                                        "skipPage": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "page": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "addtobreadcrumbs": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "required": [
+                                                                "page",
+                                                                "addtobreadcrumbs"
+                                                            ]
+                                                        },
+                                                        "bubble": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "showBubble": {
+                                                                    "type": "boolean"
+                                                                },
+                                                                "bubbleTitle": {
+                                                                    "type": "string"
+                                                                },
+                                                                "bubbleText": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "required": [
+                                                                "showBubble",
+                                                                "bubbleTitle",
+                                                                "bubbleText"
+                                                            ]
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "formName",
+                                                        "state_values",
+                                                        "setstate",
+                                                        "key",
+                                                        "value",
+                                                        "skipPage",
+                                                        "bubble"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "condition",
+                                                "functionName",
+                                                "params"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "functionName"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "key",
+                                "label",
+                                "type",
+                                "invoke"
+                            ]
+                        }
+                    }
+                },
+                "required": [
+                    "key",
+                    "type"
+                ],
+                "if": {
+                    "properties": {
+                        "type": {
+                            "const": "Input"
+                        }
+                    }
+                },
+                "then": {
+                    "required": [
+                        "fields"
+                    ]
+                }
+            }
+        }
+    },
+    "required": [
+        "title",
+        "conditionalOptions",
+        "description",
+        "pages"
+    ]
+}

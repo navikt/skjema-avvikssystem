@@ -1,4 +1,5 @@
 {
+    "$schema": "./schema/schema.json",
     "title": "HSE",
     "conditionalOptions": {
         "Violence, threats and harassment by users or others outside of NAV": [

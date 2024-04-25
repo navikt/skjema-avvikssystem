@@ -1,4 +1,5 @@
 {
+    "$schema": "./schema/schema.json",
     "title": "Physical security",
     "conditionalOptions": {
         "Violation of laws, regulations and routines": [

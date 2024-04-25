@@ -1,4 +1,5 @@
 {
+    "$schema": "./schema/schema.json",
     "title": "Privacy",
     "conditionalOptions": {
         "Basis for processing": [
