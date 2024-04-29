@@ -73,6 +73,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
         submitting: false,
         submitResult: null
     });
+    const getFunctionParams = useFunctionParams(state, context, form, setBubbleState);
     const [fieldTypes, setFieldTypes] = useState<Map<string, string>>(new Map<string, string>());
     const prevPageRef = useRef(state.currentPageNumber);
     const actionsHandler = new ActionsHandler(setState, setSelectedForm, context.config.forms);
@@ -507,7 +508,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
         const functionName = invoke.functionName;
         const invokeParams = invoke.params;
 
-        const params: Params = useFunctionParams(invokeParams, action.key, functionName, state, context, form, setBubbleState);
+        const params: Params = getFunctionParams(invokeParams, action.key, functionName);
         const iconRightStyles = { flexContainer: { flexDirection: 'row-reverse' } };
         if (action.type === DeviationActionType.Default)
             return <DefaultButton
