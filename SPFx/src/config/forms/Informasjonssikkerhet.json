@@ -280,7 +280,7 @@
                     "type": "Text",
                     "maxLength": 255,
                     "placeholder": "Ola Normann, 47101112",
-                    "multiline": "true",
+                    "multiline": true,
                     "hidden": "!(state.values.isExternalReporter === 'Ja')",
                     "required": "state.values.isExternalReporter === 'Ja'"
                 },
@@ -296,7 +296,7 @@
                     "label": "Hvem er de berørte?",
                     "type": "Text",
                     "maxLength": 1000,
-                    "multiline": "true",
+                    "multiline": true,
                     "placeholder": "Oppgi navn og personnummer, ett per linje",
                     "hidden": "state.values.category !== 'Personal information'",
                     "required": "state.values.category === 'Personal information'"
@@ -306,7 +306,7 @@
                     "label": "Hvilken type personopplysninger er berørt?",
                     "type": "Text",
                     "maxLength": 255,
-                    "multiline": "true",
+                    "multiline": true,
                     "hidden": "state.values.category !== 'Personal information'",
                     "required": "state.values.category === 'Personal information'"
                 },
@@ -316,7 +316,7 @@
                     "type": "Text",
                     "maxLength": 3000,
                     "placeholder": "Beskriv avviket, mulig årsak og eventuelle konsekvenser",
-                    "multiline": "true",
+                    "multiline": true,
                     "required": "true"
                 },
                 {
@@ -324,14 +324,14 @@
                     "label": "Beskriv eventuelle iverksatte strakstiltak:",
                     "type": "Text",
                     "maxLength": 3000,
-                    "multiline": "true"
+                    "multiline": true
                 },
                 {
                     "key": "measureSuggestionsDescription",
                     "label": "Har du forslag til tiltak for å unngå at noe slikt skjer igjen?",
                     "type": "Text",
                     "maxLength": 3000,
-                    "multiline": "true",
+                    "multiline": true,
                     "required": "true"
                 }
             ],

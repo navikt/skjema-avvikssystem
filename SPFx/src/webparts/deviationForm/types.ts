@@ -78,14 +78,14 @@ export interface IDeviationFormField {
     description?: string;
     options?: string[] | string;
     optionType?: IChoiceFieldOptionType;
-    multiselect?: string;
+    multiselect?: boolean;
     choiceInfoTexts?: IChoiceInfoText[];
     showInSummary?: string;
     required?: string;
     disabled?: string;
     combobox?: string;
     minDate?: string;
-    multiline?: string;
+    multiline?: boolean;
     maxLength?: number;
     hidden?: string;
     valid?: string;

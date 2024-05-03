@@ -76,6 +76,13 @@
                     "required": "true"
                 }
             ],
+            "messages": [
+                {
+                    "display": "state.values.stateOrMunicipalityService && state.values.stateOrMunicipalityService === 'Municipal'",
+                    "type": "info",
+                    "content": "For øyeblikket kan kun avvik for statlige tjenester rapporteres."
+                }
+            ],
             "actions": [
                 {
                     "key": "previous",
@@ -492,7 +499,7 @@
                     "label": "Hva har skjedd? Beskriv avviket, mulig årsak og eventuelle konsekvenser",
                     "type": "Text",
                     "maxLength": 3000,
-                    "multiline": "true",
+                    "multiline": true,
                     "required": "true"
                 },
                 {
@@ -500,14 +507,14 @@
                     "label": "Beskriv eventuelle iverksatte strakstiltak:",
                     "type": "Text",
                     "maxLength": 3000,
-                    "multiline": "true"
+                    "multiline": true
                 },
                 {
                     "key": "measureSuggestionsDescription",
                     "label": "Har du forslag til tiltak for å unngå at noe slikt skjer igjen?",
                     "type": "Text",
                     "maxLength": 3000,
-                    "multiline": "true",
+                    "multiline": true,
                     "required": "true"
                 }
             ],

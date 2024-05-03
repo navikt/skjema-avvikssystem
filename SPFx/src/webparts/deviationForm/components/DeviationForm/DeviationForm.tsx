@@ -171,7 +171,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                             options = eval(field.options).map(o => ({ key: o, text: strings[o] || o }));
                         }
                     } else options = field.options.map(o => ({ key: o, text: strings[o] || o }));
-                    const multiSelect = eval(field.multiselect) || false;
+                    const multiSelect = field.multiselect || false;
                     if (eval(field.combobox)) {
                         return (
                             <div className={styles.field}>
@@ -331,7 +331,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                             value={state.values[field.key]}
                             required={eval(field.required)}
                             onChange={(_, value) => setState({ ...state, values: { ...state.values, [field.key]: value } })}
-                            multiline={eval(field.multiline)}
+                            multiline={field.multiline}
                         />
                     );
                 case 'Date':
