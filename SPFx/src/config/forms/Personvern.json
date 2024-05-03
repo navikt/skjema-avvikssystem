@@ -63,7 +63,7 @@
     "pages": [
         {
             "key": 1,
-            "title": "Gjelder avviket personopplysninger på avveie?",
+            "title": "Omfatter avviket brudd på personopplysningssikkerheten?",
             "type": "Input",
             "fields": [
                 {
@@ -78,9 +78,10 @@
             ],
             "messages": [
                 {
-                    "display": "state.values.stateOrMunicipalityService && state.values.stateOrMunicipalityService === 'Municipal'",
-                    "type": "info",
-                    "content": "For øyeblikket kan kun avvik for statlige tjenester rapporteres."
+                    "display": "true",
+                    "position": "top",
+                    "type": "severeWarning",
+                    "content": "Personopplysninger på avveie/Brudd på personopplysningssikkerheten oppstår når personopplysningene ikke er tilstrekkelig sikret, enten ved at opplysningen er tilgjengelig for uvedkommende (konfidensialitet), er blitt endret eller slettet (integritet) eller at opplysningene ikke er tilgjengelig i IT-løsningen (tilgjengelighet). Hvis avviket omfatter andre brudd etter personvernlovgivningen, som for eksempel manglende eller feilaktig bruk av behandlingsgrunnlag, manglende ivaretakelse av den registrertes rettigheter, skal du velge svaralternativet «Nei»."
                 }
             ],
             "actions": [
@@ -125,8 +126,8 @@
                                 },
                                 "bubble": {
                                     "showBubble": true,
-                                    "bubbleTitle": "Endret skjema",
-                                    "bubbleText": "Ettersom avviket gjelder personopplysninger på avveie, har skjemaet blitt endret til informasjonssikkerhet. Dette er for å sikre at avviket blir behandlet på riktig måte."
+                                    "bubbleTitle": "Endret hovedkategori",
+                                    "bubbleText": "Ettersom avviket gjelder brudd på personopplysningssikkerheten, har hovedkategori blitt automatisk endret til informasjonssikkerhet. Dette er for å sikre at avviket blir behandlet på riktig måte. Kategori \"Personopplysninger på avveie\" vil også bli automatisk valgt på neste side."
                                 }
                             }
                         }
@@ -163,6 +164,7 @@
             "messages": [
                 {
                     "display": "state.values.stateOrMunicipalityService && state.values.stateOrMunicipalityService === 'Municipal'",
+                    "position": "bottom",
                     "type": "info",
                     "content": "For øyeblikket kan kun avvik for statlige tjenester rapporteres."
                 }

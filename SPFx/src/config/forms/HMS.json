@@ -61,16 +61,19 @@
                 {
                     "display": "state.values.orgConfirmation === 'Nei'",
                     "type": "info",
+                    "position": "bottom",
                     "content": "Vennligst kontakt din leder for å rette din registrerte stilling."
                 },
                 {
                     "display": "state.values.stateOrMunicipalitySector === 'Municipal' && state.values.orgConfirmation === 'Ja'",
                     "type": "info",
+                    "position": "bottom",
                     "content": "For øyeblikket kan kun statlig ansatte rapportere HMS-avvik."
                 },
                 {
                     "display": "state.values.stateOrMunicipalitySector === 'External' && state.values.orgConfirmation === 'Ja'",
                     "type": "info",
+                    "position": "bottom",
                     "content": "Du er registrert som ekstern og kan ikke registrere HMS-avvik. Ta kontakt med din kontaktperson i NAV."
                 }
             ],

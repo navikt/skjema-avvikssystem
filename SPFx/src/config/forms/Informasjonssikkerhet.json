@@ -58,6 +58,7 @@
                 {
                     "display": "state.values.stateOrMunicipalityService && state.values.stateOrMunicipalityService === 'Municipal'",
                     "type": "info",
+                    "position": "bottom",
                     "content": "For øyeblikket kan kun avvik for statlige tjenester rapporteres."
                 }
             ],

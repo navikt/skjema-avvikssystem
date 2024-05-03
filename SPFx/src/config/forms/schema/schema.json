@@ -121,8 +121,18 @@
                                 },
                                 "content": {
                                     "type": "string"
+                                },
+                                "position": {
+                                    "type": "string",
+                                    "enum": ["top", "bottom"]
                                 }
-                            }
+                            },
+                            "required": [
+                                "display",
+                                "type",
+                                "content",
+                                "position"
+                            ]
                         }
                     },
                     "fields": {

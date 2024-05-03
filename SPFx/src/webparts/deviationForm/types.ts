@@ -11,6 +11,11 @@ export enum DeviationActionType {
     Primary = "primary"
 }
 
+export enum MessagePosition {
+    Top = "top",
+    Bottom = "bottom"
+}
+
 export enum DeviationActionIconPosition {
     Left = "left",
     Right = "right"
@@ -106,12 +111,12 @@ export interface IDeviationFormMessage {
     display: string;
     type: string;
     content: string;
+    position: MessagePosition;
 }
 
 export interface IDeviationFormPage {
     key: number;
     title: string;
-    informationMessages?: string[];
     type: DeviationFormPageType;
     fields: IDeviationFormField[];
     content: string;

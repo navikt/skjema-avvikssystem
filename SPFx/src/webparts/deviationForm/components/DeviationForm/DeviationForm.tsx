@@ -39,7 +39,8 @@ import {
     IDeviationFormState,
     ISubmitResult,
     IBubbleState,
-    Params
+    Params,
+    MessagePosition
 } from '../../types';
 
 import TimeSpanField from '../TimeSpanField/TimeSpanField';
@@ -561,7 +562,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
     };
 
     const renderMessages = (messages: IDeviationFormMessage[]) => {
-        if (messages) return messages.map(m => { if (eval(m.display)) return <MessageBar messageBarType={getMessageType(m.type)}>{m.content}</MessageBar>; });
+        if (messages) return messages.map(m => (eval(m.display) && <MessageBar className={styles.message} messageBarType={getMessageType(m.type)}>{m.content}</MessageBar>));
     };
 
     const renderContent = (content: string, format: string[], confirmation: IDeviationPageConfirmation, messages: IDeviationFormMessage[]): JSX.Element => {
@@ -615,7 +616,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                             <Spinner size={SpinnerSize.large} label='Sender inn...' />
                             :
                             <>
-                                {page.informationMessages?.map(message => <MessageBar messageBarType={MessageBarType.info}>{message}</MessageBar>)}
+                                {renderMessages(page.messages?.filter(m => m.position === MessagePosition.Top))}
                                 {page.title &&
                                     <header role='banner' aria-label={page.title}>
                                         <h2>{page.title}</h2>
@@ -630,7 +631,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                                 {page.type === DeviationFormPageType.Summary &&
                                     renderSummary(state.values)
                                 }
-                                {renderMessages(page.messages)}
+                                {renderMessages(page.messages?.filter(m => m.position === MessagePosition.Bottom))}
                                 <div className={styles.actions}>
                                     {page.actions?.map(action => renderAction(action))}
                                 </div>
