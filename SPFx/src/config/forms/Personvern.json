@@ -80,8 +80,8 @@
                 {
                     "display": "true",
                     "position": "top",
-                    "type": "severeWarning",
-                    "content": "Personopplysninger på avveie/Brudd på personopplysningssikkerheten oppstår når personopplysningene ikke er tilstrekkelig sikret, enten ved at opplysningen er tilgjengelig for uvedkommende (konfidensialitet), er blitt endret eller slettet (integritet) eller at opplysningene ikke er tilgjengelig i IT-løsningen (tilgjengelighet). Hvis avviket omfatter andre brudd etter personvernlovgivningen, som for eksempel manglende eller feilaktig bruk av behandlingsgrunnlag, manglende ivaretakelse av den registrertes rettigheter, skal du velge svaralternativet «Nei»."
+                    "type": "warning",
+                    "content": "Ett brudd på personopplysningssikkerhet er at personopplysningene er på avveie, er blitt endret eller slettet, eller ikke tilgjengelig. \nEksempler kan være brev sendt til feil mottaker, opplysninger registrert på feil bruker, eller feil i ett IT-system."
                 }
             ],
             "actions": [

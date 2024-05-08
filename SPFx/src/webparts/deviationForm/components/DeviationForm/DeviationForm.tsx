@@ -562,7 +562,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
     };
 
     const renderMessages = (messages: IDeviationFormMessage[]) => {
-        if (messages) return messages.map(m => (eval(m.display) && <MessageBar className={styles.message} messageBarType={getMessageType(m.type)}>{m.content}</MessageBar>));
+        if (messages) return messages.map(m => (eval(m.display) && <MessageBar className={styles.message} messageBarType={getMessageType(m.type)}><div style={{ whiteSpace: 'break-spaces' }}>{m.content}</div></MessageBar>));
     };
 
     const renderContent = (content: string, format: string[], confirmation: IDeviationPageConfirmation, messages: IDeviationFormMessage[]): JSX.Element => {
