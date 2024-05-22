@@ -11,16 +11,17 @@ import {
     Dialog,
     DialogFooter,
     Dropdown,
+    DropdownMenuItemType,
     IChoiceGroupOption,
     IconButton,
+    IDropdownOption,
     mergeStyles,
     MessageBar,
     MessageBarType,
     Spinner,
     SpinnerSize,
     TextField,
-    TooltipHost,
-    VirtualizedComboBox
+    TooltipHost
 } from 'office-ui-fabric-react';
 
 import * as React from 'react';
@@ -48,6 +49,7 @@ import styles from './DeviationForm.module.scss';
 import dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 import useFunctionParams from './useFunctionParams';
+import SearchableDropdown from '../SearchableDropdown/SearchableDropdown';
 
 dayjs.extend(customParseFormat.default);
 
@@ -69,6 +71,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
             reporterNAVIdentId: context.reporterNAVIdentId,
             form: form.title
         },
+        filteredOptions: {},
         valid: false,
         summaryConfirmed: false,
         submitting: false,
@@ -158,6 +161,24 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
         else return null;
     };
 
+    const onDropDownSearch = (
+        searchValue: string,
+        initialValues: IDropdownOption[],
+    ): IDropdownOption[] => {
+        if (!searchValue || searchValue === '') {
+            return [...initialValues];
+        }
+
+        const filteredOptions = [...initialValues].filter(
+            (i) =>
+                i.text.toLowerCase().includes(searchValue.toLowerCase()) &&
+                (!i.itemType || i.itemType !== DropdownMenuItemType.Header),
+        );
+
+        return filteredOptions;
+    }
+
+
 
     const renderField = (field: IDeviationFormField) => {
         let options: any[];
@@ -173,28 +194,33 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                         }
                     } else options = field.options.map(o => ({ key: o, text: strings[o] || o }));
                     const multiSelect = field.multiselect || false;
-                    if (eval(field.combobox)) {
+                    if (field.searchable) {
                         return (
-                            <div className={styles.field}>
-                                <VirtualizedComboBox
-                                    label={field.label}
-                                    selectedKey={state.values[field.key]}
-                                    allowFreeform
-                                    autoComplete="on"
-                                    options={options}
-                                    required={eval(field.required)}
-                                    onChange={(_, option) => {
-                                        let selectedValues = [];
-                                        if (multiSelect) {
-                                            const vals = state.values[field.key] || [];
-                                            if (option.selected) {
-                                                selectedValues = [...vals, option.key];
-                                            } else selectedValues = vals.filter(v => v !== option.key);
-                                        }
-                                        setState({ ...state, values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.key } });
-                                    }}
-                                />
-                            </div>
+                            <SearchableDropdown
+                                label={field.label}
+                                required={eval(field.required)}
+                                defaultSelectedKey={state.values[field.key]}
+                                options={state.filteredOptions[field.key] || options}
+                                onDismiss={() => setState({ ...state, filteredOptions: { ...state.filteredOptions, [field.key]: null } })}
+                                onChange={(_, option) => {
+                                    let selectedValues = [];
+                                    if (multiSelect) {
+                                        const vals = state.values[field.key] || [];
+                                        if (option.selected) {
+                                            selectedValues = [...vals, option.key];
+                                        } else selectedValues = vals.filter(v => v !== option.key);
+                                    }
+                                    setState({
+                                        ...state,
+                                        values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.key },
+                                        filteredOptions: { ...state.filteredOptions, [field.key]: null }
+                                    });
+                                }}
+                                onSearchValueChanged={(searchValue) => {
+                                    const newOptions = onDropDownSearch(searchValue, options);
+                                    setState({ ...state, filteredOptions: { ...state.filteredOptions, [field.key]: newOptions } });
+                                }}
+                            />
                         );
                     }
                     return (

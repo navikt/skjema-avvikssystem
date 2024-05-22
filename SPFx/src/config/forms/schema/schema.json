@@ -203,8 +203,8 @@
                                         }
                                     }
                                 },
-                                "combobox": {
-                                    "type": "string"
+                                "searchable": {
+                                    "type": "boolean"
                                 },
                                 "optionType": {
                                     "type": "object",

@@ -1,4 +1,4 @@
-import { IDatePickerStrings, IIconProps } from "office-ui-fabric-react";
+import { IDatePickerStrings, IDropdownOption, IIconProps } from "office-ui-fabric-react";
 
 export enum DeviationFormPageType {
     Input = "Input",
@@ -88,7 +88,7 @@ export interface IDeviationFormField {
     showInSummary?: string;
     required?: string;
     disabled?: string;
-    combobox?: string;
+    searchable?: boolean;
     minDate?: string;
     multiline?: boolean;
     maxLength?: number;
@@ -164,6 +164,10 @@ export interface ISkipPage {
     addtobreadcrumbs: string;
 }
 
+export interface IFilteredOptions {
+    [key: string]: IDropdownOption[];
+}
+
 export interface IDeviationFormState {
     currentPageNumber: number;
     values: any;
@@ -172,6 +176,7 @@ export interface IDeviationFormState {
     submitting: boolean;
     submitResult: ISubmitResult;
     skipPage?: ISkipPage;
+    filteredOptions: IFilteredOptions;
 }
 
 export interface IGetCaseParameters {
