@@ -1,4 +1,5 @@
 {
+    "$schema": "./schema/schema.json",
     "title": "HSE",
     "conditionalOptions": {
         "Violence, threats and harassment by users or others outside of NAV": [
@@ -33,7 +34,11 @@
     },
     "description": {
         "type": "html",
-        "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Vold, trusler og trakassering fra bruker eller andre utenfor NAV</li> <li>Organisatoriske og psykososiale arbeidsmiljøforhold</li> <li>Fysiske arbeidsmiljøforhold</li> <li>Kjemiske og biologiske faktorer</li> <li>Nestenulykke/ personskade</li> <li>Andre uønskede hendelser</li> </ul> </div>"
+        "categories": {
+            "page": 2,
+            "field": "category"
+        },
+        "contentTemplate": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> {categories} </ul> </div>"
     },
     "pages": [
         {
@@ -58,16 +63,19 @@
                 {
                     "display": "state.values.orgConfirmation === 'Nei'",
                     "type": "info",
+                    "position": "bottom",
                     "content": "Vennligst kontakt din leder for å rette din registrerte stilling."
                 },
                 {
                     "display": "state.values.stateOrMunicipalitySector === 'Municipal' && state.values.orgConfirmation === 'Ja'",
                     "type": "info",
+                    "position": "bottom",
                     "content": "For øyeblikket kan kun statlig ansatte rapportere HMS-avvik."
                 },
                 {
                     "display": "state.values.stateOrMunicipalitySector === 'External' && state.values.orgConfirmation === 'Ja'",
                     "type": "info",
+                    "position": "bottom",
                     "content": "Du er registrert som ekstern og kan ikke registrere HMS-avvik. Ta kontakt med din kontaktperson i NAV."
                 }
             ],
@@ -350,7 +358,7 @@
                     "key": "unitOther",
                     "label": "Velg enhet",
                     "type": "Choice",
-                    "combobox": "true",
+                    "searchable": true,
                     "options": "context.orgUnits",
                     "optionType": {
                         "type": "object",
@@ -388,7 +396,7 @@
                     "label": "Du valgte \"annet\". Vennligst spesifiser ved å oppgi rolle eller funksjon, ikke personnavn: ",
                     "type": "Text",
                     "maxLength": 255,
-                    "multiline": "true",
+                    "multiline": true,
                     "hidden": "!(state.values.location === 'Other')",
                     "required": "state.values.location === 'Other'"
                 },
@@ -403,7 +411,7 @@
                     "label": "Hva har skjedd? Beskriv hendelsen, mulig årsak og eventuelle konsekvenser",
                     "type": "Text",
                     "maxLength": 3000,
-                    "multiline": "true",
+                    "multiline": true,
                     "required": "true"
                 },
                 {
@@ -411,21 +419,21 @@
                     "label": "Beskriv eventuelle iverksatte strakstiltak:",
                     "type": "Text",
                     "maxLength": 3000,
-                    "multiline": "true"
+                    "multiline": true
                 },
                 {
                     "key": "measureSuggestionsDescription",
                     "label": "Har du forslag til tiltak for å unngå at noe slikt skjer igjen?",
                     "type": "Text",
                     "maxLength": 3000,
-                    "multiline": "true",
+                    "multiline": true,
                     "required": "true"
                 },
                 {
                     "key": "notifiedOfIncident",
                     "label": "Har du informert noen andre om denne hendelsen?",
                     "type": "Choice",
-                    "multiselect": "true",
+                    "multiselect": true,
                     "options": [
                         "Manager",
                         "Manager at another unit",
@@ -449,7 +457,7 @@
                     "label": "Du valgte \"annet\". Vennligst spesifiser ved å oppgi rolle eller funksjon, ikke personnavn:",
                     "type": "Text",
                     "maxLength": 255,
-                    "multiline": "true",
+                    "multiline": true,
                     "hidden": "state.values.notifiedOfIncident ? state.values.notifiedOfIncident.indexOf('Other') === -1 : true",
                     "required": "state.values.notifiedOfIncident ? state.values.notifiedOfIncident.indexOf('Other') !== -1 : true"
                 }

@@ -1,0 +1,461 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "$schema": {
+            "type": "string"
+        },
+        "title": {
+            "type": "string"
+        },
+        "conditionalOptions": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        },
+        "description": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "html"
+                    ]
+                },
+                "categories": {
+                    "type": "object",
+                    "properties": {
+                        "page": {
+                            "type": "integer",
+                            "minimum": 1
+                        },
+                        "field": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "page",
+                        "field"
+                    ]
+                },
+                "contentTemplate": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type",
+                "categories",
+                "contentTemplate"
+            ]
+        },
+        "pages": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "key": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string"
+                    },
+                    "format": {
+                        "type": "array",
+                        "additionalProperties": false,
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "confirmation": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "required": {
+                                "type": "string"
+                            },
+                            "field": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "key": {
+                                        "type": "string"
+                                    },
+                                    "type": {
+                                        "type": "string"
+                                    },
+                                    "options": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "messages": {
+                        "type": "array",
+                        "additionalProperties": false,
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "display": {
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "type": "string"
+                                },
+                                "content": {
+                                    "type": "string"
+                                },
+                                "position": {
+                                    "type": "string",
+                                    "enum": ["top", "bottom"]
+                                }
+                            },
+                            "required": [
+                                "display",
+                                "type",
+                                "content",
+                                "position"
+                            ]
+                        }
+                    },
+                    "fields": {
+                        "type": "array",
+                        "additionalProperties": false,
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "key": {
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "type": "string"
+                                },
+                                "label": {
+                                    "type": "string"
+                                },
+                                "defaultValue": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "infoText": {
+                                    "type": "string"
+                                },
+                                "disabled": {
+                                    "type": "string"
+                                },
+                                "showInSummary": {
+                                    "type": "string"
+                                },
+                                "placeholder": {
+                                    "type": "string"
+                                },
+                                "dynamicValue": {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "variable": {
+                                            "type": "string"
+                                        },
+                                        "condition": {
+                                            "type": "string"
+                                        },
+                                        "value": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "additionalData": {
+                                    "type": "array",
+                                    "additionalProperties": false,
+                                    "items": {
+                                        "type": "object",
+                                        "additionalProperties": false,
+                                        "properties": {
+                                            "key": {
+                                                "type": "string"
+                                            },
+                                            "value": {
+                                                "type": "string"
+                                            },
+                                            "fallback": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                },
+                                "searchable": {
+                                    "type": "boolean"
+                                },
+                                "optionType": {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "key": {
+                                            "type": "string"
+                                        },
+                                        "text": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "maxLength": {
+                                    "type": "integer"
+                                },
+                                "multiline": {
+                                    "type": "boolean"
+                                },
+                                "hidden": {
+                                    "type": "string"
+                                },
+                                "multiselect": {
+                                    "type": "boolean"
+                                },
+                                "options": {
+                                    "anyOf": [
+                                        {
+                                            "type": "array",
+                                            "additionalProperties": false,
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
+                                },
+                                "choiceInfoTexts": {
+                                    "type": "array",
+                                    "additionalProperties": false,
+                                    "items": {
+                                        "type": "object",
+                                        "additionalProperties": false,
+                                        "properties": {
+                                            "key": {
+                                                "type": "string"
+                                            },
+                                            "text": {
+                                                "type": "string"
+                                            },
+                                            "dynamicKey": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "key",
+                                            "text"
+                                        ]
+                                    }
+                                },
+                                "required": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "key",
+                                "type"
+                            ]
+                        }
+                    },
+                    "actions": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "key": {
+                                    "type": "string"
+                                },
+                                "label": {
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "type": "string"
+                                },
+                                "iconProps": {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "iconName": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "iconName"
+                                    ]
+                                },
+                                "iconPosition": {
+                                    "type": "string"
+                                },
+                                "disabled": {
+                                    "type": "string"
+                                },
+                                "addtobreadcrumbs": {
+                                    "type": "string"
+                                },
+                                "removefrombreadcrumbs": {
+                                    "type": "string"
+                                },
+                                "invoke": {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "functionName": {
+                                            "type": "string"
+                                        },
+                                        "params": {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "conditionalInvoke": {
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "condition": {
+                                                    "type": "string"
+                                                },
+                                                "functionName": {
+                                                    "type": "string"
+                                                },
+                                                "params": {
+                                                    "type": "object",
+                                                    "additionalProperties": false,
+                                                    "properties": {
+                                                        "formName": {
+                                                            "type": "string"
+                                                        },
+                                                        "state_values": {
+                                                            "type": "string"
+                                                        },
+                                                        "setstate": {
+                                                            "type": "string"
+                                                        },
+                                                        "key": {
+                                                            "type": "string"
+                                                        },
+                                                        "value": {
+                                                            "type": "string"
+                                                        },
+                                                        "skipPage": {
+                                                            "type": "object",
+                                                            "additionalProperties": false,
+                                                            "properties": {
+                                                                "page": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "addtobreadcrumbs": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "required": [
+                                                                "page",
+                                                                "addtobreadcrumbs"
+                                                            ]
+                                                        },
+                                                        "bubble": {
+                                                            "type": "object",
+                                                            "additionalProperties": false,
+                                                            "properties": {
+                                                                "showBubble": {
+                                                                    "type": "boolean"
+                                                                },
+                                                                "bubbleTitle": {
+                                                                    "type": "string"
+                                                                },
+                                                                "bubbleText": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "required": [
+                                                                "showBubble",
+                                                                "bubbleTitle",
+                                                                "bubbleText"
+                                                            ]
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "formName",
+                                                        "state_values",
+                                                        "setstate",
+                                                        "key",
+                                                        "value",
+                                                        "skipPage",
+                                                        "bubble"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "condition",
+                                                "functionName",
+                                                "params"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "functionName"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "key",
+                                "label",
+                                "type",
+                                "invoke"
+                            ]
+                        }
+                    },
+                    "values": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "key",
+                    "type"
+                ],
+                "if": {
+                    "properties": {
+                        "type": {
+                            "const": "Input"
+                        }
+                    }
+                },
+                "then": {
+                    "required": [
+                        "fields"
+                    ]
+                }
+            }
+        }
+    },
+    "required": [
+        "title",
+        "conditionalOptions",
+        "description",
+        "pages"
+    ]
+}

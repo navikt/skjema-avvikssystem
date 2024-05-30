@@ -1,4 +1,4 @@
-import { IDatePickerStrings, IIconProps } from "office-ui-fabric-react";
+import { IDatePickerStrings, IDropdownOption, IIconProps } from "office-ui-fabric-react";
 
 export enum DeviationFormPageType {
     Input = "Input",
@@ -9,6 +9,11 @@ export enum DeviationFormPageType {
 export enum DeviationActionType {
     Default = "default",
     Primary = "primary"
+}
+
+export enum MessagePosition {
+    Top = "top",
+    Bottom = "bottom"
 }
 
 export enum DeviationActionIconPosition {
@@ -25,9 +30,19 @@ export interface IDeviationFormConditionalOptions {
     [key: string]: string[];
 }
 
+export type Params = {
+    [key: string]: string;
+};
+
 export interface IDeviationFormActionInvoke {
     functionName: string;
-    params: any;
+    params: Params;
+    conditionalInvoke?: IConditionalInvoke;
+}
+export interface IConditionalInvoke {
+    condition: string;
+    functionName: string;
+    params: Params;
 }
 
 export interface IDeviationFormAction {
@@ -68,14 +83,14 @@ export interface IDeviationFormField {
     description?: string;
     options?: string[] | string;
     optionType?: IChoiceFieldOptionType;
-    multiselect?: string;
+    multiselect?: boolean;
     choiceInfoTexts?: IChoiceInfoText[];
     showInSummary?: string;
     required?: string;
     disabled?: string;
-    combobox?: string;
+    searchable?: boolean;
     minDate?: string;
-    multiline?: string;
+    multiline?: boolean;
     maxLength?: number;
     hidden?: string;
     valid?: string;
@@ -96,12 +111,12 @@ export interface IDeviationFormMessage {
     display: string;
     type: string;
     content: string;
+    position: MessagePosition;
 }
 
 export interface IDeviationFormPage {
     key: number;
     title: string;
-    informationMessages?: string[];
     type: DeviationFormPageType;
     fields: IDeviationFormField[];
     content: string;
@@ -111,9 +126,15 @@ export interface IDeviationFormPage {
     actions: IDeviationFormAction[];
 }
 
+export interface ICalloutCategoryDefinition {
+    page: number;
+    field: string;
+}
+
 export interface IDeviationFormDescription {
     type: DescriptionType;
-    content: string;
+    categories: ICalloutCategoryDefinition;
+    contentTemplate: string;
 }
 
 export interface IDeviationForm {
@@ -138,6 +159,15 @@ export interface ISubmitResult {
     text: string;
 }
 
+export interface ISkipPage {
+    page: number;
+    addtobreadcrumbs: string;
+}
+
+export interface IFilteredOptions {
+    [key: string]: IDropdownOption[];
+}
+
 export interface IDeviationFormState {
     currentPageNumber: number;
     values: any;
@@ -145,12 +175,20 @@ export interface IDeviationFormState {
     summaryConfirmed: boolean;
     submitting: boolean;
     submitResult: ISubmitResult;
+    skipPage?: ISkipPage;
+    filteredOptions: IFilteredOptions;
 }
 
 export interface IGetCaseParameters {
     reporterNAVIdentId: string;
     avvikNumber: string;
     isVerneombud?: boolean;
+}
+
+export interface IBubbleState {
+    showBubble: boolean;
+    bubbleTitle?: string;
+    bubbleText?: string;
 }
 
 export interface IOrgUnit {

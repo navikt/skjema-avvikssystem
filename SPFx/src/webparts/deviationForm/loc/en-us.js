@@ -193,7 +193,7 @@ define([], function () {
     "New": "Ny",
     "In progress": "Under behandling",
     "Actions initiated": "Tiltak påbegynt",
-    "Closed": "Lukket",
+    "Closed": "Lukket"
   }
 });
 

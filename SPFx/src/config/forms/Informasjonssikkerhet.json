@@ -1,9 +1,8 @@
 {
+    "$schema": "./schema/schema.json",
     "title": "Information security",
     "conditionalOptions": {
         "Personal information": [
-            "Personal information is lost or not available",
-            "Personal information has been unrightly edited",
             "Letter sent to the wrong recipient",
             "Letter sent to the wrong employer",
             "Information accompanies letter sent to another user",
@@ -15,12 +14,18 @@
             "Loss of equipment, phone, computer",
             "Overhearing conversations with confidential personal information",
             "Lookup without official need",
+            "Personal information is lost or not available",
+            "Personal information has been unrightly edited",
             "Other"
         ]
     },
     "description": {
         "type": "html",
-        "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Personopplysninger på avveie</li> <li>Brudd på policy/retningslinjer</li> <li>Andre uønskede hendelser</li> </ul> </div>"
+        "categories": {
+            "page": 2,
+            "field": "category"
+        },
+        "contentTemplate": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> {categories} </ul> </div>"
     },
     "pages": [
         {
@@ -53,6 +58,7 @@
                 {
                     "display": "state.values.stateOrMunicipalityService && state.values.stateOrMunicipalityService === 'Municipal'",
                     "type": "info",
+                    "position": "bottom",
                     "content": "For øyeblikket kan kun avvik for statlige tjenester rapporteres."
                 }
             ],
@@ -236,7 +242,7 @@
                     "key": "unitOther",
                     "label": "Velg enhet",
                     "type": "Choice",
-                    "combobox": "true",
+                    "searchable": true,
                     "options": "context.orgUnits",
                     "optionType": {
                         "type": "object",
@@ -275,7 +281,7 @@
                     "type": "Text",
                     "maxLength": 255,
                     "placeholder": "Ola Normann, 47101112",
-                    "multiline": "true",
+                    "multiline": true,
                     "hidden": "!(state.values.isExternalReporter === 'Ja')",
                     "required": "state.values.isExternalReporter === 'Ja'"
                 },
@@ -291,7 +297,7 @@
                     "label": "Hvem er de berørte?",
                     "type": "Text",
                     "maxLength": 1000,
-                    "multiline": "true",
+                    "multiline": true,
                     "placeholder": "Oppgi navn og personnummer, ett per linje",
                     "hidden": "state.values.category !== 'Personal information'",
                     "required": "state.values.category === 'Personal information'"
@@ -301,7 +307,7 @@
                     "label": "Hvilken type personopplysninger er berørt?",
                     "type": "Text",
                     "maxLength": 255,
-                    "multiline": "true",
+                    "multiline": true,
                     "hidden": "state.values.category !== 'Personal information'",
                     "required": "state.values.category === 'Personal information'"
                 },
@@ -311,7 +317,7 @@
                     "type": "Text",
                     "maxLength": 3000,
                     "placeholder": "Beskriv avviket, mulig årsak og eventuelle konsekvenser",
-                    "multiline": "true",
+                    "multiline": true,
                     "required": "true"
                 },
                 {
@@ -319,14 +325,14 @@
                     "label": "Beskriv eventuelle iverksatte strakstiltak:",
                     "type": "Text",
                     "maxLength": 3000,
-                    "multiline": "true"
+                    "multiline": true
                 },
                 {
                     "key": "measureSuggestionsDescription",
                     "label": "Har du forslag til tiltak for å unngå at noe slikt skjer igjen?",
                     "type": "Text",
                     "maxLength": 3000,
-                    "multiline": "true",
+                    "multiline": true,
                     "required": "true"
                 }
             ],
