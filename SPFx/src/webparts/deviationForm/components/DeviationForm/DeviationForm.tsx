@@ -521,7 +521,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                 <Checkbox
                     className={styles.checkbox}
                     checked={state.summaryConfirmed}
-                    label={state.values.category === 'Personal information' ? strings.SummaryConfirmationPersonaldata : strings.SummaryConfirmation}
+                    label={state.values.category === 'Violation of personal data security' ? strings.SummaryConfirmationPersonaldata : strings.SummaryConfirmation}
                     onChange={(_, checked) => setState({ ...state, summaryConfirmed: checked })}
                 />
             </div>

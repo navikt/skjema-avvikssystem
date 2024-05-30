@@ -119,7 +119,7 @@
                                 "state_values": "values",
                                 "setstate": "values",
                                 "key": "category",
-                                "value": "Personal information",
+                                "value": "Violation of personal data security",
                                 "skipPage": {
                                     "page": 2,
                                     "addtobreadcrumbs": "state.values.category"

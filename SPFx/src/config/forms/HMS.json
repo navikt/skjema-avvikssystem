@@ -30,6 +30,19 @@
             "Chemical factors",
             "Biological factors",
             "Other"
+        ],
+        "Education, training and exercises before user meetings": [
+            "Lack of education plan",
+            "Lack of education",
+            "Lack of training and exercises ",
+            "Lack of education for safety representative and AMU-members"
+        ],
+        "Risk assessments": [
+            "Violence and threats",
+            "Before user meetings",
+            "Change and adjustment",
+            "Physical working environment conditions",
+            "Information about planed and implemented actions"
         ]
     },
     "description": {
@@ -123,6 +136,8 @@
                         "Organizational and psychosocial working environment conditions",
                         "Physical working environment conditions, chemical and biological factors",
                         "Almost accidents/personnel injury",
+                        "Education, training and exercises before user meetings",
+                        "Risk assessments",
                         "Other unwanted incidents"
                     ],
                     "choiceInfoTexts": [

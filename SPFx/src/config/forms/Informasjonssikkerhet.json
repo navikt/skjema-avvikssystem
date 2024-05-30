@@ -2,10 +2,10 @@
     "$schema": "./schema/schema.json",
     "title": "Information security",
     "conditionalOptions": {
-        "Personal information": [
+        "Violation of personal data security": [
             "Letter sent to the wrong recipient",
             "Letter sent to the wrong employer",
-            "Information accompanies letter sent to another user",
+            "Information accompanies letter sent to another recipient",
             "E-mail or SMS sent to the wrong recipient",
             "Information registered on the wrong user",
             "Documents are scanned and registered on the wrong user",
@@ -102,7 +102,7 @@
                     "key": "category",
                     "type": "ChoiceGroup",
                     "options": [
-                        "Personal information",
+                        "Violation of personal data security",
                         "Violation of policies",
                         "Other unwanted incidents"
                     ],
@@ -272,8 +272,8 @@
                         "Ja",
                         "Nei"
                     ],
-                    "required": "state.values.category === 'Personal information'",
-                    "hidden": "state.values.category !== 'Personal information'"
+                    "required": "state.values.category === 'Violation of personal data security'",
+                    "hidden": "state.values.category !== 'Violation of personal data security'"
                 },
                 {
                     "key": "externalReporter",
@@ -289,8 +289,8 @@
                     "key": "affectedPeopleCount",
                     "label": "Antall berørte:",
                     "type": "Number",
-                    "hidden": "state.values.category !== 'Personal information'",
-                    "required": "state.values.category === 'Personal information'"
+                    "hidden": "state.values.category !== 'Violation of personal data security'",
+                    "required": "state.values.category === 'Violation of personal data security'"
                 },
                 {
                     "key": "affectedPeople",
@@ -299,8 +299,8 @@
                     "maxLength": 1000,
                     "multiline": true,
                     "placeholder": "Oppgi navn og personnummer, ett per linje",
-                    "hidden": "state.values.category !== 'Personal information'",
-                    "required": "state.values.category === 'Personal information'"
+                    "hidden": "state.values.category !== 'Violation of personal data security'",
+                    "required": "state.values.category === 'Violation of personal data security'"
                 },
                 {
                     "key": "informationType",
@@ -308,8 +308,8 @@
                     "type": "Text",
                     "maxLength": 255,
                     "multiline": true,
-                    "hidden": "state.values.category !== 'Personal information'",
-                    "required": "state.values.category === 'Personal information'"
+                    "hidden": "state.values.category !== 'Violation of personal data security'",
+                    "required": "state.values.category === 'Violation of personal data security'"
                 },
                 {
                     "key": "incidentDescription",
