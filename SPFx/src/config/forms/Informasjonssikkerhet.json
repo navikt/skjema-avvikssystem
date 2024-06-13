@@ -106,6 +106,12 @@
                         "Violation of policies",
                         "Other unwanted incidents"
                     ],
+                    "choiceInfoTexts": [
+                        {
+                            "key": "Violation of personal data security",
+                            "text": "Ett brudd på personopplysningssikkerhet er at personopplysningene er på avveie, er blitt endret eller slettet, eller ikke tilgjengelig. Eksempler kan være brev sendt til feil mottaker, opplysninger registrert på feil bruker, eller feil i ett IT-system."
+                        }
+                    ],
                     "required": "true"
                 }
             ],

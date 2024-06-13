@@ -31,11 +31,11 @@
             "Biological factors",
             "Other"
         ],
-        "Education, training and exercises before user meetings": [
-            "Lack of education plan",
-            "Lack of education",
-            "Lack of training and exercises ",
-            "Lack of education for safety representative and AMU-members"
+        "Education, training and exercises related to violence and threats": [
+            "Education plan",
+            "Education in handeling violence and threats",
+            "Training and exercises ",
+            "Education for safety representative and AMU-members"
         ],
         "Risk assessments": [
             "Violence and threats",
@@ -136,7 +136,7 @@
                         "Organizational and psychosocial working environment conditions",
                         "Physical working environment conditions, chemical and biological factors",
                         "Almost accidents/personnel injury",
-                        "Education, training and exercises before user meetings",
+                        "Education, training and exercises related to violence and threats",
                         "Risk assessments",
                         "Other unwanted incidents"
                     ],
