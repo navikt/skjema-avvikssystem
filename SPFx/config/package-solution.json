@@ -3,7 +3,7 @@
     "solution": {
         "name": "NAV Avviksskjema",
         "id": "5d51865f-5fb6-4b14-b35e-2a164758f891",
-        "version": "1.10.2.0",
+        "version": "1.13.1.0",
         "includeClientSideAssets": true,
         "isDomainIsolated": false,
         "developer": {

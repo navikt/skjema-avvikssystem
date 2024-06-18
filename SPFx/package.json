@@ -1,6 +1,6 @@
 {
   "name": "deviation-form",
-  "version": "1.10.2",
+  "version": "1.13.1",
   "private": true,
   "main": "lib/index.js",
   "scripts": {
@@ -10,6 +10,7 @@
     "test": "gulp test"
   },
   "dependencies": {
+    "@fluentui/react-hooks": "^8.8.1",
     "@microsoft/rush-stack-compiler-4.2": "^0.3.1",
     "@microsoft/sp-core-library": "1.13.1",
     "@microsoft/sp-lodash-subset": "1.13.1",

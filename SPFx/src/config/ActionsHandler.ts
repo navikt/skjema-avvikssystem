@@ -1,12 +1,15 @@
 import { includes } from 'lodash';
+import { IDeviationForm, IDeviationFormState } from '../webparts/deviationForm/types';
 
 export default class ActionsHandler {
     private _setState;
     private _setForm;
+    private _forms: IDeviationForm[];
 
-    constructor(setState: any, setForm: any) {
+    constructor(setState: React.Dispatch<React.SetStateAction<IDeviationFormState>>, setForm: (form: IDeviationForm) => void, forms: IDeviationForm[]) {
         this._setState = setState;
         this._setForm = setForm;
+        this._forms = forms;
     }
 
     public invoke(functionName: string, params: any) {
@@ -15,6 +18,13 @@ export default class ActionsHandler {
 
     private ToFormSelection() {
         this._setForm(null);
+    }
+
+    private SwitchForm({ formName, stateVariable, state, key, value, skipPage, bubble, setBubbleState }) {
+        const [form] = this._forms.filter((f) => f.title === formName);
+        this._setState({ ...state, currentPageNumber: 1, [stateVariable]: { ...state[stateVariable], form: formName, [key]: value }, skipPage: skipPage });
+        this._setForm(form);
+        setBubbleState(bubble);
     }
 
     private NextPage({ currentPageNumber, stateVariable, state }) {
@@ -30,7 +40,7 @@ export default class ActionsHandler {
         if (!values.anonymous) fieldsToInclude = [...fieldsToInclude, 'reporterEmail', 'reporterNAVIdentId'];
         this._setState({ ...state, [stateVariable]: true });
         for (const key in values) {
-            if (!includes(fieldsToInclude, key)) {
+            if (!includes(fieldsToInclude, key) || key === 'personalInfoLost') {
                 delete values[key];
             }
         }

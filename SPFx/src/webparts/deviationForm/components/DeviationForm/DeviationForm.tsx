@@ -11,16 +11,17 @@ import {
     Dialog,
     DialogFooter,
     Dropdown,
+    DropdownMenuItemType,
     IChoiceGroupOption,
     IconButton,
+    IDropdownOption,
     mergeStyles,
     MessageBar,
     MessageBarType,
     Spinner,
     SpinnerSize,
     TextField,
-    TooltipHost,
-    VirtualizedComboBox
+    TooltipHost
 } from 'office-ui-fabric-react';
 
 import * as React from 'react';
@@ -37,13 +38,18 @@ import {
     IDeviationPageConfirmation,
     IDeviationFormMessage,
     IDeviationFormState,
-    ISubmitResult
+    ISubmitResult,
+    IBubbleState,
+    Params,
+    MessagePosition
 } from '../../types';
 
 import TimeSpanField from '../TimeSpanField/TimeSpanField';
 import styles from './DeviationForm.module.scss';
 import dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
+import useFunctionParams from './useFunctionParams';
+import SearchableDropdown from '../SearchableDropdown/SearchableDropdown';
 
 dayjs.extend(customParseFormat.default);
 
@@ -52,9 +58,10 @@ export interface IDeviationFormProps {
     setSelectedForm: (form: IDeviationForm) => void;
     toFormSelection: () => void;
     breadcrumbState: { breadcrumbs: string[], setBreadcrumbs: (breadcrumbs: string[]) => void };
+    setBubbleState: React.Dispatch<React.SetStateAction<IBubbleState>>;
 }
 
-const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection }: IDeviationFormProps) => {
+const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection, setBubbleState }: IDeviationFormProps) => {
     const context = useContext(DeviationFormContext);
     const [state, setState] = useState<IDeviationFormState>({
         currentPageNumber: 1,
@@ -64,14 +71,16 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
             reporterNAVIdentId: context.reporterNAVIdentId,
             form: form.title
         },
+        filteredOptions: {},
         valid: false,
         summaryConfirmed: false,
         submitting: false,
         submitResult: null
     });
+    const getFunctionParams = useFunctionParams(state, context, form, setBubbleState);
     const [fieldTypes, setFieldTypes] = useState<Map<string, string>>(new Map<string, string>());
     const prevPageRef = useRef(state.currentPageNumber);
-    const actionsHandler = new ActionsHandler(setState, setSelectedForm);
+    const actionsHandler = new ActionsHandler(setState, setSelectedForm, context.config.forms);
 
     const hours = range(0, 24).map(key => ({ key, text: `${padStart(key.toString(), 2, '0')}` }));
     const minutes = range(0, 60).map(key => ({ key, text: `${padStart(key.toString(), 2, '0')}` }));
@@ -124,9 +133,10 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
 
             let updatedState = { ...state, valid };
 
-            if (page.fields.every(f => eval(f.hidden))) {
+            if (page.fields.every(f => eval(f.hidden)) || state?.skipPage?.page === state.currentPageNumber) {
                 const nextPageNumber = prevPageRef.current < state.currentPageNumber ? state.currentPageNumber + 1 : state.currentPageNumber - 1;
-                updatedState = { ...updatedState, currentPageNumber: nextPageNumber };
+                updatedState = { ...updatedState, currentPageNumber: nextPageNumber, skipPage: null };
+                if (state?.skipPage?.addtobreadcrumbs) breadcrumbState.setBreadcrumbs([...breadcrumbState.breadcrumbs, eval(state.skipPage.addtobreadcrumbs)])
             }
 
             setState(updatedState);
@@ -151,6 +161,24 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
         else return null;
     };
 
+    const onDropDownSearch = (
+        searchValue: string,
+        initialValues: IDropdownOption[],
+    ): IDropdownOption[] => {
+        if (!searchValue || searchValue === '') {
+            return [...initialValues];
+        }
+
+        const filteredOptions = [...initialValues].filter(
+            (i) =>
+                i.text.toLowerCase().includes(searchValue.toLowerCase()) &&
+                (!i.itemType || i.itemType !== DropdownMenuItemType.Header),
+        );
+
+        return filteredOptions;
+    }
+
+
 
     const renderField = (field: IDeviationFormField) => {
         let options: any[];
@@ -165,29 +193,34 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                             options = eval(field.options).map(o => ({ key: o, text: strings[o] || o }));
                         }
                     } else options = field.options.map(o => ({ key: o, text: strings[o] || o }));
-                    const multiSelect = eval(field.multiselect) || false;
-                    if (eval(field.combobox)) {
+                    const multiSelect = field.multiselect || false;
+                    if (field.searchable) {
                         return (
-                            <div className={styles.field}>
-                                <VirtualizedComboBox
-                                    label={field.label}
-                                    selectedKey={state.values[field.key]}
-                                    allowFreeform
-                                    autoComplete="on"
-                                    options={options}
-                                    required={eval(field.required)}
-                                    onChange={(_, option) => {
-                                        let selectedValues = [];
-                                        if (multiSelect) {
-                                            const vals = state.values[field.key] || [];
-                                            if (option.selected) {
-                                                selectedValues = [...vals, option.key];
-                                            } else selectedValues = vals.filter(v => v !== option.key);
-                                        }
-                                        setState({ ...state, values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.key } });
-                                    }}
-                                />
-                            </div>
+                            <SearchableDropdown
+                                label={field.label}
+                                required={eval(field.required)}
+                                defaultSelectedKey={state.values[field.key]}
+                                options={state.filteredOptions[field.key] || options}
+                                onDismiss={() => setState({ ...state, filteredOptions: { ...state.filteredOptions, [field.key]: null } })}
+                                onChange={(_, option) => {
+                                    let selectedValues = [];
+                                    if (multiSelect) {
+                                        const vals = state.values[field.key] || [];
+                                        if (option.selected) {
+                                            selectedValues = [...vals, option.key];
+                                        } else selectedValues = vals.filter(v => v !== option.key);
+                                    }
+                                    setState({
+                                        ...state,
+                                        values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.key },
+                                        filteredOptions: { ...state.filteredOptions, [field.key]: null }
+                                    });
+                                }}
+                                onSearchValueChanged={(searchValue) => {
+                                    const newOptions = onDropDownSearch(searchValue, options);
+                                    setState({ ...state, filteredOptions: { ...state.filteredOptions, [field.key]: newOptions } });
+                                }}
+                            />
                         );
                     }
                     return (
@@ -325,7 +358,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                             value={state.values[field.key]}
                             required={eval(field.required)}
                             onChange={(_, value) => setState({ ...state, values: { ...state.values, [field.key]: value } })}
-                            multiline={eval(field.multiline)}
+                            multiline={field.multiline}
                         />
                     );
                 case 'Date':
@@ -488,32 +521,21 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                 <Checkbox
                     className={styles.checkbox}
                     checked={state.summaryConfirmed}
-                    label={state.values.category === 'Personal information' ? strings.SummaryConfirmationPersonaldata : strings.SummaryConfirmation}
+                    label={state.values.category === 'Violation of personal data security' ? strings.SummaryConfirmationPersonaldata : strings.SummaryConfirmation}
                     onChange={(_, checked) => setState({ ...state, summaryConfirmed: checked })}
                 />
             </div>
         );
     };
-
-    const getFunctionParams = (params: any, action: string) => {
-        let functionParams = {};
-        if (params) {
-            for (const key in params) {
-                if (key.indexOf('state_') === 0) {
-                    functionParams[params[key]] = state[params[key]];
-                } else if (key.indexOf('context_') === 0) {
-                    functionParams[params[key]] = context[params[key]];
-                } else if (key === 'setstate') {
-                    functionParams = { ...functionParams, stateVariable: params[key], state };
-                } else functionParams[key] = params[key];
-            }
-            if (action === 'submit') functionParams = { ...functionParams, fieldsToInclude: flatten(form.pages.map(p => p.fields).filter(Boolean)).filter(f => !eval(f.hidden)).map(f => f.key) };
-            return functionParams;
-        } else return null;
-    };
-
     const renderAction = (action: IDeviationFormAction) => {
-        let params = getFunctionParams(action.invoke.params, action.key);
+        const invoke = action.invoke.conditionalInvoke && eval(action.invoke.conditionalInvoke.condition)
+            ? action.invoke.conditionalInvoke
+            : action.invoke;
+
+        const functionName = invoke.functionName;
+        const invokeParams = invoke.params;
+
+        const params: Params = getFunctionParams(invokeParams, action.key, functionName);
         const iconRightStyles = { flexContainer: { flexDirection: 'row-reverse' } };
         if (action.type === DeviationActionType.Default)
             return <DefaultButton
@@ -528,7 +550,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                         crumbs.splice(crumbs.length - 1, 1);
                         breadcrumbState.setBreadcrumbs(crumbs);
                     }
-                    actionsHandler.invoke(action.invoke.functionName, params);
+                    actionsHandler.invoke(functionName, params);
                 }}
             />;
         if (action.type === DeviationActionType.Primary)
@@ -543,7 +565,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                         crumbs.splice(crumbs.length - 1, 1);
                         breadcrumbState.setBreadcrumbs(crumbs);
                     }
-                    actionsHandler.invoke(action.invoke.functionName, params);
+                    actionsHandler.invoke(functionName, params);
                 }}
             />;
     };
@@ -566,7 +588,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
     };
 
     const renderMessages = (messages: IDeviationFormMessage[]) => {
-        if (messages) return messages.map(m => { if (eval(m.display)) return <MessageBar messageBarType={getMessageType(m.type)}>{m.content}</MessageBar>; });
+        if (messages) return messages.map(m => (eval(m.display) && <MessageBar className={styles.message} messageBarType={getMessageType(m.type)}><div style={{ whiteSpace: 'break-spaces' }}>{m.content}</div></MessageBar>));
     };
 
     const renderContent = (content: string, format: string[], confirmation: IDeviationPageConfirmation, messages: IDeviationFormMessage[]): JSX.Element => {
@@ -620,7 +642,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                             <Spinner size={SpinnerSize.large} label='Sender inn...' />
                             :
                             <>
-                                {page.informationMessages?.map(message => <MessageBar messageBarType={MessageBarType.info}>{message}</MessageBar>)}
+                                {renderMessages(page.messages?.filter(m => m.position === MessagePosition.Top))}
                                 {page.title &&
                                     <header role='banner' aria-label={page.title}>
                                         <h2>{page.title}</h2>
@@ -635,7 +657,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                                 {page.type === DeviationFormPageType.Summary &&
                                     renderSummary(state.values)
                                 }
-                                {renderMessages(page.messages)}
+                                {renderMessages(page.messages?.filter(m => m.position === MessagePosition.Bottom))}
                                 <div className={styles.actions}>
                                     {page.actions?.map(action => renderAction(action))}
                                 </div>

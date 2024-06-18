@@ -1,4 +1,5 @@
 {
+    "$schema": "./schema/schema.json",
     "title": "HSE",
     "conditionalOptions": {
         "Violence, threats and harassment by users or others outside of NAV": [
@@ -22,16 +23,35 @@
             "Violation of laws, regulations and routines",
             "Other"
         ],
-        "Physical working environment conditions": [
+        "Physical working environment conditions, chemical and biological factors": [
             "Indoor climate",
             "Ergonomic conditions at the workplace",
             "Noise",
+            "Chemical factors",
+            "Biological factors",
             "Other"
+        ],
+        "Education, training and exercises related to violence and threats": [
+            "Education plan",
+            "Education in handeling violence and threats",
+            "Training and exercises ",
+            "Education for safety representative and AMU-members"
+        ],
+        "Risk assessments": [
+            "Violence and threats",
+            "Before user meetings",
+            "Change and adjustment",
+            "Physical working environment conditions",
+            "Information about planed and implemented actions"
         ]
     },
     "description": {
         "type": "html",
-        "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Vold, trusler og trakassering fra bruker eller andre utenfor NAV</li> <li>Organisatoriske og psykososiale arbeidsmiljøforhold</li> <li>Fysiske arbeidsmiljøforhold</li> <li>Kjemiske og biologiske faktorer</li> <li>Nestenulykke/ personskade</li> <li>Andre uønskede hendelser</li> </ul> </div>"
+        "categories": {
+            "page": 2,
+            "field": "category"
+        },
+        "contentTemplate": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> {categories} </ul> </div>"
     },
     "pages": [
         {
@@ -56,16 +76,19 @@
                 {
                     "display": "state.values.orgConfirmation === 'Nei'",
                     "type": "info",
+                    "position": "bottom",
                     "content": "Vennligst kontakt din leder for å rette din registrerte stilling."
                 },
                 {
                     "display": "state.values.stateOrMunicipalitySector === 'Municipal' && state.values.orgConfirmation === 'Ja'",
                     "type": "info",
+                    "position": "bottom",
                     "content": "For øyeblikket kan kun statlig ansatte rapportere HMS-avvik."
                 },
                 {
                     "display": "state.values.stateOrMunicipalitySector === 'External' && state.values.orgConfirmation === 'Ja'",
                     "type": "info",
+                    "position": "bottom",
                     "content": "Du er registrert som ekstern og kan ikke registrere HMS-avvik. Ta kontakt med din kontaktperson i NAV."
                 }
             ],
@@ -111,9 +134,10 @@
                     "options": [
                         "Violence, threats and harassment by users or others outside of NAV",
                         "Organizational and psychosocial working environment conditions",
-                        "Physical working environment conditions",
-                        "Chemical and biological factors",
+                        "Physical working environment conditions, chemical and biological factors",
                         "Almost accidents/personnel injury",
+                        "Education, training and exercises related to violence and threats",
+                        "Risk assessments",
                         "Other unwanted incidents"
                     ],
                     "choiceInfoTexts": [
@@ -126,12 +150,8 @@
                             "text": "Handler om hvordan arbeidet er organisert, arbeidsinnhold og de sosiale relasjonene på arbeidsplassen."
                         },
                         {
-                            "key": "Physical working environment conditions",
+                            "key": "Physical working environment conditions, chemical and biological factors",
                             "text": "Handler om temperatur- og lysforhold, ergonomiske forhold eller støy på arbeidsplassen."
-                        },
-                        {
-                            "key": "Chemical and biological factors",
-                            "text": "Eksponeringer for kjemiske og biologiske faktorer som kan gi helseskade, som for eksempel rengjøringsmidler, oljer, desinfiksjonsmidler, eksos, virus og bakterier."
                         },
                         {
                             "key": "Almost accidents/personnel injury",
@@ -353,7 +373,7 @@
                     "key": "unitOther",
                     "label": "Velg enhet",
                     "type": "Choice",
-                    "combobox": "true",
+                    "searchable": true,
                     "options": "context.orgUnits",
                     "optionType": {
                         "type": "object",
@@ -391,7 +411,7 @@
                     "label": "Du valgte \"annet\". Vennligst spesifiser ved å oppgi rolle eller funksjon, ikke personnavn: ",
                     "type": "Text",
                     "maxLength": 255,
-                    "multiline": "true",
+                    "multiline": true,
                     "hidden": "!(state.values.location === 'Other')",
                     "required": "state.values.location === 'Other'"
                 },
@@ -406,7 +426,7 @@
                     "label": "Hva har skjedd? Beskriv hendelsen, mulig årsak og eventuelle konsekvenser",
                     "type": "Text",
                     "maxLength": 3000,
-                    "multiline": "true",
+                    "multiline": true,
                     "required": "true"
                 },
                 {
@@ -414,21 +434,21 @@
                     "label": "Beskriv eventuelle iverksatte strakstiltak:",
                     "type": "Text",
                     "maxLength": 3000,
-                    "multiline": "true"
+                    "multiline": true
                 },
                 {
                     "key": "measureSuggestionsDescription",
                     "label": "Har du forslag til tiltak for å unngå at noe slikt skjer igjen?",
                     "type": "Text",
                     "maxLength": 3000,
-                    "multiline": "true",
+                    "multiline": true,
                     "required": "true"
                 },
                 {
                     "key": "notifiedOfIncident",
                     "label": "Har du informert noen andre om denne hendelsen?",
                     "type": "Choice",
-                    "multiselect": "true",
+                    "multiselect": true,
                     "options": [
                         "Manager",
                         "Manager at another unit",
@@ -452,7 +472,7 @@
                     "label": "Du valgte \"annet\". Vennligst spesifiser ved å oppgi rolle eller funksjon, ikke personnavn:",
                     "type": "Text",
                     "maxLength": 255,
-                    "multiline": "true",
+                    "multiline": true,
                     "hidden": "state.values.notifiedOfIncident ? state.values.notifiedOfIncident.indexOf('Other') === -1 : true",
                     "required": "state.values.notifiedOfIncident ? state.values.notifiedOfIncident.indexOf('Other') !== -1 : true"
                 }

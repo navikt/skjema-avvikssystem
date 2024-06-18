@@ -1,10 +1,11 @@
 {
+    "$schema": "./schema/schema.json",
     "title": "Information security",
     "conditionalOptions": {
-        "Personal information": [
+        "Violation of personal data security": [
             "Letter sent to the wrong recipient",
             "Letter sent to the wrong employer",
-            "Information accompanies letter sent to another user",
+            "Information accompanies letter sent to another recipient",
             "E-mail or SMS sent to the wrong recipient",
             "Information registered on the wrong user",
             "Documents are scanned and registered on the wrong user",
@@ -13,12 +14,18 @@
             "Loss of equipment, phone, computer",
             "Overhearing conversations with confidential personal information",
             "Lookup without official need",
+            "Personal information is lost or not available",
+            "Personal information has been unrightly edited",
             "Other"
         ]
     },
     "description": {
         "type": "html",
-        "content": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> <li>Personopplysninger på avveie</li> <li>Brudd på policy/retningslinjer</li> <li>Andre uønskede hendelser</li> </ul> </div>"
+        "categories": {
+            "page": 2,
+            "field": "category"
+        },
+        "contentTemplate": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> {categories} </ul> </div>"
     },
     "pages": [
         {
@@ -51,6 +58,7 @@
                 {
                     "display": "state.values.stateOrMunicipalityService && state.values.stateOrMunicipalityService === 'Municipal'",
                     "type": "info",
+                    "position": "bottom",
                     "content": "For øyeblikket kan kun avvik for statlige tjenester rapporteres."
                 }
             ],
@@ -94,9 +102,15 @@
                     "key": "category",
                     "type": "ChoiceGroup",
                     "options": [
-                        "Personal information",
+                        "Violation of personal data security",
                         "Violation of policies",
                         "Other unwanted incidents"
+                    ],
+                    "choiceInfoTexts": [
+                        {
+                            "key": "Violation of personal data security",
+                            "text": "Ett brudd på personopplysningssikkerhet er at personopplysningene er på avveie, er blitt endret eller slettet, eller ikke tilgjengelig. Eksempler kan være brev sendt til feil mottaker, opplysninger registrert på feil bruker, eller feil i ett IT-system."
+                        }
                     ],
                     "required": "true"
                 }
@@ -234,7 +248,7 @@
                     "key": "unitOther",
                     "label": "Velg enhet",
                     "type": "Choice",
-                    "combobox": "true",
+                    "searchable": true,
                     "options": "context.orgUnits",
                     "optionType": {
                         "type": "object",
@@ -264,8 +278,8 @@
                         "Ja",
                         "Nei"
                     ],
-                    "required": "state.values.category === 'Personal information'",
-                    "hidden": "state.values.category !== 'Personal information'"
+                    "required": "state.values.category === 'Violation of personal data security'",
+                    "hidden": "state.values.category !== 'Violation of personal data security'"
                 },
                 {
                     "key": "externalReporter",
@@ -273,7 +287,7 @@
                     "type": "Text",
                     "maxLength": 255,
                     "placeholder": "Ola Normann, 47101112",
-                    "multiline": "true",
+                    "multiline": true,
                     "hidden": "!(state.values.isExternalReporter === 'Ja')",
                     "required": "state.values.isExternalReporter === 'Ja'"
                 },
@@ -281,27 +295,27 @@
                     "key": "affectedPeopleCount",
                     "label": "Antall berørte:",
                     "type": "Number",
-                    "hidden": "state.values.category !== 'Personal information'",
-                    "required": "state.values.category === 'Personal information'"
+                    "hidden": "state.values.category !== 'Violation of personal data security'",
+                    "required": "state.values.category === 'Violation of personal data security'"
                 },
                 {
                     "key": "affectedPeople",
                     "label": "Hvem er de berørte?",
                     "type": "Text",
                     "maxLength": 1000,
-                    "multiline": "true",
+                    "multiline": true,
                     "placeholder": "Oppgi navn og personnummer, ett per linje",
-                    "hidden": "state.values.category !== 'Personal information'",
-                    "required": "state.values.category === 'Personal information'"
+                    "hidden": "state.values.category !== 'Violation of personal data security'",
+                    "required": "state.values.category === 'Violation of personal data security'"
                 },
                 {
                     "key": "informationType",
                     "label": "Hvilken type personopplysninger er berørt?",
                     "type": "Text",
                     "maxLength": 255,
-                    "multiline": "true",
-                    "hidden": "state.values.category !== 'Personal information'",
-                    "required": "state.values.category === 'Personal information'"
+                    "multiline": true,
+                    "hidden": "state.values.category !== 'Violation of personal data security'",
+                    "required": "state.values.category === 'Violation of personal data security'"
                 },
                 {
                     "key": "incidentDescription",
@@ -309,7 +323,7 @@
                     "type": "Text",
                     "maxLength": 3000,
                     "placeholder": "Beskriv avviket, mulig årsak og eventuelle konsekvenser",
-                    "multiline": "true",
+                    "multiline": true,
                     "required": "true"
                 },
                 {
@@ -317,14 +331,14 @@
                     "label": "Beskriv eventuelle iverksatte strakstiltak:",
                     "type": "Text",
                     "maxLength": 3000,
-                    "multiline": "true"
+                    "multiline": true
                 },
                 {
                     "key": "measureSuggestionsDescription",
                     "label": "Har du forslag til tiltak for å unngå at noe slikt skjer igjen?",
                     "type": "Text",
                     "maxLength": 3000,
-                    "multiline": "true",
+                    "multiline": true,
                     "required": "true"
                 }
             ],

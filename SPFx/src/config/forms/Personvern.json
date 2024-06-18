@@ -1,4 +1,5 @@
 {
+    "$schema": "./schema/schema.json",
     "title": "Privacy",
     "conditionalOptions": {
         "Basis for processing": [
@@ -53,11 +54,89 @@
     },
     "description": {
         "type": "html",
-        "content": "<div style='padding: 5px 10px'> <p>Personvern omfatter brudd på registrertes rettigheter og NAVs forpliktelser etter personopplysningsloven.<br />Følgende kategorier faller inn under Personvern:</p> <ul> <li>Behandlingsgrunnlag</li> <li>Registrertes rettigheter</li> <li>Databehandleravtaler</li> <li>Overføring til tredjeland</li> <li>Lagring/sletting</li> <li>Manglende oversikter, vurderinger og dokumentasjon</li> <li>Bruk av bilder,lyd- og videoopptak</li> <li>Overvåking/kontroll av ansatte</li> <li>Fødselsnummer/biometriske kjennetegn</li> <li>Andre uønskede hendelser</li> </ul> <p>Brudd på personopplysningssikkerhet hører inn under tema Informasjonssikkerhet.</p> </div>"
+        "categories": {
+            "page": 3,
+            "field": "category"
+        },
+        "contentTemplate": "<div style='padding: 5px 10px'> <p>Personvern omfatter brudd på registrertes rettigheter og NAVs forpliktelser etter personopplysningsloven.<br />Følgende kategorier faller inn under Personvern:</p> <ul> {categories} </ul> <p>Brudd på personopplysningssikkerhet hører inn under tema Informasjonssikkerhet.</p> </div>"
     },
     "pages": [
         {
             "key": 1,
+            "title": "Omfatter avviket brudd på personopplysningssikkerheten?",
+            "type": "Input",
+            "fields": [
+                {
+                    "key": "personalInfoLost",
+                    "type": "ChoiceGroup",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ],
+                    "required": "true"
+                }
+            ],
+            "messages": [
+                {
+                    "display": "true",
+                    "position": "top",
+                    "type": "warning",
+                    "content": "Ett brudd på personopplysningssikkerhet er at personopplysningene er på avveie, er blitt endret eller slettet, eller ikke tilgjengelig. \nEksempler kan være brev sendt til feil mottaker, opplysninger registrert på feil bruker, eller feil i ett IT-system."
+                }
+            ],
+            "actions": [
+                {
+                    "key": "previous",
+                    "label": "Tilbake",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronLeft"
+                    },
+                    "invoke": {
+                        "functionName": "ToFormSelection"
+                    }
+                },
+                {
+                    "key": "next",
+                    "label": "Neste",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronRight"
+                    },
+                    "iconPosition": "right",
+                    "disabled": "!state.values.personalInfoLost",
+                    "invoke": {
+                        "functionName": "NextPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        },
+                        "conditionalInvoke": {
+                            "condition": "state.values.personalInfoLost === 'Yes'",
+                            "functionName": "SwitchForm",
+                            "params": {
+                                "formName": "Information security",
+                                "state_values": "values",
+                                "setstate": "values",
+                                "key": "category",
+                                "value": "Violation of personal data security",
+                                "skipPage": {
+                                    "page": 2,
+                                    "addtobreadcrumbs": "state.values.category"
+                                },
+                                "bubble": {
+                                    "showBubble": true,
+                                    "bubbleTitle": "Endret hovedkategori",
+                                    "bubbleText": "Ettersom avviket gjelder brudd på personopplysningssikkerheten, har hovedkategori blitt automatisk endret til informasjonssikkerhet. Dette er for å sikre at avviket blir behandlet på riktig måte. Kategori \"Personopplysninger på avveie\" vil også bli automatisk valgt på neste side."
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "key": 2,
             "title": "Gjelder det en statlig eller kommunal tjeneste?",
             "type": "Input",
             "fields": [
@@ -85,6 +164,7 @@
             "messages": [
                 {
                     "display": "state.values.stateOrMunicipalityService && state.values.stateOrMunicipalityService === 'Municipal'",
+                    "position": "bottom",
                     "type": "info",
                     "content": "For øyeblikket kan kun avvik for statlige tjenester rapporteres."
                 }
@@ -121,10 +201,9 @@
             ]
         },
         {
-            "key": 2,
+            "key": 3,
             "title": "Velg kategori",
             "type": "Input",
-            "informationMessages": ["Avvik knyttet til personopplysninger på avveie skal meldes under hovedkategori informasjonssikkerhet."],
             "fields": [
                 {
                     "key": "category",
@@ -211,7 +290,7 @@
             ]
         },
         {
-            "key": 3,
+            "key": 4,
             "title": "Velg underkategori",
             "type": "Input",
             "fields": [
@@ -355,7 +434,7 @@
             ]
         },
         {
-            "key": 4,
+            "key": 5,
             "type": "Input",
             "fields": [
                 {
@@ -395,7 +474,7 @@
                     "key": "unitOther",
                     "label": "Velg enhet",
                     "type": "Choice",
-                    "combobox": "true",
+                    "searchable": true,
                     "options": "context.orgUnits",
                     "optionType": {
                         "type": "object",
@@ -422,7 +501,7 @@
                     "label": "Hva har skjedd? Beskriv avviket, mulig årsak og eventuelle konsekvenser",
                     "type": "Text",
                     "maxLength": 3000,
-                    "multiline": "true",
+                    "multiline": true,
                     "required": "true"
                 },
                 {
@@ -430,14 +509,14 @@
                     "label": "Beskriv eventuelle iverksatte strakstiltak:",
                     "type": "Text",
                     "maxLength": 3000,
-                    "multiline": "true"
+                    "multiline": true
                 },
                 {
                     "key": "measureSuggestionsDescription",
                     "label": "Har du forslag til tiltak for å unngå at noe slikt skjer igjen?",
                     "type": "Text",
                     "maxLength": 3000,
-                    "multiline": "true",
+                    "multiline": true,
                     "required": "true"
                 }
             ],
@@ -478,7 +557,7 @@
             ]
         },
         {
-            "key": 5,
+            "key": 6,
             "title": "Verifiser opplysningene som er registrert",
             "type": "Summary",
             "values": "state.values",
