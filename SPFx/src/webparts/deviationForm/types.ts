@@ -3,7 +3,8 @@ import { IDatePickerStrings, IDropdownOption, IIconProps } from "office-ui-fabri
 export enum DeviationFormPageType {
     Input = "Input",
     Info = "Info",
-    Summary = "Summary"
+    Summary = "Summary",
+    Validation = "Validation"
 }
 
 export enum DeviationActionType {

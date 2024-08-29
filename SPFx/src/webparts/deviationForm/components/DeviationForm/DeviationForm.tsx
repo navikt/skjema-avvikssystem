@@ -50,6 +50,7 @@ import dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 import useFunctionParams from './useFunctionParams';
 import SearchableDropdown from '../SearchableDropdown/SearchableDropdown';
+import ValidationPage from '../ValidationPage/ValidationPage';
 
 dayjs.extend(customParseFormat.default);
 
@@ -647,6 +648,13 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                                     <header role='banner' aria-label={page.title}>
                                         <h2>{page.title}</h2>
                                     </header>
+                                }
+                                {page.type === DeviationFormPageType.Validation &&
+                                    <ValidationPage
+                                        currentPageNumber={state.currentPageNumber}
+                                        previousPageNumber={prevPageRef.current}
+                                        setPagenumber={(number) => setState({ ...state, currentPageNumber: number })}
+                                    />
                                 }
                                 {page.type === DeviationFormPageType.Input &&
                                     page.fields?.map(field => renderField(field))
