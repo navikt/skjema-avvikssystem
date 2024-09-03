@@ -1,8 +1,10 @@
 import { createContext } from 'react';
 import { IAppConfig, IOrgUnitOption } from './types';
+import { SPFI } from '@pnp/sp';
 
 export interface IDeviationFormContext {
     config: IAppConfig;
+    sp: SPFI;
     environment: string;
     organization: string;
     unit: string;

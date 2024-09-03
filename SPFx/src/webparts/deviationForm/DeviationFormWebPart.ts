@@ -15,7 +15,7 @@ import config from '../../config/config';
 import { DeviationFormContext, IDeviationFormContext } from './DeviationFormContext';
 import { IAppConfig, IOrgUnit, IOrgUnitOption } from './types';
 import { AadHttpClient } from '@microsoft/sp-http';
-import { spfi, SPFx } from '@pnp/sp';
+import { SPFI, spfi, SPFx } from '@pnp/sp';
 import "@pnp/sp/webs";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
@@ -33,10 +33,12 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
   private reporterEmail: string;
   private reporterNAVIdentId: string;
   private orgUnits: IOrgUnitOption[];
+  private spClient: SPFI;
 
   public render(): void {
     const value: IDeviationFormContext = {
       config: config as IAppConfig,
+      sp: this.spClient,
       environment: this.properties.environment,
       organization: this.organization,
       unit: this.unit,
@@ -59,9 +61,9 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
 
   protected async onInit(): Promise<void> {
     await super.onInit();
-    const sp = spfi().using(SPFx(this.context));
+    this.spClient = spfi().using(SPFx(this.context));
 
-    const units = await sp.web.lists.getByTitle('Enheter').items.select('NOMId', 'Title').getAll();
+    const units = await this.spClient.web.lists.getByTitle('Enheter').items.select('NOMId', 'Title').getAll();
 
     /*     const body = `{
                             "query": "query { orgEnheter(where: {nomNivaa: ARBEIDSOMRAADE}){ orgEnhet{ id navn nomNivaa gyldigFom gyldigTom organiseringer(retning: under){ orgEnhet{ navn nomNivaa orgEnhetsType gyldigFom gyldigTom } } } } }"

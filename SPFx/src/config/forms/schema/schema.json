@@ -72,6 +72,48 @@
                     "content": {
                         "type": "string"
                     },
+                    "disabled": {
+                        "type": "string"
+                    },
+                    "validationParams": {
+                        "type": "object",
+                        "properties": {
+                            "validations": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "enum": [
+                                                "SPList"
+                                            ]
+                                        },
+                                        "listName": {
+                                            "type": "string"
+                                        },
+                                        "filter": {
+                                            "type": "string"
+                                        },
+                                        "stateVariable": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "type"
+                                    ]
+                                }
+                            },
+                            "errorMessage": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "validations",
+                            "errorMessage"
+                        ]
+                    },
                     "format": {
                         "type": "array",
                         "additionalProperties": false,
@@ -124,7 +166,10 @@
                                 },
                                 "position": {
                                     "type": "string",
-                                    "enum": ["top", "bottom"]
+                                    "enum": [
+                                        "top",
+                                        "bottom"
+                                    ]
                                 }
                             },
                             "required": [

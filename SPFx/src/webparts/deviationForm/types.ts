@@ -12,6 +12,10 @@ export enum DeviationActionType {
     Primary = "primary"
 }
 
+export enum ValidationType {
+    SPList = "SPList"
+}
+
 export enum MessagePosition {
     Top = "top",
     Bottom = "bottom"
@@ -122,6 +126,8 @@ export interface IDeviationFormPage {
     fields: IDeviationFormField[];
     content: string;
     format: string[];
+    disabled?: string;
+    validationParams?: IValidationParams;
     confirmation?: IDeviationPageConfirmation;
     messages?: IDeviationFormMessage[];
     actions: IDeviationFormAction[];
@@ -207,4 +213,16 @@ export interface IOrgUnit {
 export interface IOrgUnitOption {
     id: string;
     name: string;
+}
+
+export interface IValidation {
+    type: ValidationType;
+    listName?: string;
+    filter?: string;
+    stateVariable?: string;
+}
+
+export interface IValidationParams {
+    validations: IValidation[];
+    errorMessage: string;
 }

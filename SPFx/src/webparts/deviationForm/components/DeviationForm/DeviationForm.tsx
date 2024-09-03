@@ -628,51 +628,59 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
     return (
         <div className={state.submitting && styles.spinner}>
             {form.pages.filter(page => page.key === state.currentPageNumber)
-                .map(page => (
-                    <div className={styles.page}>
-                        <Dialog
-                            dialogContentProps={{ title: 'Registrer avvik', subText: getSubmitResultSubtext(state.submitResult), showCloseButton: true }}
-                            hidden={!state.submitResult}
-                            onDismiss={toFormSelection}>
-                            <DialogFooter>
-                                <DefaultButton text='Lukk' onClick={state.submitResult?.status && range(200, 299).indexOf(state.submitResult.status) === -1 ?
-                                    () => setState({ ...state, submitResult: null }) : toFormSelection} />
-                            </DialogFooter>
-                        </Dialog>
-                        {state.submitting ?
-                            <Spinner size={SpinnerSize.large} label='Sender inn...' />
-                            :
-                            <>
-                                {renderMessages(page.messages?.filter(m => m.position === MessagePosition.Top))}
-                                {page.title &&
-                                    <header role='banner' aria-label={page.title}>
-                                        <h2>{page.title}</h2>
-                                    </header>
-                                }
-                                {page.type === DeviationFormPageType.Validation &&
-                                    <ValidationPage
-                                        currentPageNumber={state.currentPageNumber}
-                                        previousPageNumber={prevPageRef.current}
-                                        setPagenumber={(number) => setState({ ...state, currentPageNumber: number })}
-                                    />
-                                }
-                                {page.type === DeviationFormPageType.Input &&
-                                    page.fields?.map(field => renderField(field))
-                                }
-                                {page.type === DeviationFormPageType.Info &&
-                                    renderContent(page.content, page.format, page.confirmation, page.messages)
-                                }
-                                {page.type === DeviationFormPageType.Summary &&
-                                    renderSummary(state.values)
-                                }
-                                {renderMessages(page.messages?.filter(m => m.position === MessagePosition.Bottom))}
-                                <div className={styles.actions}>
-                                    {page.actions?.map(action => renderAction(action))}
-                                </div>
-                            </>
-                        }
-                    </div>
-                ))}
+                .map(page => {
+                    if (eval(page.disabled)) {
+                        setState({ ...state, currentPageNumber: state.currentPageNumber + 1 });
+                        return;
+                    } else return (
+                        <div className={styles.page}>
+                            <Dialog
+                                dialogContentProps={{ title: 'Registrer avvik', subText: getSubmitResultSubtext(state.submitResult), showCloseButton: true }}
+                                hidden={!state.submitResult}
+                                onDismiss={toFormSelection}>
+                                <DialogFooter>
+                                    <DefaultButton text='Lukk' onClick={state.submitResult?.status && range(200, 299).indexOf(state.submitResult.status) === -1 ?
+                                        () => setState({ ...state, submitResult: null }) : toFormSelection} />
+                                </DialogFooter>
+                            </Dialog>
+                            {state.submitting ?
+                                <Spinner size={SpinnerSize.large} label='Sender inn...' />
+                                :
+                                <>
+                                    {renderMessages(page.messages?.filter(m => m.position === MessagePosition.Top))}
+                                    {page.title &&
+                                        <header role='banner' aria-label={page.title}>
+                                            <h2>{page.title}</h2>
+                                        </header>
+                                    }
+                                    {page.type === DeviationFormPageType.Validation &&
+                                        <ValidationPage
+                                            currentPageNumber={state.currentPageNumber}
+                                            previousPageNumber={prevPageRef.current}
+                                            sp={context.sp}
+                                            params={page.validationParams}
+                                            state={state}
+                                            setPagenumber={(number) => setState({ ...state, currentPageNumber: number })}
+                                        />
+                                    }
+                                    {page.type === DeviationFormPageType.Input &&
+                                        page.fields?.map(field => renderField(field))
+                                    }
+                                    {page.type === DeviationFormPageType.Info &&
+                                        renderContent(page.content, page.format, page.confirmation, page.messages)
+                                    }
+                                    {page.type === DeviationFormPageType.Summary &&
+                                        renderSummary(state.values)
+                                    }
+                                    {renderMessages(page.messages?.filter(m => m.position === MessagePosition.Bottom))}
+                                    <div className={styles.actions}>
+                                        {page.actions?.map(action => renderAction(action))}
+                                    </div>
+                                </>
+                            }
+                        </div>
+                    )
+                })}
         </div>
     );
 };
