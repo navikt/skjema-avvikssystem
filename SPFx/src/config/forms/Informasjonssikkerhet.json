@@ -137,6 +137,14 @@
                     "required": "state.values.unit === 'Annen enhet'"
                 }
             ],
+            "messages": [
+                {
+                    "display": "state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement",
+                    "type": "error",
+                    "content": "Valgt enhet har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system.",
+                    "position": "bottom"
+                }
+            ],
             "actions": [
                 {
                     "key": "previous",
@@ -161,7 +169,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.valid",
+                    "disabled": "(state.values.stateOrMunicipalityService === 'Municipal' && !state.agreement) || !state.valid",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
@@ -174,22 +182,6 @@
         },
         {
             "key": 3,
-            "type": "Validation",
-            "validationParams": {
-                "validations": [
-                    {
-                        "type": "SPList",
-                        "listName": "Kommuner",
-                        "filter": "Title eq '{variable}'",
-                        "stateVariable": "state.values.unit === 'Annen enhet' ? state.values.unitOther : state.values.unit"
-                    }
-                ],
-                "errorMessage": "Valgt kommune har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system."
-            },
-            "disabled": "state.values.anonymous === true || state.values.stateOrMunicipalityService !== 'Municipal'"
-        },
-        {
-            "key": 4,
             "title": "Velg kategori",
             "type": "Input",
             "fields": [
@@ -247,7 +239,7 @@
             ]
         },
         {
-            "key": 5,
+            "key": 4,
             "title": "Velg underkategori",
             "type": "Input",
             "fields": [
@@ -303,7 +295,7 @@
             ]
         },
         {
-            "key": 6,
+            "key": 5,
             "type": "Input",
             "fields": [
                 {
@@ -427,7 +419,7 @@
             ]
         },
         {
-            "key": 7,
+            "key": 6,
             "title": "Verifiser opplysningene som er registrert",
             "type": "Summary",
             "values": "state.values",

@@ -63,7 +63,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
     await super.onInit();
     this.spClient = spfi().using(SPFx(this.context));
 
-    const units = await this.spClient.web.lists.getByTitle('Enheter').items.select('NOMId', 'Title').getAll();
+    const units = await this.spClient.web.lists.getByTitle('Enheter').items.select('NOMId', 'Title', 'Avtale').getAll();
 
     /*     const body = `{
                             "query": "query { orgEnheter(where: {nomNivaa: ARBEIDSOMRAADE}){ orgEnhet{ id navn nomNivaa gyldigFom gyldigTom organiseringer(retning: under){ orgEnhet{ navn nomNivaa orgEnhetsType gyldigFom gyldigTom } } } } }"
@@ -119,7 +119,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
         break;
     }
 
-    this.orgUnits = units.map(unit => ({ id: unit.NOMId, name: unit.Title })).sort((a, b) => a.name > b.name ? 1 : -1); //unitOptions.sort();
+    this.orgUnits = units.map(unit => ({ id: unit.NOMId, name: unit.Title, agreement: unit.Avtale })).sort((a, b) => a.name > b.name ? 1 : -1); //unitOptions.sort();
     this.unit = user.department;
     this.reporterEmail = user.mail;
     this.reporterNAVIdentId = user.onPremisesSamAccountName;

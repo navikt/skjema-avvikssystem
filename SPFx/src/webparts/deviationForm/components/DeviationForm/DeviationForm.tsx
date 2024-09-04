@@ -76,7 +76,8 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
         valid: false,
         summaryConfirmed: false,
         submitting: false,
-        submitResult: null
+        submitResult: null,
+        agreement: null
     });
     const getFunctionParams = useFunctionParams(state, context, form, setBubbleState);
     const [fieldTypes, setFieldTypes] = useState<Map<string, string>>(new Map<string, string>());
@@ -189,7 +190,11 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                     if (typeof field.options === 'string') {
                         if (field.optionType?.type === 'object') {
                             const objects = eval(field.options);
-                            options = objects.map(o => ({ key: o[field.optionType.key], text: strings[o[field.optionType.text]] || o[field.optionType.text] }));
+                            options = objects.map(o => ({
+                                key: o[field.optionType.key],
+                                text: strings[o[field.optionType.text]] || o[field.optionType.text],
+                                data: o.agreement ? { agreement: o.agreement } : null
+                            }));
                         } else if (field.optionType?.type === 'string') {
                             options = eval(field.options).map(o => ({ key: o, text: strings[o] || o }));
                         }
@@ -214,7 +219,8 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                                     setState({
                                         ...state,
                                         values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.key },
-                                        filteredOptions: { ...state.filteredOptions, [field.key]: null }
+                                        filteredOptions: { ...state.filteredOptions, [field.key]: null },
+                                        agreement: option?.data?.agreement
                                     });
                                 }}
                                 onSearchValueChanged={(searchValue) => {

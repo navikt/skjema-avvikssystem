@@ -184,6 +184,7 @@ export interface IDeviationFormState {
     submitResult: ISubmitResult;
     skipPage?: ISkipPage;
     filteredOptions: IFilteredOptions;
+    agreement?: boolean;
 }
 
 export interface IGetCaseParameters {
@@ -213,6 +214,7 @@ export interface IOrgUnit {
 export interface IOrgUnitOption {
     id: string;
     name: string;
+    agreement?: boolean;
 }
 
 export interface IValidation {
