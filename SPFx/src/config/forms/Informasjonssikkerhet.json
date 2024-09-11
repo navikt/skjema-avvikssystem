@@ -139,6 +139,12 @@
             ],
             "messages": [
                 {
+                    "display": "state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement",
+                    "type": "error",
+                    "content": "Din enhet har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system.",
+                    "position": "bottom"
+                },
+                {
                     "display": "state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement",
                     "type": "error",
                     "content": "Valgt enhet har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system.",
@@ -169,7 +175,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "(state.values.stateOrMunicipalityService === 'Municipal' && !state.agreement) || !state.valid",
+                    "disabled": "(state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && !state.agreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement) || !state.valid",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {

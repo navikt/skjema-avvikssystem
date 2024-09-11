@@ -30,6 +30,7 @@ export interface IDeviationFormWebPartProps {
 export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviationFormWebPartProps> {
   private organization: string;
   private unit: string;
+  private unitDataAgreement: boolean;
   private reporterEmail: string;
   private reporterNAVIdentId: string;
   private orgUnits: IOrgUnitOption[];
@@ -42,6 +43,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
       environment: this.properties.environment,
       organization: this.organization,
       unit: this.unit,
+      unitDataAgreement: this.unitDataAgreement,
       orgUnits: this.orgUnits,
       reporterEmail: this.reporterEmail,
       reporterNAVIdentId: this.reporterNAVIdentId,
@@ -101,8 +103,9 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
         const unitOptions: IOrgUnitOption[] = uniq(filteredUnits.map(unit => ({ id: unit.orgEnhet.id, name: unit.orgEnhet.navn })).concat(subUnits.map(unit => ({ id: unit.orgEnhet.id, name: unit.orgEnhet.navn })).concat(parentUnits.map(unit => ({ id: unit.orgEnhet.id, name: unit.orgEnhet.navn })))));
      */
 
+
     const client: AadHttpClient = await this.context.aadHttpClientFactory.getClient('https://graph.microsoft.com');
-    const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName,department,mail,onPremisesSamAccountName', AadHttpClient.configurations.v1);
+    const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName,department,mail,onPremisesSamAccountName,streetAddress', AadHttpClient.configurations.v1);
     const user = await res.json();
     switch (user.companyName) {
       case 'NAV Kommunal':
@@ -118,7 +121,8 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
         this.organization = 'State';
         break;
     }
-
+    const [unitAgreement] = await this.spClient.web.lists.getByTitle('Databehandleravtaler').items.filter(`Title eq '${user.streetAddress}'`)();
+    this.unitDataAgreement = !!unitAgreement;
     this.orgUnits = units.map(unit => ({ id: unit.NOMId, name: unit.Title, agreement: unit.Avtale })).sort((a, b) => a.name > b.name ? 1 : -1); //unitOptions.sort();
     this.unit = user.department;
     this.reporterEmail = user.mail;
@@ -163,7 +167,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
                 }),
                 PropertyPaneDropdown('environment', {
                   label: strings.EnvironmentSettingLabel,
-                  options: [{key: 'Production', text: strings.EnvironmentProd}, {key: 'Test', text: strings.EnvironmentTest}],
+                  options: [{ key: 'Production', text: strings.EnvironmentProd }, { key: 'Test', text: strings.EnvironmentTest }],
                 }),
                 PropertyPaneLabel('', {
                   text: `v${this.manifest.version}`

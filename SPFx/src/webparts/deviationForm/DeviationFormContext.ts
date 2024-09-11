@@ -8,6 +8,7 @@ export interface IDeviationFormContext {
     environment: string;
     organization: string;
     unit: string;
+    unitDataAgreement: boolean;
     reporterEmail: string;
     reporterNAVIdentId: string;
     functionUrl: string;
