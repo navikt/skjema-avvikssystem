@@ -22,7 +22,7 @@
     "description": {
         "type": "html",
         "categories": {
-            "page": 4,
+            "page": 3,
             "field": "category"
         },
         "contentTemplate": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> {categories} </ul> </div>"

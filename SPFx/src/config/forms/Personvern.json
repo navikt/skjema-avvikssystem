@@ -161,14 +161,6 @@
                     ]
                 }
             ],
-            "messages": [
-                {
-                    "display": "state.values.stateOrMunicipalityService && state.values.stateOrMunicipalityService === 'Municipal'",
-                    "position": "bottom",
-                    "type": "info",
-                    "content": "For øyeblikket kan kun avvik for statlige tjenester rapporteres."
-                }
-            ],
             "actions": [
                 {
                     "key": "previous",
@@ -189,7 +181,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.values.stateOrMunicipalityService || state.values.stateOrMunicipalityService === 'Municipal'",
+                    "disabled": "!state.values.stateOrMunicipalityService",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
@@ -252,6 +244,20 @@
                     "required": "state.values.unit === 'Annen enhet'"
                 }
             ],
+            "messages": [
+                {
+                    "display": "state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement",
+                    "type": "error",
+                    "content": "Din enhet har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system.",
+                    "position": "bottom"
+                },
+                {
+                    "display": "state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement",
+                    "type": "error",
+                    "content": "Valgt enhet har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system.",
+                    "position": "bottom"
+                }
+            ],
             "actions": [
                 {
                     "key": "previous",
@@ -276,7 +282,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.valid",
+                    "disabled": "(state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && !state.agreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement) || !state.valid",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
