@@ -1,6 +1,6 @@
 {
   "name": "deviation-form",
-  "version": "1.13.1",
+  "version": "1.13.1-AVIO380beta",
   "private": true,
   "main": "lib/index.js",
   "scripts": {

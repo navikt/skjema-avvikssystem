@@ -112,7 +112,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "(!state.values.stateOrMunicipalitySector || state.values.orgConfirmation !== 'Ja') || (state.values.stateOrMunicipalitySector !== 'State' && state.values.stateOrMunicipalitySector !== 'Municipal')",
+                    "disabled": "(!state.values.stateOrMunicipalitySector || state.values.orgConfirmation !== 'Ja') || (state.values.stateOrMunicipalitySector !== 'State' && state.values.stateOrMunicipalitySector !== 'Municipal') || (state.values.stateOrMunicipalitySector === 'Municipal' && state.values.orgConfirmation === 'Ja' && !context.unitDataAgreement)",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {

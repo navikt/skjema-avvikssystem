@@ -118,7 +118,8 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
         this.organization = 'External';
         break;
       default:
-        // DEBUG: this.organization = 'Municipal';
+        // DEBUG
+        // this.organization = 'Municipal';
         break;
     }
     const [unitAgreement] = await this.spClient.web.lists.getByTitle('Databehandleravtaler').items.filter(`Title eq '${user.streetAddress}'`)();
