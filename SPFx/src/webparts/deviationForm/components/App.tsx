@@ -57,11 +57,11 @@ const App: React.FC<IDeviationAppProps> = ({ title }: IDeviationAppProps) => {
       <div className={styles.wrapper}>
         <div className={styles.content}>
           <header>
-            <h2>Fyll inn avviksnummer</h2>
+            <h2>Fyll inn avviksnummer (AV-XXXXXX) på avviket</h2>
           </header>
           <div className={styles.search}>
             <SearchBox
-              ariaLabel='Fyll inn avviksnummer'
+              ariaLabel='Fyll inn avviksnummer på avviket'
               className={styles.searchBox}
               disabled={searchState.searching}
               value={searchState.caseId ?? undefined}
