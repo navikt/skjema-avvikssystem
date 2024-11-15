@@ -187,71 +187,73 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
         if (!eval(field.hidden)) {
             switch (field.type) {
                 case 'Choice':
-                    if (typeof field.options === 'string') {
-                        if (field.optionType?.type === 'object') {
-                            const objects = eval(field.options);
-                            options = objects.map(o => ({
-                                key: o[field.optionType.key],
-                                text: strings[o[field.optionType.text]] || o[field.optionType.text],
-                                data: o.agreement ? { agreement: o.agreement } : null
-                            }));
-                        } else if (field.optionType?.type === 'string') {
-                            options = eval(field.options).map(o => ({ key: o, text: strings[o] || o }));
+                    {
+                        if (typeof field.options === 'string') {
+                            if (field.optionType?.type === 'object') {
+                                const objects = eval(field.options);
+                                options = objects.map(o => ({
+                                    key: o[field.optionType.key],
+                                    text: strings[o[field.optionType.text]] || o[field.optionType.text],
+                                    data: o.agreement ? { agreement: o.agreement } : null
+                                }));
+                            } else if (field.optionType?.type === 'string') {
+                                options = eval(field.options).map(o => ({ key: o, text: strings[o] || o }));
+                            }
+                        } else options = field.options.map(o => ({ key: o, text: strings[o] || o }));
+                        const multiSelect = field.multiselect || false;
+                        if (field.searchable) {
+                            return (
+                                <SearchableDropdown
+                                    label={field.label}
+                                    required={eval(field.required)}
+                                    defaultSelectedKey={state.values[field.key]}
+                                    options={state.filteredOptions[field.key] || options}
+                                    onDismiss={() => setState({ ...state, filteredOptions: { ...state.filteredOptions, [field.key]: null } })}
+                                    onChange={(_, option) => {
+                                        let selectedValues = [];
+                                        if (multiSelect) {
+                                            const vals = state.values[field.key] || [];
+                                            if (option.selected) {
+                                                selectedValues = [...vals, option.key];
+                                            } else selectedValues = vals.filter(v => v !== option.key);
+                                        }
+                                        setState({
+                                            ...state,
+                                            values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.key },
+                                            filteredOptions: { ...state.filteredOptions, [field.key]: null },
+                                            agreement: option?.data?.agreement
+                                        });
+                                    }}
+                                    onSearchValueChanged={(searchValue) => {
+                                        const newOptions = onDropDownSearch(searchValue, options);
+                                        setState({ ...state, filteredOptions: { ...state.filteredOptions, [field.key]: newOptions } });
+                                    }}
+                                />
+                            );
                         }
-                    } else options = field.options.map(o => ({ key: o, text: strings[o] || o }));
-                    const multiSelect = field.multiselect || false;
-                    if (field.searchable) {
                         return (
-                            <SearchableDropdown
-                                label={field.label}
-                                required={eval(field.required)}
-                                defaultSelectedKey={state.values[field.key]}
-                                options={state.filteredOptions[field.key] || options}
-                                onDismiss={() => setState({ ...state, filteredOptions: { ...state.filteredOptions, [field.key]: null } })}
-                                onChange={(_, option) => {
-                                    let selectedValues = [];
-                                    if (multiSelect) {
-                                        const vals = state.values[field.key] || [];
-                                        if (option.selected) {
-                                            selectedValues = [...vals, option.key];
-                                        } else selectedValues = vals.filter(v => v !== option.key);
-                                    }
-                                    setState({
-                                        ...state,
-                                        values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.key },
-                                        filteredOptions: { ...state.filteredOptions, [field.key]: null },
-                                        agreement: option?.data?.agreement
-                                    });
-                                }}
-                                onSearchValueChanged={(searchValue) => {
-                                    const newOptions = onDropDownSearch(searchValue, options);
-                                    setState({ ...state, filteredOptions: { ...state.filteredOptions, [field.key]: newOptions } });
-                                }}
-                            />
+                            <div className={styles.field}>
+                                <Dropdown
+                                    label={field.label}
+                                    selectedKeys={state.values[field.key]}
+                                    selectedKey={state.values[field.key]}
+                                    required={eval(field.required)}
+                                    options={options}
+                                    multiSelect={multiSelect}
+                                    onChange={(_, option) => {
+                                        let selectedValues = [];
+                                        if (multiSelect) {
+                                            const vals = state.values[field.key] || [];
+                                            if (option.selected) {
+                                                selectedValues = [...vals, option.key];
+                                            } else selectedValues = vals.filter(v => v !== option.key);
+                                        }
+                                        setState({ ...state, values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.key } });
+                                    }}
+                                />
+                            </div>
                         );
                     }
-                    return (
-                        <div className={styles.field}>
-                            <Dropdown
-                                label={field.label}
-                                selectedKeys={state.values[field.key]}
-                                selectedKey={state.values[field.key]}
-                                required={eval(field.required)}
-                                options={options}
-                                multiSelect={multiSelect}
-                                onChange={(_, option) => {
-                                    let selectedValues = [];
-                                    if (multiSelect) {
-                                        const vals = state.values[field.key] || [];
-                                        if (option.selected) {
-                                            selectedValues = [...vals, option.key];
-                                        } else selectedValues = vals.filter(v => v !== option.key);
-                                    }
-                                    setState({ ...state, values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.key } });
-                                }}
-                            />
-                        </div>
-                    );
                 case 'ChoiceGroup':
                     {
                         const values = new Map<string, string>();

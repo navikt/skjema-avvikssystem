@@ -15,12 +15,10 @@ export interface IValidationPageProps {
 
 const { useEffect, useState } = React;
 
-const ValidationPage: React.FC<IValidationPageProps> = ({ currentPageNumber, previousPageNumber, sp, params, state, setPagenumber }: IValidationPageProps) => {
+const ValidationPage: React.FC<IValidationPageProps> = ({ currentPageNumber, previousPageNumber, sp, params, setPagenumber }: IValidationPageProps) => {
     const [showError, setShowError] = useState(false);
 
-    console.log(state);
-
-    const runValidation = async () => {
+    const runValidation = async (): Promise<void> => {
         for (const v of params.validations) {
             if (v.type === ValidationType.SPList) {
                 const value = eval(v.stateVariable);
