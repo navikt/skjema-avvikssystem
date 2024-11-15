@@ -305,6 +305,26 @@
             "type": "Input",
             "fields": [
                 {
+                    "key": "criticalityCriteria",
+                    "label": "Kritikalitetskriteria",
+                    "type": "Choice",
+                    "multiselect": true,
+                    "options": [
+                        "User with protected address is involved",
+                        "Personal information is publicly available",
+                        "Loss of unencrypted equipment",
+                        "Lookup without official need",
+                        "Medical certificate is lost/involved in incident",
+                        "Number of affected people is more than five",
+                        "None of these"
+                    ],
+                    "optionType": {
+                        "type": "string"
+                    },
+                    "required": "state.values.category === 'Violation of personal data security'",
+                    "hidden": "state.values.category !== 'Violation of personal data security'"
+                },
+                {
                     "key": "timeOfIncident",
                     "label": "Når skjedde avviket?",
                     "type": "Date",

@@ -233,6 +233,9 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                         return (
                             <div className={styles.field}>
                                 <Dropdown
+                                    placeholder={multiSelect && 'Velg en eller flere av de verdiene som stemmer'}
+                                    dropdownWidth={500}
+                                    styles={{ root: { width: '500px' } }}
                                     label={field.label}
                                     selectedKeys={state.values[field.key]}
                                     selectedKey={state.values[field.key]}
@@ -406,7 +409,7 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                     onSelectDate={date => setState({ ...state, values: { ...state.values, [field.key]: date } })}
                                     isRequired={eval(field.required)}
                                 />
-                                <div className={styles.timePicker}>
+                                <div className={eval(field.required) && !state.values[field.key] ? styles.timePickerCenter : styles.timePickerEnd}>
                                     <div className={styles.timeControls}>
                                         <span>Kl.</span>
                                         <ComboBox
@@ -422,7 +425,7 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                                 setState({ ...state, values: { ...state.values, [field.key]: date } });
                                             }}
                                         />
-                                        <span> : </span>
+                                        <span style={{marginLeft: '25px'}}> : </span>
                                         <ComboBox
                                             className={styles.input}
                                             options={minutes}
