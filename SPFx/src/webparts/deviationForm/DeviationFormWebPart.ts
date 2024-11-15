@@ -13,7 +13,7 @@ import * as strings from 'DeviationFormWebPartStrings';
 import App from './components/App';
 import config from '../../config/config';
 import { DeviationFormContext, IDeviationFormContext } from './DeviationFormContext';
-import { IAppConfig, IOrgUnit, IOrgUnitOption } from './types';
+import { IAppConfig, IOrgUnitOption } from './types';
 import { AadHttpClient } from '@microsoft/sp-http';
 import { SPFI, spfi, SPFx } from '@pnp/sp';
 import "@pnp/sp/webs";
@@ -130,19 +130,19 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
     this.reporterNAVIdentId = user.onPremisesSamAccountName;
   }
 
-  private filterUnits(rawUnits: IOrgUnit[]) {
-    return rawUnits.filter(unit => ((new Date(unit.orgEnhet.gyldigTom) > new Date() || !unit.orgEnhet.gyldigTom) && unit.orgEnhet.nomNivaa === "ARBEIDSOMRAADE"
-      && unit.orgEnhet.organiseringer.length > 0));
-  }
-
-  private extractOrgUnits(unit: IOrgUnit, result: IOrgUnit[]): void {
-    if (unit.orgEnhet && unit.orgEnhet.organiseringer) {
-      for (const org of unit.orgEnhet.organiseringer) {
-        result.push(org);
-        this.extractOrgUnits(org, result);
-      }
+  /*   private filterUnits(rawUnits: IOrgUnit[]) {
+      return rawUnits.filter(unit => ((new Date(unit.orgEnhet.gyldigTom) > new Date() || !unit.orgEnhet.gyldigTom) && unit.orgEnhet.nomNivaa === "ARBEIDSOMRAADE"
+        && unit.orgEnhet.organiseringer.length > 0));
     }
-  }
+  
+    private extractOrgUnits(unit: IOrgUnit, result: IOrgUnit[]): void {
+      if (unit.orgEnhet && unit.orgEnhet.organiseringer) {
+        for (const org of unit.orgEnhet.organiseringer) {
+          result.push(org);
+          this.extractOrgUnits(org, result);
+        }
+      }
+    } */
 
   protected onDispose(): void {
     ReactDom.unmountComponentAtNode(this.domElement);

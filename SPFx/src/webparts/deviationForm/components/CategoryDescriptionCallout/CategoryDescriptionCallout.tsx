@@ -1,5 +1,5 @@
 import React from 'react';
-import { Callout, DirectionalHint } from 'office-ui-fabric-react';
+import { Callout, DirectionalHint } from '@fluentui/react';
 import { DescriptionType, IDeviationForm } from '../../types';
 import strings from 'DeviationFormWebPartStrings';
 
@@ -16,8 +16,8 @@ interface ICategoryDescriptionCalloutProps {
     screenReaderTextId: string;
 }
 
-const extractContent = (s) => {
-    var span = document.createElement('span');
+const extractContent = (s): string => {
+    const span = document.createElement('span');
     span.innerHTML = s;
     return span.textContent || span.innerText;
 };

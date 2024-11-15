@@ -6,13 +6,35 @@
         "version": "1.13.1.0",
         "includeClientSideAssets": true,
         "isDomainIsolated": false,
+        "metadata": {
+            "shortDescription": {
+                "default": "Avviksskjema"
+            },
+            "longDescription": {
+                "default": "Avviksskjema"
+            },
+            "screenshotPaths": [],
+            "videoUrl": "",
+            "categories": []
+        },
         "developer": {
             "name": "",
             "websiteUrl": "",
             "privacyUrl": "",
             "termsOfUseUrl": "",
             "mpnId": "Undefined-1.13.1"
-        }
+        },
+        "features": [
+            {
+                "title": "deviation-form DeviationFormWebPart Feature",
+                "description": "The feature that activates DeviationFormWebPart from the deviation-form solution.",
+                "id": "0177bb5f-8ab6-4995-aba1-26f76443aa40",
+                "version": "1.13.1.0",
+                "componentIds": [
+                    "0177bb5f-8ab6-4995-aba1-26f76443aa40"
+                ]
+            }
+        ]
     },
     "paths": {
         "zippedPackage": "solution/deviation-form.sppkg"

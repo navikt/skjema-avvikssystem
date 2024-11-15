@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useContext } from 'react';
 import styles from './App.module.scss';
 import { DeviationFormContext } from '../DeviationFormContext';
-import { DefaultButton, Link, PrimaryButton, SearchBox, Spinner, SpinnerSize, TeachingBubble } from 'office-ui-fabric-react';
+import { DefaultButton, Link, PrimaryButton, SearchBox, Spinner, SpinnerSize, TeachingBubble } from '@fluentui/react';
 import DeviationForm from './DeviationForm/DeviationForm';
 import strings from 'DeviationFormWebPartStrings';
 import { IBubbleState, IGetCaseParameters } from '../types';
@@ -14,7 +14,7 @@ export interface IDeviationAppProps {
   title: string;
 }
 
-const App = ({ title }: IDeviationAppProps) => {
+const App: React.FC<IDeviationAppProps> = ({ title }: IDeviationAppProps) => {
   const context = useContext(DeviationFormContext);
   const defaultCalloutProps = { display: false, button: null };
   const initialSearchState = { search: false, caseId: null, result: null, searching: false, isVerneombud: false };
@@ -25,16 +25,16 @@ const App = ({ title }: IDeviationAppProps) => {
   const [bubbleState, setBubbleState] = useState<IBubbleState>({ showBubble: false });
   const breadcrumbsId = useId('breadcrumbs');
 
-  const toFormSelection = () => {
+  const toFormSelection = (): void => {
     setSelectedForm(null);
     setBreadcrumbs([]);
     setBubbleState({ showBubble: false });
     setSearchState(initialSearchState);
   };
 
-  const getCase = async () => {
+  const getCase = async (): Promise<void> => {
     setSearchState({ ...searchState, searching: true });
-    let values: IGetCaseParameters = {
+    const values: IGetCaseParameters = {
       reporterNAVIdentId: context.reporterNAVIdentId,
       avvikNumber: searchState.caseId,
       isVerneombud: searchState.isVerneombud

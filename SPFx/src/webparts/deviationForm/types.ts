@@ -1,4 +1,4 @@
-import { IDatePickerStrings, IDropdownOption, IIconProps } from "office-ui-fabric-react";
+import { IDatePickerStrings, IDropdownOption, IIconProps } from '@fluentui/react'
 
 export enum DeviationFormPageType {
     Input = "Input",
@@ -203,10 +203,10 @@ export interface IOrgUnit {
     orgEnhet: {
         id?: string;
         navn: string;
-        nomNivaa: string | null;
-        orgEnhetsType?: string | null;
+        nomNivaa: string | undefined;
+        orgEnhetsType?: string | undefined;
         gyldigFom: string;
-        gyldigTom: string | null;
+        gyldigTom: string | undefined;
         organiseringer?: IOrgUnit[];
     };
 }

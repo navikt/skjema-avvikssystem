@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { TextField } from 'office-ui-fabric-react';
+import { TextField } from '@fluentui/react';
 import styles from './TimeSpanField.module.scss';
 
 export interface ITimeSpanFieldProps {
@@ -8,7 +8,7 @@ export interface ITimeSpanFieldProps {
     onChange: (value: string) => void;
 }
 
-const TimeSpanField = (props: ITimeSpanFieldProps) => {
+const TimeSpanField = (props: ITimeSpanFieldProps): JSX.Element => {
     const template = '{0}d{1}h';
     const [value, setValue] = useState({ days: '0', hours: '0' });
 

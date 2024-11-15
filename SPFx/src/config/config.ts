@@ -3,7 +3,7 @@ import FysiskSikkerhet from './forms/Fysisk sikkerhet.json';
 import InformasjonsSikkerhet from './forms/Informasjonssikkerhet.json';
 import Personvern from './forms/personvern.json';
 import SearchResult from './SearchResult.json';
-import { IDatePickerStrings } from 'office-ui-fabric-react';
+import { IDatePickerStrings } from '@fluentui/react';
 
 const DatePickerStrings: IDatePickerStrings = {
     months: ['Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Desember'],
