@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import strings from 'DeviationFormWebPartStrings';
 import { flatten, range, padStart, clone } from 'lodash';
 import {
@@ -23,9 +24,6 @@ import {
     TooltipHost,
     PrimaryButton
 } from '@fluentui/react';
-
-import * as React from 'react';
-import { useState, useEffect, useRef, useContext } from 'react';
 import ActionsHandler from '../../../../config/ActionsHandler';
 import { DeviationFormContext } from '../../DeviationFormContext';
 import {
@@ -51,6 +49,7 @@ import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 import useFunctionParams from './useFunctionParams';
 import SearchableDropdown from '../SearchableDropdown/SearchableDropdown';
 import ValidationPage from '../ValidationPage/ValidationPage';
+import { getMessageType } from '../../shared';
 
 dayjs.extend(customParseFormat.default);
 
@@ -583,23 +582,6 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
             />;
     };
 
-    const getMessageType = (type: string): MessageBarType => {
-        switch (type) {
-            case 'info':
-                return MessageBarType.info;
-            case 'error':
-                return MessageBarType.error;
-            case 'severeWarning':
-                return MessageBarType.severeWarning;
-            case 'success':
-                return MessageBarType.success;
-            case 'warning':
-                return MessageBarType.warning;
-            default:
-                return MessageBarType.info;
-        }
-    };
-
     const renderMessages = (messages: IDeviationFormMessage[]): JSX.Element[] => {
         if (messages) return messages.map(m => (eval(m.display) && <MessageBar className={styles.message} messageBarType={getMessageType(m.type)}><div style={{ whiteSpace: 'break-spaces' }}>{m.content}</div></MessageBar>));
     };
@@ -669,10 +651,10 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                         <ValidationPage
                                             currentPageNumber={state.currentPageNumber}
                                             previousPageNumber={prevPageRef.current}
-                                            sp={context.sp}
-                                            params={page.validationParams}
+                                            renderConditions={page.renderConditions}
                                             state={state}
                                             setPagenumber={(number) => setState({ ...state, currentPageNumber: number })}
+                                            toFormSelection={toFormSelection}
                                         />
                                     }
                                     {page.type === DeviationFormPageType.Input &&

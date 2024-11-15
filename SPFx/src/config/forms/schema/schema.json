@@ -75,44 +75,29 @@
                     "disabled": {
                         "type": "string"
                     },
-                    "validationParams": {
-                        "type": "object",
-                        "properties": {
-                            "validations": {
-                                "type": "array",
-                                "items": {
-                                    "type": "object",
-                                    "additionalProperties": false,
-                                    "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "enum": [
-                                                "SPList"
-                                            ]
-                                        },
-                                        "listName": {
-                                            "type": "string"
-                                        },
-                                        "filter": {
-                                            "type": "string"
-                                        },
-                                        "stateVariable": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "required": [
-                                        "type"
-                                    ]
+                    "renderConditions": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "condition": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "enum": ["error", "warning", "info"]
                                 }
                             },
-                            "errorMessage": {
-                                "type": "string"
-                            }
-                        },
-                        "required": [
-                            "validations",
-                            "errorMessage"
-                        ]
+                            "required": [
+                                "condition",
+                                "message",
+                                "type"
+                            ]
+                        }
                     },
                     "format": {
                         "type": "array",

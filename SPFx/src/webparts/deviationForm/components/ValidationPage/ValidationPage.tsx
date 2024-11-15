@@ -1,39 +1,36 @@
-import { MessageBar, MessageBarType, Spinner, SpinnerSize } from 'office-ui-fabric-react';
+import { MessageBar } from '@fluentui/react';
 import styles from './ValidationPage.module.scss';
-import * as React from 'react';
-import { SPFI } from '@pnp/sp';
-import { IDeviationFormState, IValidationParams, ValidationType } from '../../types';
+import React, { useEffect, useContext } from 'react';
+import { IDeviationFormState, IRenderCondition } from '../../types';
+import { getMessageType } from '../../shared';
+import { DeviationFormContext } from '../../DeviationFormContext';
 
 export interface IValidationPageProps {
     currentPageNumber: number;
     previousPageNumber: number;
-    sp: SPFI;
-    params: IValidationParams;
+    renderConditions: IRenderCondition[];
     state: IDeviationFormState;
     setPagenumber: (pageNumber: number) => void;
+    toFormSelection: () => void;
 }
 
-const { useEffect, useState } = React;
-
-const ValidationPage: React.FC<IValidationPageProps> = ({ currentPageNumber, previousPageNumber, sp, params, setPagenumber }: IValidationPageProps) => {
-    const [showError, setShowError] = useState(false);
+const ValidationPage: React.FC<IValidationPageProps> = ({ currentPageNumber, previousPageNumber, toFormSelection, state, renderConditions, setPagenumber }: IValidationPageProps) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const context = useContext(DeviationFormContext);
 
     const runValidation = async (): Promise<void> => {
-        for (const v of params.validations) {
-            if (v.type === ValidationType.SPList) {
-                const value = eval(v.stateVariable);
-                const filter = v.filter.replace('{variable}', value);
-                const [item] = await sp.web.lists.getByTitle(v.listName).items.filter(filter)();
-                if (!item) {
-                    setShowError(true);
-                } else setPagenumber(currentPageNumber + 1);
-            }
+        if (renderConditions.every(rc => !eval(rc.condition))) {
+            const newPageNumber = currentPageNumber + 1;
+            setPagenumber(newPageNumber);
         }
     };
 
     useEffect(() => {
         if (previousPageNumber > currentPageNumber) {
-            setPagenumber(currentPageNumber - 1);
+            const newPageNumber = currentPageNumber - 1;
+            if (newPageNumber > 0) {
+                setPagenumber(newPageNumber)
+            } else toFormSelection();
         } else {
             runValidation();
         }
@@ -41,10 +38,13 @@ const ValidationPage: React.FC<IValidationPageProps> = ({ currentPageNumber, pre
 
     return (
         <div className={styles.wrapper}>
-            {showError ? <MessageBar messageBarType={MessageBarType.error}>{params.errorMessage}</MessageBar>
-                :
-                <Spinner size={SpinnerSize.large} />
-            }
+            {renderConditions.map(rc => {
+                if (eval(rc.condition)) {
+                    return (
+                        <MessageBar messageBarType={getMessageType(rc.type)}>{rc.message}</MessageBar>
+                    )
+                }
+            })}
         </div>
     );
 }

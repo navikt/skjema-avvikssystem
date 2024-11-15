@@ -1,6 +1,9 @@
-@import '~office-ui-fabric-react/dist/sass/References.scss';
+@import '~@fluentui/react/dist/sass/References.scss';
 
 .wrapper {
-    width: 15vw;
-    padding: 30px 0;
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+    flex-direction: column;
+    gap: 10px;
 }

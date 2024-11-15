@@ -56,40 +56,22 @@
     "pages": [
         {
             "key": 1,
-            "type": "Info",
-            "content": "Du er registrert som <strong>{0}</strong> ansatt. Stemmer dette med din stilling?",
-            "format": [
-                "context.organization"
-            ],
-            "confirmation": {
-                "required": "true",
-                "field": {
-                    "key": "orgConfirmation",
-                    "type": "ChoiceGroup",
-                    "options": [
-                        "Ja",
-                        "Nei"
-                    ]
-                }
-            },
-            "messages": [
+            "type": "Validation",
+            "renderConditions": [
                 {
-                    "display": "state.values.orgConfirmation === 'Nei'",
-                    "type": "info",
-                    "position": "bottom",
-                    "content": "Vennligst kontakt din leder for å rette din registrerte stilling."
+                    "condition": "state.values.stateOrMunicipalitySector === 'Municipal' && !context.unitDataAgreement",
+                    "message": "Din enhet har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system.",
+                    "type": "error"
                 },
                 {
-                    "display": "state.values.stateOrMunicipalitySector === 'Municipal' && state.values.orgConfirmation === 'Ja' && !context.unitDataAgreement",
-                    "type": "error",
-                    "position": "bottom",
-                    "content": "Din enhet har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system."
+                    "condition": "state.values.stateOrMunicipalitySector === 'External'",
+                    "message": "Du er registrert som ekstern og kan ikke registrere HMS-avvik. Ta kontakt med din kontaktperson i NAV.",
+                    "type": "error"
                 },
                 {
-                    "display": "state.values.stateOrMunicipalitySector === 'External' && state.values.orgConfirmation === 'Ja'",
-                    "type": "info",
-                    "position": "bottom",
-                    "content": "Du er registrert som ekstern og kan ikke registrere HMS-avvik. Ta kontakt med din kontaktperson i NAV."
+                    "condition": "!state.values.stateOrMunicipalitySector",
+                    "message": "Klarte ikke å hente nødvendig data fra din bruker.",
+                    "type": "error"
                 }
             ],
             "actions": [
@@ -102,23 +84,6 @@
                     },
                     "invoke": {
                         "functionName": "ToFormSelection"
-                    }
-                },
-                {
-                    "key": "next",
-                    "label": "Neste",
-                    "type": "default",
-                    "iconProps": {
-                        "iconName": "ChevronRight"
-                    },
-                    "iconPosition": "right",
-                    "disabled": "(!state.values.stateOrMunicipalitySector || state.values.orgConfirmation !== 'Ja') || (state.values.stateOrMunicipalitySector !== 'State' && state.values.stateOrMunicipalitySector !== 'Municipal') || (state.values.stateOrMunicipalitySector === 'Municipal' && state.values.orgConfirmation === 'Ja' && !context.unitDataAgreement)",
-                    "invoke": {
-                        "functionName": "NextPage",
-                        "params": {
-                            "state_pageNumber": "currentPageNumber",
-                            "setstate": "currentPageNumber"
-                        }
                     }
                 }
             ]
