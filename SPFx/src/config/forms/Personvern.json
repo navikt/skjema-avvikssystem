@@ -531,53 +531,6 @@
             "type": "Input",
             "fields": [
                 {
-                    "key": "anonymous",
-                    "label": "Anonym innmelding",
-                    "type": "Checkbox",
-                    "defaultValue": "false",
-                    "description": "Obs! Ved anonym innmelding vil du ikke få tilsendt saksnummer og ikke ha mulighet til innsyn i avviket.",
-                    "infoText": "Ved anonym innmelding vil det ikke bli knyttet noen opplysninger om deg til avviksmeldingen. Det vil ikke være mulig for saksbehandler å etterspørre mer informasjon, og det er derfor viktig at informasjonen som fylles inn er så utfyllende som mulig. Når du velger å være anonym, må du i feltet \"Velg enhet\" velge den Nav-enheten som du vil skal motta og følge opp avviksmeldingen."
-                },
-                {
-                    "key": "unit",
-                    "label": "Hvilken enhet gjelder avviket?",
-                    "type": "ChoiceGroup",
-                    "options": [
-                        "Min enhet",
-                        "Annen enhet"
-                    ],
-                    "required": "true",
-                    "defaultValue": "Min enhet",
-                    "showInSummary": "false",
-                    "dynamicValue": {
-                        "variable": "state.values.anonymous",
-                        "condition": "{variable} === true",
-                        "value": "Annen enhet"
-                    },
-                    "disabled": "state.values.anonymous === true",
-                    "additionalData": [
-                        {
-                            "key": "Min enhet",
-                            "value": "context.unit",
-                            "fallback": "Min enhet"
-                        }
-                    ]
-                },
-                {
-                    "key": "unitOther",
-                    "label": "Velg enhet",
-                    "type": "Choice",
-                    "searchable": true,
-                    "options": "context.orgUnits",
-                    "optionType": {
-                        "type": "object",
-                        "key": "id",
-                        "text": "name"
-                    },
-                    "hidden": "!(state.values.unit === 'Annen enhet')",
-                    "required": "state.values.unit === 'Annen enhet'"
-                },
-                {
                     "key": "timeOfIncident",
                     "label": "Når skjedde avviket?",
                     "type": "Date",
