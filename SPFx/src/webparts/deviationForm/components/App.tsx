@@ -57,14 +57,14 @@ const App: React.FC<IDeviationAppProps> = ({ title }: IDeviationAppProps) => {
       <div className={styles.wrapper}>
         <div className={styles.content}>
           <header>
-            <h2>Fyll inn id på avviket</h2>
+            <h2>Fyll inn avviksnummer</h2>
           </header>
           <div className={styles.search}>
             <SearchBox
-              ariaLabel='Fyll inn id på avviket'
+              ariaLabel='Fyll inn avviksnummer'
               className={styles.searchBox}
               disabled={searchState.searching}
-              value={searchState.caseId}
+              value={searchState.caseId ?? undefined}
               onChange={(_, val) => setSearchState({ ...searchState, caseId: val })}
               onSearch={() => getCase()}
             />
