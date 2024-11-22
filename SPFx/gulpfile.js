@@ -25,8 +25,7 @@ build.rig.getTasks = function () {
 };
 
 let syncVersionsSubtask = build.subTask('version-sync', function (gulp, buildOptions, done) {
-  this.log('Synching versions');
-  const gutil = require('gulp-util');
+  this.log('Syncing versions');
   const fs = require('fs');
   var pkgConfig = require('./package.json');
   var pkgSolution = require('./config/package-solution.json');

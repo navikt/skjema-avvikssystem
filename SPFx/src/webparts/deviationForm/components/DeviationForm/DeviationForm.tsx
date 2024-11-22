@@ -425,7 +425,7 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                                 setState({ ...state, values: { ...state.values, [field.key]: date } });
                                             }}
                                         />
-                                        <span style={{marginLeft: '25px'}}> : </span>
+                                        <span style={{ marginLeft: '25px' }}> : </span>
                                         <ComboBox
                                             className={styles.input}
                                             options={minutes}
@@ -554,7 +554,7 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
         const iconRightStyles = { flexContainer: { flexDirection: 'row-reverse' } };
         if (action.type === DeviationActionType.Default)
             return <DefaultButton
-                styles={action.iconPosition === DeviationActionIconPosition.Right && iconRightStyles}
+                styles={action.iconPosition === DeviationActionIconPosition.Right ? iconRightStyles : {}}
                 iconProps={action.iconProps}
                 text={action.label}
                 disabled={eval(action.disabled)}
