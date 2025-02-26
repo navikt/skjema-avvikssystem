@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useContext } from 'react';
 import styles from './App.module.scss';
 import { DeviationFormContext } from '../DeviationFormContext';
-import { DefaultButton, Link, PrimaryButton, SearchBox, Spinner, SpinnerSize, TeachingBubble } from 'office-ui-fabric-react';
+import { DefaultButton, Link, PrimaryButton, SearchBox, Spinner, SpinnerSize, TeachingBubble } from '@fluentui/react';
 import DeviationForm from './DeviationForm/DeviationForm';
 import strings from 'DeviationFormWebPartStrings';
 import { IBubbleState, IGetCaseParameters } from '../types';
@@ -14,7 +14,7 @@ export interface IDeviationAppProps {
   title: string;
 }
 
-const App = ({ title }: IDeviationAppProps) => {
+const App: React.FC<IDeviationAppProps> = ({ title }: IDeviationAppProps) => {
   const context = useContext(DeviationFormContext);
   const defaultCalloutProps = { display: false, button: null };
   const initialSearchState = { search: false, caseId: null, result: null, searching: false, isVerneombud: false };
@@ -25,16 +25,16 @@ const App = ({ title }: IDeviationAppProps) => {
   const [bubbleState, setBubbleState] = useState<IBubbleState>({ showBubble: false });
   const breadcrumbsId = useId('breadcrumbs');
 
-  const toFormSelection = () => {
+  const toFormSelection = (): void => {
     setSelectedForm(null);
     setBreadcrumbs([]);
     setBubbleState({ showBubble: false });
     setSearchState(initialSearchState);
   };
 
-  const getCase = async () => {
+  const getCase = async (): Promise<void> => {
     setSearchState({ ...searchState, searching: true });
-    let values: IGetCaseParameters = {
+    const values: IGetCaseParameters = {
       reporterNAVIdentId: context.reporterNAVIdentId,
       avvikNumber: searchState.caseId,
       isVerneombud: searchState.isVerneombud
@@ -57,14 +57,14 @@ const App = ({ title }: IDeviationAppProps) => {
       <div className={styles.wrapper}>
         <div className={styles.content}>
           <header>
-            <h2>Fyll inn id på avviket</h2>
+            <h2>Fyll inn avviksnummer (AV-XXXXXX) på avviket</h2>
           </header>
           <div className={styles.search}>
             <SearchBox
-              ariaLabel='Fyll inn id på avviket'
+              ariaLabel='Fyll inn avviksnummer på avviket'
               className={styles.searchBox}
               disabled={searchState.searching}
-              value={searchState.caseId}
+              value={searchState.caseId ?? undefined}
               onChange={(_, val) => setSearchState({ ...searchState, caseId: val })}
               onSearch={() => getCase()}
             />

@@ -22,7 +22,7 @@
     "description": {
         "type": "html",
         "categories": {
-            "page": 2,
+            "page": 3,
             "field": "category"
         },
         "contentTemplate": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> {categories} </ul> </div>"
@@ -54,14 +54,6 @@
                     ]
                 }
             ],
-            "messages": [
-                {
-                    "display": "state.values.stateOrMunicipalityService && state.values.stateOrMunicipalityService === 'Municipal'",
-                    "type": "info",
-                    "position": "bottom",
-                    "content": "For øyeblikket kan kun avvik for statlige tjenester rapporteres."
-                }
-            ],
             "actions": [
                 {
                     "key": "previous",
@@ -82,7 +74,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.values.stateOrMunicipalityService || state.values.stateOrMunicipalityService === 'Municipal'",
+                    "disabled": "!state.values.stateOrMunicipalityService",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
@@ -95,6 +87,107 @@
         },
         {
             "key": 2,
+            "type": "Input",
+            "fields": [
+                {
+                    "key": "anonymous",
+                    "label": "Anonym innmelding",
+                    "type": "Checkbox",
+                    "defaultValue": "false",
+                    "description": "Obs! Ved anonym innmelding vil du ikke få tilsendt saksnummer og ikke ha mulighet til innsyn i avviket.",
+                    "infoText": "Ved anonym innmelding vil det ikke bli knyttet noen opplysninger om deg til avviksmeldingen. Det vil ikke være mulig for saksbehandler å etterspørre mer informasjon, og det er derfor viktig at informasjonen som fylles inn er så utfyllende som mulig. Når du velger å være anonym, må du i feltet \"Velg enhet\" velge den Nav-enheten som du vil skal motta og følge opp avviksmeldingen."
+                },
+                {
+                    "key": "unit",
+                    "label": "Hvilken enhet gjelder avviket?",
+                    "type": "ChoiceGroup",
+                    "options": [
+                        "Min enhet",
+                        "Annen enhet"
+                    ],
+                    "required": "true",
+                    "defaultValue": "Min enhet",
+                    "showInSummary": "false",
+                    "dynamicValue": {
+                        "variable": "state.values.anonymous",
+                        "condition": "{variable} === true",
+                        "value": "Annen enhet"
+                    },
+                    "disabled": "state.values.anonymous === true",
+                    "additionalData": [
+                        {
+                            "key": "Min enhet",
+                            "value": "context.unit",
+                            "fallback": "Min enhet"
+                        }
+                    ]
+                },
+                {
+                    "key": "unitOther",
+                    "label": "Velg enhet",
+                    "type": "Choice",
+                    "searchable": true,
+                    "options": "context.orgUnits",
+                    "optionType": {
+                        "type": "object",
+                        "key": "id",
+                        "text": "name"
+                    },
+                    "hidden": "!(state.values.unit === 'Annen enhet')",
+                    "required": "state.values.unit === 'Annen enhet'"
+                }
+            ],
+            "messages": [
+                {
+                    "display": "state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement",
+                    "type": "error",
+                    "content": "Din enhet har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system.",
+                    "position": "bottom"
+                },
+                {
+                    "display": "state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement",
+                    "type": "error",
+                    "content": "Valgt enhet har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system.",
+                    "position": "bottom"
+                }
+            ],
+            "actions": [
+                {
+                    "key": "previous",
+                    "label": "Tilbake",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronLeft"
+                    },
+                    "invoke": {
+                        "functionName": "PreviousPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
+                },
+                {
+                    "key": "next",
+                    "label": "Neste",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronRight"
+                    },
+                    "iconPosition": "right",
+                    "disabled": "(state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && !state.agreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement) || !state.valid",
+                    "invoke": {
+                        "functionName": "NextPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "key": 3,
             "title": "Velg kategori",
             "type": "Input",
             "fields": [
@@ -152,7 +245,7 @@
             ]
         },
         {
-            "key": 3,
+            "key": 4,
             "title": "Velg underkategori",
             "type": "Input",
             "fields": [
@@ -208,55 +301,28 @@
             ]
         },
         {
-            "key": 4,
+            "key": 5,
             "type": "Input",
             "fields": [
                 {
-                    "key": "anonymous",
-                    "label": "Anonym innmelding",
-                    "type": "Checkbox",
-                    "defaultValue": "false",
-                    "description": "Obs! Ved anonym innmelding vil du ikke få tilsendt saksnummer og ikke ha mulighet til innsyn i avviket.",
-                    "infoText": "Ved anonym innmelding vil det ikke bli knyttet noen opplysninger om deg til avviksmeldingen. Det vil ikke være mulig for saksbehandler å etterspørre mer informasjon, og det er derfor viktig at informasjonen som fylles inn er så utfyllende som mulig. Når du velger å være anonym, må du i feltet \"Velg enhet\" velge den Nav-enheten som du vil skal motta og følge opp avviksmeldingen."
-                },
-                {
-                    "key": "unit",
-                    "label": "Hvilken enhet gjelder avviket?",
-                    "type": "ChoiceGroup",
-                    "options": [
-                        "Min enhet",
-                        "Annen enhet"
-                    ],
-                    "required": "true",
-                    "defaultValue": "Min enhet",
-                    "showInSummary": "false",
-                    "dynamicValue": {
-                        "variable": "state.values.anonymous",
-                        "condition": "{variable} === true",
-                        "value": "Annen enhet"
-                    },
-                    "disabled": "state.values.anonymous === true",
-                    "additionalData": [
-                        {
-                            "key": "Min enhet",
-                            "value": "context.unit",
-                            "fallback": "Min enhet"
-                        }
-                    ]
-                },
-                {
-                    "key": "unitOther",
-                    "label": "Velg enhet",
+                    "key": "criticalityCriteria",
+                    "label": "Kritikalitetskriteria",
                     "type": "Choice",
-                    "searchable": true,
-                    "options": "context.orgUnits",
+                    "multiselect": true,
+                    "options": [
+                        "User with protected address is involved",
+                        "Personal information is publicly available",
+                        "Loss of unencrypted equipment",
+                        "Lookup without official need",
+                        "Medical certificate is lost/involved in incident",
+                        "Number of affected people is more than five",
+                        "None of these"
+                    ],
                     "optionType": {
-                        "type": "object",
-                        "key": "id",
-                        "text": "name"
+                        "type": "string"
                     },
-                    "hidden": "!(state.values.unit === 'Annen enhet')",
-                    "required": "state.values.unit === 'Annen enhet'"
+                    "required": "state.values.category === 'Violation of personal data security'",
+                    "hidden": "state.values.category !== 'Violation of personal data security'"
                 },
                 {
                     "key": "timeOfIncident",
@@ -379,7 +445,7 @@
             ]
         },
         {
-            "key": 5,
+            "key": 6,
             "title": "Verifiser opplysningene som er registrert",
             "type": "Summary",
             "values": "state.values",

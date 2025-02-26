@@ -12,30 +12,30 @@ export default class ActionsHandler {
         this._forms = forms;
     }
 
-    public invoke(functionName: string, params: any) {
+    public invoke(functionName: string, params: any): void {
         this[functionName](params);
     }
 
-    private ToFormSelection() {
+    private ToFormSelection(): void {
         this._setForm(null);
     }
 
-    private SwitchForm({ formName, stateVariable, state, key, value, skipPage, bubble, setBubbleState }) {
+    private SwitchForm({ formName, stateVariable, state, key, value, skipPage, bubble, setBubbleState }): void {
         const [form] = this._forms.filter((f) => f.title === formName);
         this._setState({ ...state, currentPageNumber: 1, [stateVariable]: { ...state[stateVariable], form: formName, [key]: value }, skipPage: skipPage });
         this._setForm(form);
         setBubbleState(bubble);
     }
 
-    private NextPage({ currentPageNumber, stateVariable, state }) {
+    private NextPage({ currentPageNumber, stateVariable, state }): void {
         this._setState({ ...state, [stateVariable]: currentPageNumber + 1 });
     }
 
-    private PreviousPage({ currentPageNumber, stateVariable, state }) {
+    private PreviousPage({ currentPageNumber, stateVariable, state }): void {
         this._setState({ ...state, [stateVariable]: currentPageNumber - 1 });
     }
 
-    private async Submit({ values, functionUrl, environment, stateVariable, state, resultVariable, fieldsToInclude }) {
+    private async Submit({ values, functionUrl, environment, stateVariable, state, resultVariable, fieldsToInclude }): Promise<void> {
         fieldsToInclude = [...fieldsToInclude, 'stateOrMunicipalitySector', 'form'];
         if (!values.anonymous) fieldsToInclude = [...fieldsToInclude, 'reporterEmail', 'reporterNAVIdentId'];
         this._setState({ ...state, [stateVariable]: true });

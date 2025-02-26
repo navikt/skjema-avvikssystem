@@ -9,7 +9,7 @@ const useFunctionParams = (
     context: IDeviationFormContext,
     form: IDeviationForm,
     setBubbleState: React.Dispatch<React.SetStateAction<IBubbleState>>
-) => {
+): (initialParams: Params | undefined, action: string, functionName: string) => Params | undefined => {
     const getFunctionParams = useCallback(
         (initialParams: Params | null,
             action: string,

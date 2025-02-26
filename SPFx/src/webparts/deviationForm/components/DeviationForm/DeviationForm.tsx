@@ -1,4 +1,4 @@
-import { PrimaryButton } from '@microsoft/office-ui-fabric-react-bundle';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import strings from 'DeviationFormWebPartStrings';
 import { flatten, range, padStart, clone } from 'lodash';
 import {
@@ -21,11 +21,9 @@ import {
     Spinner,
     SpinnerSize,
     TextField,
-    TooltipHost
-} from 'office-ui-fabric-react';
-
-import * as React from 'react';
-import { useState, useEffect, useRef, useContext } from 'react';
+    TooltipHost,
+    PrimaryButton
+} from '@fluentui/react';
 import ActionsHandler from '../../../../config/ActionsHandler';
 import { DeviationFormContext } from '../../DeviationFormContext';
 import {
@@ -50,6 +48,8 @@ import dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 import useFunctionParams from './useFunctionParams';
 import SearchableDropdown from '../SearchableDropdown/SearchableDropdown';
+import ValidationPage from '../ValidationPage/ValidationPage';
+import { getMessageType } from '../../shared';
 
 dayjs.extend(customParseFormat.default);
 
@@ -61,7 +61,7 @@ export interface IDeviationFormProps {
     setBubbleState: React.Dispatch<React.SetStateAction<IBubbleState>>;
 }
 
-const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection, setBubbleState }: IDeviationFormProps) => {
+const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, breadcrumbState, toFormSelection, setBubbleState }: IDeviationFormProps) => {
     const context = useContext(DeviationFormContext);
     const [state, setState] = useState<IDeviationFormState>({
         currentPageNumber: 1,
@@ -75,7 +75,8 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
         valid: false,
         summaryConfirmed: false,
         submitting: false,
-        submitResult: null
+        submitResult: null,
+        agreement: null
     });
     const getFunctionParams = useFunctionParams(state, context, form, setBubbleState);
     const [fieldTypes, setFieldTypes] = useState<Map<string, string>>(new Map<string, string>());
@@ -94,7 +95,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
             form.pages.forEach(page => {
                 if (page.type === DeviationFormPageType.Input) {
                     page.fields.forEach(field => {
-                        let values = new Map<string, string>();
+                        const values = new Map<string, string>();
                         if (field.additionalData) {
                             field.additionalData.forEach(d => {
                                 values.set(d.key, eval(d.value) || d.fallback);
@@ -180,173 +181,185 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
 
 
 
-    const renderField = (field: IDeviationFormField) => {
+    const renderField = (field: IDeviationFormField): JSX.Element => {
         let options: any[];
         if (!eval(field.hidden)) {
             switch (field.type) {
                 case 'Choice':
-                    if (typeof field.options === 'string') {
-                        if (field.optionType?.type === 'object') {
-                            const objects = eval(field.options);
-                            options = objects.map(o => ({ key: o[field.optionType.key], text: strings[o[field.optionType.text]] || o[field.optionType.text] }));
-                        } else if (field.optionType?.type === 'string') {
-                            options = eval(field.options).map(o => ({ key: o, text: strings[o] || o }));
+                    {
+                        if (typeof field.options === 'string') {
+                            if (field.optionType?.type === 'object') {
+                                const objects = eval(field.options);
+                                options = objects.map(o => ({
+                                    key: o[field.optionType.key],
+                                    text: strings[o[field.optionType.text]] || o[field.optionType.text],
+                                    data: o.agreement ? { agreement: o.agreement } : null
+                                }));
+                            } else if (field.optionType?.type === 'string') {
+                                options = eval(field.options).map(o => ({ key: o, text: strings[o] || o }));
+                            }
+                        } else options = field.options.map(o => ({ key: o, text: strings[o] || o }));
+                        const multiSelect = field.multiselect || false;
+                        if (field.searchable) {
+                            return (
+                                <SearchableDropdown
+                                    label={field.label}
+                                    required={eval(field.required)}
+                                    defaultSelectedKey={state.values[field.key]}
+                                    options={state.filteredOptions[field.key] || options}
+                                    onDismiss={() => setState({ ...state, filteredOptions: { ...state.filteredOptions, [field.key]: null } })}
+                                    onChange={(_, option) => {
+                                        let selectedValues = [];
+                                        if (multiSelect) {
+                                            const vals = state.values[field.key] || [];
+                                            if (option.selected) {
+                                                selectedValues = [...vals, option.key];
+                                            } else selectedValues = vals.filter(v => v !== option.key);
+                                        }
+                                        setState({
+                                            ...state,
+                                            values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.key },
+                                            filteredOptions: { ...state.filteredOptions, [field.key]: null },
+                                            agreement: option?.data?.agreement
+                                        });
+                                    }}
+                                    onSearchValueChanged={(searchValue) => {
+                                        const newOptions = onDropDownSearch(searchValue, options);
+                                        setState({ ...state, filteredOptions: { ...state.filteredOptions, [field.key]: newOptions } });
+                                    }}
+                                />
+                            );
                         }
-                    } else options = field.options.map(o => ({ key: o, text: strings[o] || o }));
-                    const multiSelect = field.multiselect || false;
-                    if (field.searchable) {
                         return (
-                            <SearchableDropdown
-                                label={field.label}
-                                required={eval(field.required)}
-                                defaultSelectedKey={state.values[field.key]}
-                                options={state.filteredOptions[field.key] || options}
-                                onDismiss={() => setState({ ...state, filteredOptions: { ...state.filteredOptions, [field.key]: null } })}
-                                onChange={(_, option) => {
-                                    let selectedValues = [];
-                                    if (multiSelect) {
-                                        const vals = state.values[field.key] || [];
-                                        if (option.selected) {
-                                            selectedValues = [...vals, option.key];
-                                        } else selectedValues = vals.filter(v => v !== option.key);
-                                    }
-                                    setState({
-                                        ...state,
-                                        values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.key },
-                                        filteredOptions: { ...state.filteredOptions, [field.key]: null }
-                                    });
-                                }}
-                                onSearchValueChanged={(searchValue) => {
-                                    const newOptions = onDropDownSearch(searchValue, options);
-                                    setState({ ...state, filteredOptions: { ...state.filteredOptions, [field.key]: newOptions } });
-                                }}
-                            />
+                            <div className={styles.field}>
+                                <Dropdown
+                                    placeholder={multiSelect && 'Velg en eller flere av de verdiene som stemmer'}
+                                    dropdownWidth={500}
+                                    styles={{ root: { width: '500px' } }}
+                                    label={field.label}
+                                    selectedKeys={state.values[field.key]}
+                                    selectedKey={state.values[field.key]}
+                                    required={eval(field.required)}
+                                    options={options}
+                                    multiSelect={multiSelect}
+                                    onChange={(_, option) => {
+                                        let selectedValues = [];
+                                        if (multiSelect) {
+                                            const vals = state.values[field.key] || [];
+                                            if (option.selected) {
+                                                selectedValues = [...vals, option.key];
+                                            } else selectedValues = vals.filter(v => v !== option.key);
+                                        }
+                                        setState({ ...state, values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.key } });
+                                    }}
+                                />
+                            </div>
                         );
                     }
-                    return (
-                        <div className={styles.field}>
-                            <Dropdown
-                                label={field.label}
-                                selectedKeys={state.values[field.key]}
-                                selectedKey={state.values[field.key]}
-                                required={eval(field.required)}
-                                options={options}
-                                multiSelect={multiSelect}
-                                onChange={(_, option) => {
-                                    let selectedValues = [];
-                                    if (multiSelect) {
-                                        const vals = state.values[field.key] || [];
-                                        if (option.selected) {
-                                            selectedValues = [...vals, option.key];
-                                        } else selectedValues = vals.filter(v => v !== option.key);
-                                    }
-                                    setState({ ...state, values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.key } });
-                                }}
-                            />
-                        </div>
-                    );
                 case 'ChoiceGroup':
-                    let values = new Map<string, string>();
-                    if (field.additionalData) {
-                        field.additionalData.forEach(d => {
-                            values.set(d.key, eval(d.value) || d.key);
-                        });
-                    }
-                    if (typeof field.options === 'string') {
-                        options = eval(field.options).map(o => ({ key: values.has(o) ? values.get(o) : o, text: strings[o] || o }));
-                    } else options = field.options.map(o => ({ key: values.has(o) ? values.get(o) : o, text: strings[o] || o, disabled: field.disabledOptions?.length > 0 && field.disabledOptions.indexOf(o) !== -1 }));
-                    if (field.choiceInfoTexts) {
-                        field.choiceInfoTexts.forEach((choiceText, i) => {
-                            const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
-                            const choiceKey = choiceText.dynamicKey ? eval(choiceText.dynamicKey) || choiceText.key : choiceText.key;
-                            const [replaceOption] = options.filter(o => o.key === choiceKey);
-                            const screenReaderTextId = `screenReaderText-${field.key}-choice-tooltip-${i}`;
-                            let key = choiceText.key;
-                            if (field.additionalData) {
-                                const [match] = field.additionalData.filter(d => d.key === choiceText.key);
-                                key = match?.key ? eval(match.value) || choiceText.key : choiceText.key;
-                            }
+                    {
+                        const values = new Map<string, string>();
+                        if (field.additionalData) {
+                            field.additionalData.forEach(d => {
+                                values.set(d.key, eval(d.value) || d.key);
+                            });
+                        }
+                        if (typeof field.options === 'string') {
+                            options = eval(field.options).map(o => ({ key: values.has(o) ? values.get(o) : o, text: strings[o] || o }));
+                        } else options = field.options.map(o => ({ key: values.has(o) ? values.get(o) : o, text: strings[o] || o, disabled: field.disabledOptions?.length > 0 && field.disabledOptions.indexOf(o) !== -1 }));
+                        if (field.choiceInfoTexts) {
+                            field.choiceInfoTexts.forEach((choiceText, i) => {
+                                const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
+                                const choiceKey = choiceText.dynamicKey ? eval(choiceText.dynamicKey) || choiceText.key : choiceText.key;
+                                const [replaceOption] = options.filter(o => o.key === choiceKey);
+                                const screenReaderTextId = `screenReaderText-${field.key}-choice-tooltip-${i}`;
+                                let key = choiceText.key;
+                                if (field.additionalData) {
+                                    const [match] = field.additionalData.filter(d => d.key === choiceText.key);
+                                    key = match?.key ? eval(match.value) || choiceText.key : choiceText.key;
+                                }
 
-                            if (options.indexOf(replaceOption) !== -1) {
-                                const option: IChoiceGroupOption = {
-                                    key: key,
-                                    text: strings[choiceText.key] || choiceText.key,
-                                    "aria-describedby": screenReaderTextId,
+                                if (options.indexOf(replaceOption) !== -1) {
+                                    const option: IChoiceGroupOption = {
+                                        key: key,
+                                        text: strings[choiceText.key] || choiceText.key,
+                                        "aria-describedby": screenReaderTextId,
 
-                                    onRenderField: (props, render) => {
-                                        return (
-                                            <div className={optionRootClass}>
-                                                {render!(props)}
-                                                <span
-                                                    style={{ height: '1px', width: '1px', position: 'absolute', overflow: 'hidden', margin: '-1px', padding: '0px', border: '0px' }}
-                                                    id={screenReaderTextId}
-                                                    aria-hidden='true'
-                                                >
-                                                    {choiceText.text}
-                                                </span>
-                                                <TooltipHost content={choiceText.text} id={`${field.key}-choice-tooltip-${i}`}>
-                                                    <IconButton tabIndex={-1} aria-hidden='true' styles={{ rootHovered: { background: 'none' }, rootPressed: { background: 'none' } }} iconProps={{ iconName: 'Info' }} />
-                                                </TooltipHost>
-                                            </div>
-                                        );
-                                    }
-                                };
-                                options.splice(options.indexOf(replaceOption), 1, option);
-                            }
-                        });
-                    }
+                                        onRenderField: (props, render) => {
+                                            return (
+                                                <div className={optionRootClass}>
+                                                    {render && render(props)}
+                                                    <span
+                                                        style={{ height: '1px', width: '1px', position: 'absolute', overflow: 'hidden', margin: '-1px', padding: '0px', border: '0px' }}
+                                                        id={screenReaderTextId}
+                                                        aria-hidden='true'
+                                                    >
+                                                        {choiceText.text}
+                                                    </span>
+                                                    <TooltipHost content={choiceText.text} id={`${field.key}-choice-tooltip-${i}`}>
+                                                        <IconButton tabIndex={-1} aria-hidden='true' styles={{ rootHovered: { background: 'none' }, rootPressed: { background: 'none' } }} iconProps={{ iconName: 'Info' }} />
+                                                    </TooltipHost>
+                                                </div>
+                                            );
+                                        }
+                                    };
+                                    options.splice(options.indexOf(replaceOption), 1, option);
+                                }
+                            });
+                        }
 
-                    // Removed label displaying unit name. Commented out in case it needs to be reintroduced.
-                    /*                     if (field.additionalData) {
-                                            field.additionalData.forEach((additionalData, i) => {
-                                                const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '20px' });
-                                                const [replaceOption] = options.filter(o => o.text === additionalData.key);
-                                                const value = eval(additionalData.value) || additionalData.key;
-                                                if (options.indexOf(replaceOption) !== -1) {
-                                                    const option = {
-                                                        key: value,
-                                                        text: additionalData.key,
-                    
-                                                                                            onRenderField: (props, render) => {
-                                                                                                return (
-                                                                                                    <div className={optionRootClass}>
-                                                                                                        {render!(props)}
-                                                                                                        {value ? <span className={styles.additionalDataValue}>{value}</span>
-                                                                                                            : <MessageBar messageBarType={MessageBarType.error}>Klarte ikke hente nødvendig data.</MessageBar>
-                                                                                                        }
-                                                                                                    </div>
-                                                                                                );
-                                                                                            } 
-                                                    };
-                                                    options.splice(options.indexOf(replaceOption), 1, option);
-                                                }
-                                            });
-                                        } */
+                        // Removed label displaying unit name. Commented out in case it needs to be reintroduced.
+                        /*                     if (field.additionalData) {
+                                                field.additionalData.forEach((additionalData, i) => {
+                                                    const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '20px' });
+                                                    const [replaceOption] = options.filter(o => o.text === additionalData.key);
+                                                    const value = eval(additionalData.value) || additionalData.key;
+                                                    if (options.indexOf(replaceOption) !== -1) {
+                                                        const option = {
+                                                            key: value,
+                                                            text: additionalData.key,
+                        
+                                                                                                onRenderField: (props, render) => {
+                                                                                                    return (
+                                                                                                        <div className={optionRootClass}>
+                                                                                                            {render!(props)}
+                                                                                                            {value ? <span className={styles.additionalDataValue}>{value}</span>
+                                                                                                                : <MessageBar messageBarType={MessageBarType.error}>Klarte ikke hente nødvendig data.</MessageBar>
+                                                                                                            }
+                                                                                                        </div>
+                                                                                                    );
+                                                                                                } 
+                                                        };
+                                                        options.splice(options.indexOf(replaceOption), 1, option);
+                                                    }
+                                                });
+                                            } */
 
-                    if (field.dynamicValue) {
-                        const { variable, value, condition } = field.dynamicValue;
-                        if (eval(condition.replace('{variable}', variable))) {
-                            const [option] = (options as IChoiceGroupOption[]).filter(o => o.text === value);
-                            if (state.values[field.key] !== option.key) {
-                                setState({ ...state, values: { ...state.values, [field.key]: option.key } });
+                        if (field.dynamicValue) {
+                            const { variable, value, condition } = field.dynamicValue;
+                            if (eval(condition.replace('{variable}', variable))) {
+                                const [option] = (options as IChoiceGroupOption[]).filter(o => o.text === value);
+                                if (state.values[field.key] !== option.key) {
+                                    setState({ ...state, values: { ...state.values, [field.key]: option.key } });
+                                }
                             }
                         }
+                        return (
+                            <div className={styles.field}>
+                                <ChoiceGroup
+                                    id='choiceGroup'
+                                    label={field.label}
+                                    selectedKey={state.values[field.key]}
+                                    required={eval(field.required)}
+                                    disabled={eval(field.disabled)}
+                                    options={options}
+                                    onChange={(_, option) => {
+                                        setState({ ...state, values: { ...state.values, [field.key]: option.key } });
+                                    }}
+                                />
+                            </div>
+                        );
                     }
-                    return (
-                        <div className={styles.field}>
-                            <ChoiceGroup
-                                id='choiceGroup'
-                                label={field.label}
-                                selectedKey={state.values[field.key]}
-                                required={eval(field.required)}
-                                disabled={eval(field.disabled)}
-                                options={options}
-                                onChange={(_, option) => {
-                                    setState({ ...state, values: { ...state.values, [field.key]: option.key } });
-                                }}
-                            />
-                        </div>
-                    );
                 case 'Text':
                     return (
                         <TextField
@@ -396,7 +409,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                                     onSelectDate={date => setState({ ...state, values: { ...state.values, [field.key]: date } })}
                                     isRequired={eval(field.required)}
                                 />
-                                <div className={styles.timePicker}>
+                                <div className={eval(field.required) && !state.values[field.key] ? styles.timePickerCenter : styles.timePickerEnd}>
                                     <div className={styles.timeControls}>
                                         <span>Kl.</span>
                                         <ComboBox
@@ -412,7 +425,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                                                 setState({ ...state, values: { ...state.values, [field.key]: date } });
                                             }}
                                         />
-                                        <span> : </span>
+                                        <span style={{ marginLeft: '25px' }}> : </span>
                                         <ComboBox
                                             className={styles.input}
                                             options={minutes}
@@ -446,49 +459,51 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                         />
                     );
                 case 'Checkbox':
-                    const checkboxRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
-                    const screenReaderCheckboxTextId = `screenReaderText-${field.key}-tooltip`;
-                    if (field.infoText) {
-                        return (
-                            <div className={styles.checkboxContainer}>
-                                <div className={checkboxRootClass}>
-                                    <Checkbox
-                                        label={field.label}
-                                        checked={state.values[field.key]}
-                                        onChange={(_, checked) => setState({ ...state, values: { ...state.values, [field.key]: checked } })}
-                                    />
-                                    <span
-                                        style={{ height: '1px', width: '1px', position: 'absolute', overflow: 'hidden', margin: '-1px', padding: '0px', border: '0px' }}
-                                        id={screenReaderCheckboxTextId}
-                                        aria-hidden='true'
-                                    >
-                                        {field.infoText}
-                                    </span>
-                                    <TooltipHost content={field.infoText} id={`${field.key}-choice-tooltip`}>
-                                        <IconButton tabIndex={-1} aria-hidden='true' styles={{ rootHovered: { background: 'none' }, rootPressed: { background: 'none' } }} iconProps={{ iconName: 'Info' }} />
-                                    </TooltipHost>
+                    {
+                        const checkboxRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
+                        const screenReaderCheckboxTextId = `screenReaderText-${field.key}-tooltip`;
+                        if (field.infoText) {
+                            return (
+                                <div className={styles.checkboxContainer}>
+                                    <div className={checkboxRootClass}>
+                                        <Checkbox
+                                            label={field.label}
+                                            checked={state.values[field.key]}
+                                            onChange={(_, checked) => setState({ ...state, values: { ...state.values, [field.key]: checked } })}
+                                        />
+                                        <span
+                                            style={{ height: '1px', width: '1px', position: 'absolute', overflow: 'hidden', margin: '-1px', padding: '0px', border: '0px' }}
+                                            id={screenReaderCheckboxTextId}
+                                            aria-hidden='true'
+                                        >
+                                            {field.infoText}
+                                        </span>
+                                        <TooltipHost content={field.infoText} id={`${field.key}-choice-tooltip`}>
+                                            <IconButton tabIndex={-1} aria-hidden='true' styles={{ rootHovered: { background: 'none' }, rootPressed: { background: 'none' } }} iconProps={{ iconName: 'Info' }} />
+                                        </TooltipHost>
+                                    </div>
+                                    {field.description &&
+                                        <span className={styles.checkBoxDescription}>{field.description}</span>
+                                    }
                                 </div>
-                                {field.description &&
-                                    <span className={styles.checkBoxDescription}>{field.description}</span>
-                                }
-                            </div>
+                            );
+                        } else return (
+                            <Checkbox
+                                label={field.label}
+                                checked={state.values[field.key]}
+                                onChange={(_, checked) => setState({ ...state, values: { ...state.values, [field.key]: checked } })}
+                            />
                         );
-                    } else return (
-                        <Checkbox
-                            label={field.label}
-                            checked={state.values[field.key]}
-                            onChange={(_, checked) => setState({ ...state, values: { ...state.values, [field.key]: checked } })}
-                        />
-                    );
+                    }
                 default:
                     break;
             }
         }
     };
 
-    const renderSummary = (values: any) => {
+    const renderSummary = (values: any): JSX.Element => {
         const fields = flatten(form.pages.filter(p => p.type === DeviationFormPageType.Input).map(p => p.fields.filter(f => !eval(f.hidden) && eval(f.showInSummary) !== false).map(f => ({ fieldName: f.key, field: f.label || p.title, value: values[f.key], options: f.options, optionType: f.optionType }))));
-        const getValue = (field: any) => {
+        const getValue = (field: any): any => {
             if (field.value instanceof Date) {
                 if (fieldTypes.get(field.fieldName) === 'DateTime') {
                     return `${field.value.toLocaleDateString('no')} Kl. ${field.value.toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })}`;
@@ -527,7 +542,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
             </div>
         );
     };
-    const renderAction = (action: IDeviationFormAction) => {
+    const renderAction = (action: IDeviationFormAction): JSX.Element => {
         const invoke = action.invoke.conditionalInvoke && eval(action.invoke.conditionalInvoke.condition)
             ? action.invoke.conditionalInvoke
             : action.invoke;
@@ -539,14 +554,14 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
         const iconRightStyles = { flexContainer: { flexDirection: 'row-reverse' } };
         if (action.type === DeviationActionType.Default)
             return <DefaultButton
-                styles={action.iconPosition === DeviationActionIconPosition.Right && iconRightStyles}
+                styles={action.iconPosition === DeviationActionIconPosition.Right ? iconRightStyles : {}}
                 iconProps={action.iconProps}
                 text={action.label}
                 disabled={eval(action.disabled)}
                 onClick={() => {
                     if (action.addtobreadcrumbs) breadcrumbState.setBreadcrumbs([...breadcrumbState.breadcrumbs, eval(action.addtobreadcrumbs)]);
                     if (eval(action.removefrombreadcrumbs)) {
-                        let crumbs = breadcrumbState.breadcrumbs.slice();
+                        const crumbs = breadcrumbState.breadcrumbs.slice();
                         crumbs.splice(crumbs.length - 1, 1);
                         breadcrumbState.setBreadcrumbs(crumbs);
                     }
@@ -561,7 +576,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
                 onClick={() => {
                     if (action.addtobreadcrumbs) breadcrumbState.setBreadcrumbs([...breadcrumbState.breadcrumbs, eval(action.addtobreadcrumbs)]);
                     if (eval(action.removefrombreadcrumbs)) {
-                        let crumbs = breadcrumbState.breadcrumbs.slice();
+                        const crumbs = breadcrumbState.breadcrumbs.slice();
                         crumbs.splice(crumbs.length - 1, 1);
                         breadcrumbState.setBreadcrumbs(crumbs);
                     }
@@ -570,31 +585,14 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
             />;
     };
 
-    const getMessageType = (type: string): MessageBarType => {
-        switch (type) {
-            case 'info':
-                return MessageBarType.info;
-            case 'error':
-                return MessageBarType.error;
-            case 'severeWarning':
-                return MessageBarType.severeWarning;
-            case 'success':
-                return MessageBarType.success;
-            case 'warning':
-                return MessageBarType.warning;
-            default:
-                return MessageBarType.info;
-        }
-    };
-
-    const renderMessages = (messages: IDeviationFormMessage[]) => {
+    const renderMessages = (messages: IDeviationFormMessage[]): JSX.Element[] => {
         if (messages) return messages.map(m => (eval(m.display) && <MessageBar className={styles.message} messageBarType={getMessageType(m.type)}><div style={{ whiteSpace: 'break-spaces' }}>{m.content}</div></MessageBar>));
     };
 
     const renderContent = (content: string, format: string[], confirmation: IDeviationPageConfirmation, messages: IDeviationFormMessage[]): JSX.Element => {
-        const formatString = (string: string, ...args: string[]) => {
+        const formatString = (string: string, ...args: string[]): string => {
             return string.replace(/{(\d+)}/g, (match, number) => {
-                return typeof args[number] != 'undefined'
+                return typeof args[number] !== 'undefined'
                     ? strings[args[number]]?.toLowerCase() || args[number]?.toLowerCase()
                     : strings[match].toLocaleLowerCase() || match.toLocaleLowerCase();
             });
@@ -617,7 +615,7 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
         }
     };
 
-    const getSubmitResultSubtext = (result: ISubmitResult) => {
+    const getSubmitResultSubtext = (result: ISubmitResult): string => {
         if (!result) return;
         const { status, text } = result;
         if (range(200, 299).indexOf(status) === -1) return `Innsending feilet. Prøv igjen senere eller meld feil i Porten. Feilmelding: ${text}`;
@@ -627,44 +625,59 @@ const DeviationForm = ({ form, setSelectedForm, breadcrumbState, toFormSelection
     return (
         <div className={state.submitting && styles.spinner}>
             {form.pages.filter(page => page.key === state.currentPageNumber)
-                .map(page => (
-                    <div className={styles.page}>
-                        <Dialog
-                            dialogContentProps={{ title: 'Registrer avvik', subText: getSubmitResultSubtext(state.submitResult), showCloseButton: true }}
-                            hidden={!state.submitResult}
-                            onDismiss={toFormSelection}>
-                            <DialogFooter>
-                                <DefaultButton text='Lukk' onClick={state.submitResult?.status && range(200, 299).indexOf(state.submitResult.status) === -1 ?
-                                    () => setState({ ...state, submitResult: null }) : toFormSelection} />
-                            </DialogFooter>
-                        </Dialog>
-                        {state.submitting ?
-                            <Spinner size={SpinnerSize.large} label='Sender inn...' />
-                            :
-                            <>
-                                {renderMessages(page.messages?.filter(m => m.position === MessagePosition.Top))}
-                                {page.title &&
-                                    <header role='banner' aria-label={page.title}>
-                                        <h2>{page.title}</h2>
-                                    </header>
-                                }
-                                {page.type === DeviationFormPageType.Input &&
-                                    page.fields?.map(field => renderField(field))
-                                }
-                                {page.type === DeviationFormPageType.Info &&
-                                    renderContent(page.content, page.format, page.confirmation, page.messages)
-                                }
-                                {page.type === DeviationFormPageType.Summary &&
-                                    renderSummary(state.values)
-                                }
-                                {renderMessages(page.messages?.filter(m => m.position === MessagePosition.Bottom))}
-                                <div className={styles.actions}>
-                                    {page.actions?.map(action => renderAction(action))}
-                                </div>
-                            </>
-                        }
-                    </div>
-                ))}
+                .map(page => {
+                    if (eval(page.disabled)) {
+                        setState({ ...state, currentPageNumber: state.currentPageNumber + 1 });
+                        return;
+                    } else return (
+                        <div className={styles.page}>
+                            <Dialog
+                                dialogContentProps={{ title: 'Registrer avvik', subText: getSubmitResultSubtext(state.submitResult), showCloseButton: true }}
+                                hidden={!state.submitResult}
+                                onDismiss={toFormSelection}>
+                                <DialogFooter>
+                                    <DefaultButton text='Lukk' onClick={state.submitResult?.status && range(200, 299).indexOf(state.submitResult.status) === -1 ?
+                                        () => setState({ ...state, submitResult: null }) : toFormSelection} />
+                                </DialogFooter>
+                            </Dialog>
+                            {state.submitting ?
+                                <Spinner size={SpinnerSize.large} label='Sender inn...' />
+                                :
+                                <>
+                                    {renderMessages(page.messages?.filter(m => m.position === MessagePosition.Top))}
+                                    {page.title &&
+                                        <header role='banner' aria-label={page.title}>
+                                            <h2>{page.title}</h2>
+                                        </header>
+                                    }
+                                    {page.type === DeviationFormPageType.Validation &&
+                                        <ValidationPage
+                                            currentPageNumber={state.currentPageNumber}
+                                            previousPageNumber={prevPageRef.current}
+                                            renderConditions={page.renderConditions}
+                                            state={state}
+                                            setPagenumber={(number) => setState({ ...state, currentPageNumber: number })}
+                                            toFormSelection={toFormSelection}
+                                        />
+                                    }
+                                    {page.type === DeviationFormPageType.Input &&
+                                        page.fields?.map(field => renderField(field))
+                                    }
+                                    {page.type === DeviationFormPageType.Info &&
+                                        renderContent(page.content, page.format, page.confirmation, page.messages)
+                                    }
+                                    {page.type === DeviationFormPageType.Summary &&
+                                        renderSummary(state.values)
+                                    }
+                                    {renderMessages(page.messages?.filter(m => m.position === MessagePosition.Bottom))}
+                                    <div className={styles.actions}>
+                                        {page.actions?.map(action => renderAction(action))}
+                                    </div>
+                                </>
+                            }
+                        </div>
+                    )
+                })}
         </div>
     );
 };

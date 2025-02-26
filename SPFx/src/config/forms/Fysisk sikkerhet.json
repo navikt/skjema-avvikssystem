@@ -5,7 +5,7 @@
     "description": {
         "type": "html",
         "categories": {
-            "page": 1,
+            "page": 2,
             "field": "category"
         },
         "contentTemplate": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> {categories} </ul> </div>"
@@ -13,6 +13,89 @@
     "pages": [
         {
             "key": 1,
+            "type": "Input",
+            "fields": [
+                {
+                    "key": "anonymous",
+                    "label": "Anonym innmelding",
+                    "type": "Checkbox",
+                    "defaultValue": "false",
+                    "description": "Obs! Ved anonym innmelding vil du ikke få tilsendt saksnummer og ikke ha mulighet til innsyn i avviket.",
+                    "infoText": "Ved anonym innmelding vil det ikke bli knyttet noen opplysninger om deg til avviksmeldingen. Det vil ikke være mulig for saksbehandler å etterspørre mer informasjon, og det er derfor viktig at informasjonen som fylles inn er så utfyllende som mulig. Når du velger å være anonym, må du i feltet \"Velg enhet\" velge den Nav-enheten som du vil skal motta og følge opp avviksmeldingen."
+                },
+                {
+                    "key": "unit",
+                    "label": "Hvilken enhet gjelder hendelsen?",
+                    "type": "ChoiceGroup",
+                    "options": [
+                        "Min enhet",
+                        "Annen enhet"
+                    ],
+                    "required": "true",
+                    "defaultValue": "Min enhet",
+                    "showInSummary": "false",
+                    "dynamicValue": {
+                        "variable": "state.values.anonymous",
+                        "condition": "{variable} === true",
+                        "value": "Annen enhet"
+                    },
+                    "disabled": "state.values.anonymous === true",
+                    "additionalData": [
+                        {
+                            "key": "Min enhet",
+                            "value": "context.unit",
+                            "fallback": "Min enhet"
+                        }
+                    ]
+                },
+                {
+                    "key": "unitOther",
+                    "label": "Velg enhet",
+                    "type": "Choice",
+                    "searchable": true,
+                    "options": "context.orgUnits",
+                    "optionType": {
+                        "type": "object",
+                        "key": "id",
+                        "text": "name"
+                    },
+                    "hidden": "!(state.values.unit === 'Annen enhet')",
+                    "required": "state.values.unit === 'Annen enhet'"
+                }
+            ],
+            "actions": [
+                {
+                    "key": "previous",
+                    "label": "Tilbake",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronLeft"
+                    },
+                    "invoke": {
+                        "functionName": "ToFormSelection"
+                    }
+                },
+                {
+                    "key": "next",
+                    "label": "Neste",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronRight"
+                    },
+                    "iconPosition": "right",
+                    "disabled": "!state.valid",
+                    "invoke": {
+                        "functionName": "NextPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "key": 2,
             "type": "Input",
             "title": "Velg kategori",
             "fields": [
@@ -46,7 +129,11 @@
                         "iconName": "ChevronLeft"
                     },
                     "invoke": {
-                        "functionName": "ToFormSelection"
+                        "functionName": "PreviousPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
                     }
                 },
                 {
@@ -70,7 +157,7 @@
             ]
         },
         {
-            "key": 2,
+            "key": 3,
             "type": "Input",
             "title": "Velg underkategori",
             "fields": [
@@ -120,56 +207,9 @@
             ]
         },
         {
-            "key": 3,
+            "key": 4,
             "type": "Input",
             "fields": [
-                {
-                    "key": "anonymous",
-                    "label": "Anonym innmelding",
-                    "type": "Checkbox",
-                    "defaultValue": "false",
-                    "description": "Obs! Ved anonym innmelding vil du ikke få tilsendt saksnummer og ikke ha mulighet til innsyn i avviket.",
-                    "infoText": "Ved anonym innmelding vil det ikke bli knyttet noen opplysninger om deg til avviksmeldingen. Det vil ikke være mulig for saksbehandler å etterspørre mer informasjon, og det er derfor viktig at informasjonen som fylles inn er så utfyllende som mulig. Når du velger å være anonym, må du i feltet \"Velg enhet\" velge den Nav-enheten som du vil skal motta og følge opp avviksmeldingen."
-                },
-                {
-                    "key": "unit",
-                    "label": "Hvilken enhet gjelder hendelsen?",
-                    "type": "ChoiceGroup",
-                    "options": [
-                        "Min enhet",
-                        "Annen enhet"
-                    ],
-                    "required": "true",
-                    "defaultValue": "Min enhet",
-                    "showInSummary": "false",
-                    "dynamicValue": {
-                        "variable": "state.values.anonymous",
-                        "condition": "{variable} === true",
-                        "value": "Annen enhet"
-                    },
-                    "disabled": "state.values.anonymous === true",
-                    "additionalData": [
-                        {
-                            "key": "Min enhet",
-                            "value": "context.unit",
-                            "fallback": "Min enhet"
-                        }
-                    ]
-                },
-                {
-                    "key": "unitOther",
-                    "label": "Velg enhet",
-                    "type": "Choice",
-                    "searchable": true,
-                    "options": "context.orgUnits",
-                    "optionType": {
-                        "type": "object",
-                        "key": "id",
-                        "text": "name"
-                    },
-                    "hidden": "!(state.values.unit === 'Annen enhet')",
-                    "required": "state.values.unit === 'Annen enhet'"
-                },
                 {
                     "key": "timeOfIncident",
                     "label": "Når skjedde hendelsen?",
@@ -272,7 +312,7 @@
             ]
         },
         {
-            "key": 4,
+            "key": 5,
             "title": "Verifiser opplysningene som er registrert",
             "type": "Summary",
             "values": "state.values",

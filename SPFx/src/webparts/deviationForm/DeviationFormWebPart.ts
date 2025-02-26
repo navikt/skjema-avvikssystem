@@ -13,9 +13,9 @@ import * as strings from 'DeviationFormWebPartStrings';
 import App from './components/App';
 import config from '../../config/config';
 import { DeviationFormContext, IDeviationFormContext } from './DeviationFormContext';
-import { IAppConfig, IOrgUnit, IOrgUnitOption } from './types';
+import { IAppConfig, IOrgUnitOption } from './types';
 import { AadHttpClient } from '@microsoft/sp-http';
-import { spfi, SPFx } from '@pnp/sp';
+import { SPFI, spfi, SPFx } from '@pnp/sp';
 import "@pnp/sp/webs";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
@@ -30,16 +30,20 @@ export interface IDeviationFormWebPartProps {
 export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviationFormWebPartProps> {
   private organization: string;
   private unit: string;
+  private unitDataAgreement: boolean;
   private reporterEmail: string;
   private reporterNAVIdentId: string;
   private orgUnits: IOrgUnitOption[];
+  private spClient: SPFI;
 
   public render(): void {
     const value: IDeviationFormContext = {
       config: config as IAppConfig,
+      sp: this.spClient,
       environment: this.properties.environment,
       organization: this.organization,
       unit: this.unit,
+      unitDataAgreement: this.unitDataAgreement,
       orgUnits: this.orgUnits,
       reporterEmail: this.reporterEmail,
       reporterNAVIdentId: this.reporterNAVIdentId,
@@ -59,9 +63,9 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
 
   protected async onInit(): Promise<void> {
     await super.onInit();
-    const sp = spfi().using(SPFx(this.context));
+    this.spClient = spfi().using(SPFx(this.context));
 
-    const units = await sp.web.lists.getByTitle('Enheter').items.select('NOMId', 'Title').getAll();
+    const units = await this.spClient.web.lists.getByTitle('Enheter').items.select('NOMId', 'Title', 'Avtale').getAll();
 
     /*     const body = `{
                             "query": "query { orgEnheter(where: {nomNivaa: ARBEIDSOMRAADE}){ orgEnhet{ id navn nomNivaa gyldigFom gyldigTom organiseringer(retning: under){ orgEnhet{ navn nomNivaa orgEnhetsType gyldigFom gyldigTom } } } } }"
@@ -99,8 +103,9 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
         const unitOptions: IOrgUnitOption[] = uniq(filteredUnits.map(unit => ({ id: unit.orgEnhet.id, name: unit.orgEnhet.navn })).concat(subUnits.map(unit => ({ id: unit.orgEnhet.id, name: unit.orgEnhet.navn })).concat(parentUnits.map(unit => ({ id: unit.orgEnhet.id, name: unit.orgEnhet.navn })))));
      */
 
+
     const client: AadHttpClient = await this.context.aadHttpClientFactory.getClient('https://graph.microsoft.com');
-    const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName,department,mail,onPremisesSamAccountName', AadHttpClient.configurations.v1);
+    const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName,department,mail,onPremisesSamAccountName,streetAddress', AadHttpClient.configurations.v1);
     const user = await res.json();
     switch (user.companyName) {
       case 'NAV Kommunal':
@@ -113,29 +118,31 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
         this.organization = 'External';
         break;
       default:
-        this.organization = 'State';
+        // DEBUG
+        //this.organization = 'Municipal';
         break;
     }
-
-    this.orgUnits = units.map(unit => ({ id: unit.NOMId, name: unit.Title })).sort((a, b) => a.name > b.name ? 1 : -1); //unitOptions.sort();
+    const [unitAgreement] = await this.spClient.web.lists.getByTitle('Databehandleravtaler').items.filter(`Title eq '${user.streetAddress}'`)();
+    this.unitDataAgreement = !!unitAgreement;
+    this.orgUnits = units.map(unit => ({ id: unit.NOMId, name: unit.Title, agreement: unit.Avtale })).sort((a, b) => a.name > b.name ? 1 : -1); //unitOptions.sort();
     this.unit = user.department;
     this.reporterEmail = user.mail;
     this.reporterNAVIdentId = user.onPremisesSamAccountName;
   }
 
-  private filterUnits(rawUnits: IOrgUnit[]) {
-    return rawUnits.filter(unit => ((new Date(unit.orgEnhet.gyldigTom) > new Date() || !unit.orgEnhet.gyldigTom) && unit.orgEnhet.nomNivaa === "ARBEIDSOMRAADE"
-      && unit.orgEnhet.organiseringer.length > 0));
-  }
-
-  private extractOrgUnits(unit: IOrgUnit, result: IOrgUnit[]): void {
-    if (unit.orgEnhet && unit.orgEnhet.organiseringer) {
-      for (const org of unit.orgEnhet.organiseringer) {
-        result.push(org);
-        this.extractOrgUnits(org, result);
-      }
+  /*   private filterUnits(rawUnits: IOrgUnit[]) {
+      return rawUnits.filter(unit => ((new Date(unit.orgEnhet.gyldigTom) > new Date() || !unit.orgEnhet.gyldigTom) && unit.orgEnhet.nomNivaa === "ARBEIDSOMRAADE"
+        && unit.orgEnhet.organiseringer.length > 0));
     }
-  }
+  
+    private extractOrgUnits(unit: IOrgUnit, result: IOrgUnit[]): void {
+      if (unit.orgEnhet && unit.orgEnhet.organiseringer) {
+        for (const org of unit.orgEnhet.organiseringer) {
+          result.push(org);
+          this.extractOrgUnits(org, result);
+        }
+      }
+    } */
 
   protected onDispose(): void {
     ReactDom.unmountComponentAtNode(this.domElement);
@@ -161,7 +168,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
                 }),
                 PropertyPaneDropdown('environment', {
                   label: strings.EnvironmentSettingLabel,
-                  options: [{key: 'Production', text: strings.EnvironmentProd}, {key: 'Test', text: strings.EnvironmentTest}],
+                  options: [{ key: 'Production', text: strings.EnvironmentProd }, { key: 'Test', text: strings.EnvironmentTest }],
                 }),
                 PropertyPaneLabel('', {
                   text: `v${this.manifest.version}`

@@ -1,9 +1,10 @@
-import { IDatePickerStrings, IDropdownOption, IIconProps } from "office-ui-fabric-react";
+import { IDatePickerStrings, IDropdownOption, IIconProps } from '@fluentui/react'
 
 export enum DeviationFormPageType {
     Input = "Input",
     Info = "Info",
-    Summary = "Summary"
+    Summary = "Summary",
+    Validation = "Validation"
 }
 
 export enum DeviationActionType {
@@ -116,14 +117,16 @@ export interface IDeviationFormMessage {
 
 export interface IDeviationFormPage {
     key: number;
-    title: string;
     type: DeviationFormPageType;
-    fields: IDeviationFormField[];
-    content: string;
-    format: string[];
+    title?: string;
+    fields?: IDeviationFormField[];
+    content?: string;
+    format?: string[];
+    disabled?: string;
+    renderConditions?: IRenderCondition[];
     confirmation?: IDeviationPageConfirmation;
     messages?: IDeviationFormMessage[];
-    actions: IDeviationFormAction[];
+    actions?: IDeviationFormAction[];
 }
 
 export interface ICalloutCategoryDefinition {
@@ -177,6 +180,7 @@ export interface IDeviationFormState {
     submitResult: ISubmitResult;
     skipPage?: ISkipPage;
     filteredOptions: IFilteredOptions;
+    agreement?: boolean;
 }
 
 export interface IGetCaseParameters {
@@ -195,10 +199,10 @@ export interface IOrgUnit {
     orgEnhet: {
         id?: string;
         navn: string;
-        nomNivaa: string | null;
-        orgEnhetsType?: string | null;
+        nomNivaa: string | undefined;
+        orgEnhetsType?: string | undefined;
         gyldigFom: string;
-        gyldigTom: string | null;
+        gyldigTom: string | undefined;
         organiseringer?: IOrgUnit[];
     };
 }
@@ -206,4 +210,11 @@ export interface IOrgUnit {
 export interface IOrgUnitOption {
     id: string;
     name: string;
+    agreement?: boolean;
+}
+
+export interface IRenderCondition {
+    condition: string;
+    message: string;
+    type: string;
 }

@@ -8,7 +8,7 @@ import {
     ISelectableOption,
     SearchBox,
     SelectableOptionMenuItemType
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 
 export interface ISearchableDropdownProps extends IDropdownProps {
     onSearchValueChanged(searchValue: string): void;
@@ -17,7 +17,7 @@ export interface ISearchableDropdownProps extends IDropdownProps {
 
 
 
-const SearchableDropdown = (props: ISearchableDropdownProps) => {
+const SearchableDropdown: React.FC<ISearchableDropdownProps> = (props: ISearchableDropdownProps) => {
     const getOptions = (): IDropdownOption[] => {
         const result: IDropdownOption[] = [];
 

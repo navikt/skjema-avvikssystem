@@ -204,7 +204,14 @@ define([], function () {
     "New": "Ny",
     "In progress": "Under behandling",
     "Actions initiated": "Tiltak påbegynt",
-    "Closed": "Lukket"
+    "Closed": "Lukket",
+    "User with protected address is involved": "Adresse beskyttet strengt fortrolig og/eller adresse beskyttet fortrolig berørt",
+    "Personal information is publicly available": "Personopplysninger er/har blitt offentlig tilgjengelig",
+    "Loss of unencrypted equipment": "Tap av ukryptert utstyr",
+    "Lookup without official need": "Oppslag uten tjenstlig behov",
+    "Medical certificate is lost/involved in incident": "Legeerklæring på avveie",
+    "Number of affected people is more than five": "Antall berørte er fem eller mer",
+    "None of these": "Ingen av disse"
   }
 });
 

@@ -48,7 +48,7 @@
     "description": {
         "type": "html",
         "categories": {
-            "page": 2,
+            "page": 4,
             "field": "category"
         },
         "contentTemplate": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> {categories} </ul> </div>"
@@ -56,40 +56,22 @@
     "pages": [
         {
             "key": 1,
-            "type": "Info",
-            "content": "Du er registrert som <strong>{0}</strong> ansatt. Stemmer dette med din stilling?",
-            "format": [
-                "context.organization"
-            ],
-            "confirmation": {
-                "required": "true",
-                "field": {
-                    "key": "orgConfirmation",
-                    "type": "ChoiceGroup",
-                    "options": [
-                        "Ja",
-                        "Nei"
-                    ]
-                }
-            },
-            "messages": [
+            "type": "Validation",
+            "renderConditions": [
                 {
-                    "display": "state.values.orgConfirmation === 'Nei'",
-                    "type": "info",
-                    "position": "bottom",
-                    "content": "Vennligst kontakt din leder for å rette din registrerte stilling."
+                    "condition": "state.values.stateOrMunicipalitySector === 'Municipal' && !context.unitDataAgreement",
+                    "message": "Din enhet har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system.",
+                    "type": "error"
                 },
                 {
-                    "display": "state.values.stateOrMunicipalitySector === 'Municipal' && state.values.orgConfirmation === 'Ja'",
-                    "type": "info",
-                    "position": "bottom",
-                    "content": "For øyeblikket kan kun statlig ansatte rapportere HMS-avvik."
+                    "condition": "state.values.stateOrMunicipalitySector === 'External'",
+                    "message": "Du er registrert som ekstern og kan ikke registrere HMS-avvik. Ta kontakt med din kontaktperson i NAV.",
+                    "type": "error"
                 },
                 {
-                    "display": "state.values.stateOrMunicipalitySector === 'External' && state.values.orgConfirmation === 'Ja'",
-                    "type": "info",
-                    "position": "bottom",
-                    "content": "Du er registrert som ekstern og kan ikke registrere HMS-avvik. Ta kontakt med din kontaktperson i NAV."
+                    "condition": "!state.values.stateOrMunicipalitySector",
+                    "message": "Klarte ikke å hente nødvendig data fra din bruker.",
+                    "type": "error"
                 }
             ],
             "actions": [
@@ -103,6 +85,83 @@
                     "invoke": {
                         "functionName": "ToFormSelection"
                     }
+                }
+            ]
+        },
+        {
+            "key": 2,
+            "type": "Input",
+            "fields": [
+                {
+                    "key": "anonymous",
+                    "label": "Anonym innmelding",
+                    "type": "Checkbox",
+                    "defaultValue": "false",
+                    "description": "Obs! Ved anonym innmelding vil du ikke få tilsendt saksnummer og ikke ha mulighet til innsyn i avviket.",
+                    "infoText": "Ved anonym innmelding vil det ikke bli knyttet noen opplysninger om deg til avviksmeldingen. Det vil ikke være mulig for saksbehandler å etterspørre mer informasjon, og det er derfor viktig at informasjonen som fylles inn er så utfyllende som mulig. Når du velger å være anonym, må du i feltet \"Velg enhet\" velge den Nav-enheten som du vil skal motta og følge opp avviksmeldingen."
+                },
+                {
+                    "key": "unit",
+                    "label": "Hvilken enhet gjelder hendelsen?",
+                    "type": "ChoiceGroup",
+                    "options": [
+                        "Min enhet",
+                        "Annen enhet"
+                    ],
+                    "required": "true",
+                    "defaultValue": "Min enhet",
+                    "showInSummary": "false",
+                    "dynamicValue": {
+                        "variable": "state.values.anonymous",
+                        "condition": "{variable} === true",
+                        "value": "Annen enhet"
+                    },
+                    "disabled": "state.values.anonymous === true",
+                    "additionalData": [
+                        {
+                            "key": "Min enhet",
+                            "value": "context.unit",
+                            "fallback": "Min enhet"
+                        }
+                    ],
+                    "choiceInfoTexts": [
+                        {
+                            "key": "Min enhet",
+                            "dynamicKey": "context.unit",
+                            "text": "For HMS vil avviket bli håndtert av din personalleder"
+                        }
+                    ]
+                },
+                {
+                    "key": "unitOther",
+                    "label": "Velg enhet",
+                    "type": "Choice",
+                    "searchable": true,
+                    "options": "context.orgUnits",
+                    "optionType": {
+                        "type": "object",
+                        "key": "id",
+                        "text": "name"
+                    },
+                    "hidden": "!(state.values.unit === 'Annen enhet')",
+                    "required": "state.values.unit === 'Annen enhet'"
+                }
+            ],
+            "actions": [
+                {
+                    "key": "previous",
+                    "label": "Tilbake",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronLeft"
+                    },
+                    "invoke": {
+                        "functionName": "PreviousPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
                 },
                 {
                     "key": "next",
@@ -112,7 +171,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "(!state.values.stateOrMunicipalitySector || state.values.orgConfirmation !== 'Ja') || state.values.stateOrMunicipalitySector !== 'State'",
+                    "disabled": "!state.valid",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
@@ -124,7 +183,76 @@
             ]
         },
         {
-            "key": 2,
+            "key": 3,
+            "title": "Gjelder det en statlig eller kommunal tjeneste?",
+            "type": "Input",
+            "fields": [
+                {
+                    "key": "stateOrMunicipalityService",
+                    "type": "ChoiceGroup",
+                    "options": [
+                        "State",
+                        "Municipal",
+                        "Unsure"
+                    ],
+                    "required": "true",
+                    "choiceInfoTexts": [
+                        {
+                            "key": "State",
+                            "text": "Omfatter statlige arbeids- og velferdstjenester som arbeid, trygd, familie, pensjon, tiltak og hjelpemidler mfl."
+                        },
+                        {
+                            "key": "Municipal",
+                            "text": "Omfatter sosiale tjenester og andre kommunale tjenester i NAV-kontoret"
+                        }
+                    ]
+                }
+            ],
+            "messages": [
+                {
+                    "display": "state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement",
+                    "type": "error",
+                    "content": "Valgt enhet har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system.",
+                    "position": "bottom"
+                }
+            ],
+            "actions": [
+                {
+                    "key": "previous",
+                    "label": "Tilbake",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronLeft"
+                    },
+                    "invoke": {
+                        "functionName": "PreviousPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
+                },
+                {
+                    "key": "next",
+                    "label": "Neste",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronRight"
+                    },
+                    "iconPosition": "right",
+                    "disabled": "!state.values.stateOrMunicipalityService || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement)",
+                    "invoke": {
+                        "functionName": "NextPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "key": 4,
             "type": "Input",
             "title": "Velg kategori",
             "fields": [
@@ -202,7 +330,7 @@
             ]
         },
         {
-            "key": 3,
+            "key": 5,
             "type": "Input",
             "title": "Velg underkategori",
             "fields": [
@@ -326,63 +454,9 @@
             ]
         },
         {
-            "key": 4,
+            "key": 6,
             "type": "Input",
             "fields": [
-                {
-                    "key": "anonymous",
-                    "label": "Anonym innmelding",
-                    "type": "Checkbox",
-                    "defaultValue": "false",
-                    "description": "Obs! Ved anonym innmelding vil du ikke få tilsendt saksnummer og ikke ha mulighet til innsyn i avviket.",
-                    "infoText": "Ved anonym innmelding vil det ikke bli knyttet noen opplysninger om deg til avviksmeldingen. Det vil ikke være mulig for saksbehandler å etterspørre mer informasjon, og det er derfor viktig at informasjonen som fylles inn er så utfyllende som mulig. Når du velger å være anonym, må du i feltet \"Velg enhet\" velge den Nav-enheten som du vil skal motta og følge opp avviksmeldingen."
-                },
-                {
-                    "key": "unit",
-                    "label": "Hvilken enhet gjelder hendelsen?",
-                    "type": "ChoiceGroup",
-                    "options": [
-                        "Min enhet",
-                        "Annen enhet"
-                    ],
-                    "required": "true",
-                    "defaultValue": "Min enhet",
-                    "showInSummary": "false",
-                    "dynamicValue": {
-                        "variable": "state.values.anonymous",
-                        "condition": "{variable} === true",
-                        "value": "Annen enhet"
-                    },
-                    "disabled": "state.values.anonymous === true",
-                    "additionalData": [
-                        {
-                            "key": "Min enhet",
-                            "value": "context.unit",
-                            "fallback": "Min enhet"
-                        }
-                    ],
-                    "choiceInfoTexts": [
-                        {
-                            "key": "Min enhet",
-                            "dynamicKey": "context.unit",
-                            "text": "For HMS vil avviket bli håndtert av din personalleder"
-                        }
-                    ]
-                },
-                {
-                    "key": "unitOther",
-                    "label": "Velg enhet",
-                    "type": "Choice",
-                    "searchable": true,
-                    "options": "context.orgUnits",
-                    "optionType": {
-                        "type": "object",
-                        "key": "id",
-                        "text": "name"
-                    },
-                    "hidden": "!(state.values.unit === 'Annen enhet')",
-                    "required": "state.values.unit === 'Annen enhet'"
-                },
                 {
                     "key": "location",
                     "label": "Hvor skjedde hendelsen?",
@@ -514,7 +588,7 @@
             ]
         },
         {
-            "key": 5,
+            "key": 7,
             "title": "Verifiser opplysningene som er registrert",
             "type": "Summary",
             "values": "state.values",

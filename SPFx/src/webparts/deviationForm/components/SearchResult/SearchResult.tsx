@@ -1,4 +1,4 @@
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
+import { MessageBar, MessageBarType } from '@fluentui/react';
 import * as React from 'react';
 import strings from 'DeviationFormWebPartStrings';
 import styles from './SearchResult.module.scss';
@@ -8,7 +8,7 @@ export interface ISearchResultProps {
     result: any;
 }
 
-const renderItemField = (field: ResultField) => {
+const renderItemField = (field: ResultField): JSX.Element => {
     switch (field.Type) {
         case "date":
             field.Value = new Date(field.Value);
@@ -27,7 +27,7 @@ const renderItemField = (field: ResultField) => {
     }
 };
 
-const SearchResult = ({ result }: ISearchResultProps) => {
+const SearchResult: React.FC<ISearchResultProps> = ({ result }: ISearchResultProps) => {
     const fields = mapResultFields(result);
 
     return (

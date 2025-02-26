@@ -72,6 +72,33 @@
                     "content": {
                         "type": "string"
                     },
+                    "disabled": {
+                        "type": "string"
+                    },
+                    "renderConditions": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "condition": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "enum": ["error", "warning", "info"]
+                                }
+                            },
+                            "required": [
+                                "condition",
+                                "message",
+                                "type"
+                            ]
+                        }
+                    },
                     "format": {
                         "type": "array",
                         "additionalProperties": false,
@@ -124,7 +151,10 @@
                                 },
                                 "position": {
                                     "type": "string",
-                                    "enum": ["top", "bottom"]
+                                    "enum": [
+                                        "top",
+                                        "bottom"
+                                    ]
                                 }
                             },
                             "required": [
