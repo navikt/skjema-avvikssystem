@@ -179,8 +179,6 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
         return filteredOptions;
     }
 
-
-
     const renderField = (field: IDeviationFormField): JSX.Element => {
         let options: any[];
         if (!eval(field.hidden)) {
@@ -449,15 +447,19 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                 case 'TimeSpan':
                     return <TimeSpanField label={field.label} onChange={(value) => setState({ ...state, values: { ...state.values, [field.key]: value } })} />;
                 case 'Number':
-                    return (
-                        <TextField
-                            type='number'
-                            label={field.label}
-                            value={state.values[field.key]}
-                            required={eval(field.required)}
-                            onChange={(_, value) => setState({ ...state, values: { ...state.values, [field.key]: value } })}
-                        />
-                    );
+                    {
+                        const valid = field.valid !== undefined ? eval(field.valid): true;
+                        return (
+                            <TextField
+                                type='number'
+                                errorMessage={valid ? '' : field.errorMessage}
+                                label={field.label}
+                                value={state.values[field.key]}
+                                required={eval(field.required)}
+                                onChange={(_, value) => setState({ ...state, values: { ...state.values, [field.key]: value } })}
+                            />
+                        );
+                    }
                 case 'Checkbox':
                     {
                         const checkboxRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });

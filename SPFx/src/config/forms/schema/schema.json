@@ -199,6 +199,12 @@
                                 "placeholder": {
                                     "type": "string"
                                 },
+                                "valid": {
+                                    "type": "string"
+                                },
+                                "errorMessage": {
+                                    "type": "string"
+                                },
                                 "dynamicValue": {
                                     "type": "object",
                                     "additionalProperties": false,

@@ -1,7 +1,6 @@
 import HMS from './forms/HMS.json';
 import FysiskSikkerhet from './forms/Fysisk sikkerhet.json';
-import InformasjonsSikkerhet from './forms/Informasjonssikkerhet.json';
-import Personvern from './forms/personvern.json';
+import PersonvernOgInformasjonsSikkerhet from './forms/Personvern og informasjonssikkerhet.json';
 import SearchResult from './SearchResult.json';
 import { IDatePickerStrings } from '@fluentui/react';
 
@@ -15,4 +14,4 @@ const DatePickerStrings: IDatePickerStrings = {
     isRequiredErrorMessage: 'Dato er påkrevd',
 };
 
-export default {forms: [HMS, FysiskSikkerhet, InformasjonsSikkerhet, Personvern], searchResult: SearchResult, datePickerStrings: DatePickerStrings};
+export default {forms: [HMS, FysiskSikkerhet, PersonvernOgInformasjonsSikkerhet], searchResult: SearchResult, datePickerStrings: DatePickerStrings};
