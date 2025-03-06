@@ -88,6 +88,8 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
 
     const isFirstRender = useRef(true);
 
+    console.log(state);
+
     useEffect(() => {
         const types = fieldTypes;
         setState(prevState => {
@@ -128,9 +130,11 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
         }
         const [page] = form.pages.filter(p => p.key === state.currentPageNumber);
         if (page.type === DeviationFormPageType.Input) {
-            const valid = page.fields
-                .filter(f => eval(f.required))
-                .every(f => state.values[f.key] && (f.valid !== undefined ? eval(f.valid) : true));
+            const valid = page.fields.every(f => {
+                const isRequiredValid = eval(f.required) ? !!state.values[f.key] : true;
+                const isValueValid = state.values[f.key] !== undefined ? (f.valid !== undefined ? eval(f.valid) : true) : true;
+                return isRequiredValid && isValueValid;
+            });
 
             let updatedState = { ...state, valid };
 
@@ -448,7 +452,7 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                     return <TimeSpanField label={field.label} onChange={(value) => setState({ ...state, values: { ...state.values, [field.key]: value } })} />;
                 case 'Number':
                     {
-                        const valid = field.valid !== undefined ? eval(field.valid): true;
+                        const valid = field.valid !== undefined ? eval(field.valid) : true;
                         return (
                             <TextField
                                 type='number'

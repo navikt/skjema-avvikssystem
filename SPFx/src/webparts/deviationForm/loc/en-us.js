@@ -55,7 +55,7 @@ define([], function () {
     "Data management agreements": "Databehandleravtaler",
     "Transfer to third countries": "Overføring til tredjeland",
     "Storage/deletion": "Lagring/sletting",
-    "Lack of overview, assessments and documentation": "Manglende oversikter, vurderinger og dokumentasjon",
+    "Processing documentation, compliance, privacy impact assessment, risk and vulnerability analysis": "Behandlingskatalog, Etterlevelseskrav, PVK og ROS",
     "Usage of pictures, sound- and videorecording": "Bruk av bilder, lyd- og videoopptak",
     "Monitoring/control of employees": "Overvåking/kontroll av ansatte",
     "Birth number/biometric identifiers": "Fødselsnummer/biometriske kjennetegn",
