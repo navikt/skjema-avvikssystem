@@ -402,8 +402,8 @@
                     "key": "affectedPeopleCount",
                     "label": "Antall berørte:",
                     "type": "Number",
-                    "valid": "state.values.affectedPeopleCount > 0",
-                    "errorMessage": "Må være et tall større enn 0",
+                    "valid": "state.values.affectedPeopleCount >= 0",
+                    "errorMessage": "Antall berørte kan ikke være et negativt tall",
                     "hidden": "state.values.category !== 'Violation of personal data security' && state.values.category !== 'Violation of privacy requirements'",
                     "required": "state.values.category === 'Violation of personal data security'"
                 },

@@ -40,6 +40,7 @@ export default class ActionsHandler {
         if (!values.anonymous) fieldsToInclude = [...fieldsToInclude, 'reporterEmail', 'reporterNAVIdentId'];
         this._setState({ ...state, [stateVariable]: true });
         for (const key in values) {
+            if (values.form === 'Physical security') values.stateOrMunicipalityService = 'Unsure';
             if (!includes(fieldsToInclude, key) || key === 'personalInfoLost') {
                 delete values[key];
             } else if (key === 'category' && values[key] === 'Violation of privacy requirements') {

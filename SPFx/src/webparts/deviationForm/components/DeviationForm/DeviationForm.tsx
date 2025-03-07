@@ -66,7 +66,7 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
     const [state, setState] = useState<IDeviationFormState>({
         currentPageNumber: 1,
         values: {
-            stateOrMunicipalitySector: form.title === 'HSE' ? context.organization : null,
+            stateOrMunicipalitySector: context.organization,
             reporterEmail: context.reporterEmail,
             reporterNAVIdentId: context.reporterNAVIdentId,
             form: form.title
@@ -87,8 +87,6 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
     const minutes = range(0, 60).map(key => ({ key, text: `${padStart(key.toString(), 2, '0')}` }));
 
     const isFirstRender = useRef(true);
-
-    console.log(state);
 
     useEffect(() => {
         const types = fieldTypes;
@@ -452,7 +450,7 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                     return <TimeSpanField label={field.label} onChange={(value) => setState({ ...state, values: { ...state.values, [field.key]: value } })} />;
                 case 'Number':
                     {
-                        const valid = field.valid !== undefined ? eval(field.valid) : true;
+                        const valid = state.values[field.key] && field.valid !== undefined ? eval(field.valid) : true;
                         return (
                             <TextField
                                 type='number'
