@@ -208,9 +208,9 @@
                     "type": "ChoiceGroup",
                     "options": [
                         "Violation of personal data security",
+                        "Violation of privacy requirements",
                         "Violation of policies",
-                        "Other unwanted incidents",
-                        "Violation of privacy requirements"
+                        "Other unwanted incidents"
                     ],
                     "choiceInfoTexts": [
                         {
