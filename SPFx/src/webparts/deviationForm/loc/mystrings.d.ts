@@ -5,6 +5,12 @@ declare interface IDeviationFormWebPartStrings {
   EnvironmentSettingLabel: string;
   EnvironmentProd: string;
   EnvironmentTest: string;
+  On: string;
+  Off: string;
+  DebugModeToggleLabel: string;
+  DebugNAVIdentSettingLabel: string;
+  DebugOrganizationSettingLabel: string;
+  DebugUnitNumberSettingLabel: string;
   SelectFormText: string;
   SummaryConfirmationPersonaldata: string
   SummaryConfirmation: string;

@@ -5,7 +5,8 @@ import {
   IPropertyPaneConfiguration,
   PropertyPaneDropdown,
   PropertyPaneLabel,
-  PropertyPaneTextField
+  PropertyPaneTextField,
+  PropertyPaneToggle
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 
@@ -25,6 +26,10 @@ export interface IDeviationFormWebPartProps {
   webpartTitle: string;
   functionUrl: string;
   environment: string;
+  debugMode: boolean;
+  debugNAVIdent: string;
+  debugOrganization: string;
+  debugUnitNumber: string;
 }
 
 export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviationFormWebPartProps> {
@@ -107,27 +112,34 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
     const client: AadHttpClient = await this.context.aadHttpClientFactory.getClient('https://graph.microsoft.com');
     const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName,department,mail,onPremisesSamAccountName,streetAddress', AadHttpClient.configurations.v1);
     const user = await res.json();
-    switch (user.companyName) {
-      case 'NAV Kommunal':
-        this.organization = 'Municipal';
-        break;
-      case 'NAV Statlig':
-        this.organization = 'State';
-        break;
-      case 'Ikke NAV':
-        this.organization = 'External';
-        break;
-      default:
-        // DEBUG
-        //this.organization = 'Municipal';
-        break;
+
+    let unitNumber = user.streetAddress;
+    if (this.properties.environment === 'Test' && this.properties.debugMode) {
+      unitNumber = this.properties.debugUnitNumber;
+      this.organization = this.properties.debugOrganization;
+      this.reporterNAVIdentId = this.properties.debugNAVIdent;
+    } else {
+      this.reporterNAVIdentId = user.onPremisesSamAccountName;
+      switch (user.companyName) {
+        case 'NAV Kommunal':
+          this.organization = 'Municipal';
+          break;
+        case 'NAV Statlig':
+          this.organization = 'State';
+          break;
+        case 'Ikke NAV':
+          this.organization = 'External';
+          break;
+        default:
+          break;
+      }
     }
-    const [unitAgreement] = await this.spClient.web.lists.getByTitle('Databehandleravtaler').items.filter(`Title eq '${user.streetAddress}'`)();
+
+    const [unitAgreement] = await this.spClient.web.lists.getByTitle('Databehandleravtaler').items.filter(`Title eq '${unitNumber}'`)();
     this.unitDataAgreement = !!unitAgreement;
     this.orgUnits = units.map(unit => ({ id: unit.NOMId, name: unit.Title, agreement: unit.Avtale })).sort((a, b) => a.name > b.name ? 1 : -1); //unitOptions.sort();
     this.unit = user.department;
     this.reporterEmail = user.mail;
-    this.reporterNAVIdentId = user.onPremisesSamAccountName;
   }
 
   /*   private filterUnits(rawUnits: IOrgUnit[]) {
@@ -153,6 +165,33 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    let debugModeToggle: any = [];
+    let debugProperties: any = [];
+    console.log(this.properties.environment);
+    if (this.properties.environment === 'Test') {
+      debugModeToggle = [PropertyPaneToggle('debugMode', {
+        label: strings.DebugModeToggleLabel,
+        checked: this.properties.debugMode,
+        onText: strings.On,
+        offText: strings.Off,
+      })]
+    }
+
+    if (this.properties.environment === 'Test' && this.properties.debugMode) {
+      debugProperties = [
+        PropertyPaneTextField('debugNAVIdent', {
+          label: strings.DebugNAVIdentSettingLabel
+        }),
+        PropertyPaneDropdown('debugOrganization', {
+          label: strings.DebugOrganizationSettingLabel,
+          options: [{ key: 'State', text: 'Statlig' }, { key: 'Municipal', text: 'Kommunal' }],
+        }),
+        PropertyPaneTextField('debugUnitNumber', {
+          label: strings.DebugUnitNumberSettingLabel
+        })
+      ]
+    }
+
     return {
       pages: [
         {
@@ -169,7 +208,10 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
                 PropertyPaneDropdown('environment', {
                   label: strings.EnvironmentSettingLabel,
                   options: [{ key: 'Production', text: strings.EnvironmentProd }, { key: 'Test', text: strings.EnvironmentTest }],
+                  selectedKey: this.properties.environment,
                 }),
+                ...debugModeToggle,
+                ...debugProperties,
                 PropertyPaneLabel('', {
                   text: `v${this.manifest.version}`
                 })
