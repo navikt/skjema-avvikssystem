@@ -69,7 +69,8 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
             stateOrMunicipalitySector: context.organization,
             reporterEmail: context.reporterEmail,
             reporterNAVIdentId: context.reporterNAVIdentId,
-            form: form.title
+            form: form.title,
+            selectedMunicipality: context.municipalityOrgNumber,
         },
         filteredOptions: {},
         valid: false,

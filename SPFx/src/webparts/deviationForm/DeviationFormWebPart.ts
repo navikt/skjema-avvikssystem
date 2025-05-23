@@ -10,6 +10,8 @@ import {
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 
+import { IDropdownOption } from '@fluentui/react';
+
 import * as strings from 'DeviationFormWebPartStrings';
 import App from './components/App';
 import config from '../../config/config';
@@ -40,6 +42,8 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
   private reporterNAVIdentId: string;
   private orgUnits: IOrgUnitOption[];
   private spClient: SPFI;
+  private agreementOptions: IDropdownOption[] = [];
+  private municipalityOrgNumber: string;
 
   public render(): void {
     const value: IDeviationFormContext = {
@@ -52,7 +56,9 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
       orgUnits: this.orgUnits,
       reporterEmail: this.reporterEmail,
       reporterNAVIdentId: this.reporterNAVIdentId,
-      functionUrl: this.properties.functionUrl
+      functionUrl: this.properties.functionUrl,
+      agreementOptions: this.agreementOptions,
+      municipalityOrgNumber: this.municipalityOrgNumber,
     };
 
     const element: React.ReactElement<{}> = (
@@ -135,8 +141,20 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
       }
     }
 
-    const [unitAgreement] = await this.spClient.web.lists.getByTitle('Databehandleravtaler').items.filter(`Title eq '${unitNumber}'`)();
-    this.unitDataAgreement = !!unitAgreement;
+    const agreements = await this.spClient.web.lists.getByTitle('Databehandleravtaler').select('Title,Kommunenavn,Organisasjonsnummer').items.filter(`Title eq '${unitNumber}'`)();
+
+    this.unitDataAgreement = false;
+    if (agreements.length >= 1) {
+      this.unitDataAgreement = true;
+      if (agreements.length > 1) {
+        this.agreementOptions = agreements.map(agreement => ({
+          key: agreement.Organisasjonsnummer,
+          text: agreement.Kommunenavn,
+        }));
+      } else if (agreements.length === 1) {
+        this.municipalityOrgNumber = agreements[0].Organisasjonsnummer;
+      }
+    }
     this.orgUnits = units.map(unit => ({ id: unit.NOMId, name: unit.Title, agreement: unit.Avtale })).sort((a, b) => a.name > b.name ? 1 : -1); //unitOptions.sort();
     this.unit = user.department;
     this.reporterEmail = user.mail;

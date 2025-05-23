@@ -51,7 +51,6 @@ export default class ActionsHandler {
                 }
             }
         }
-
         const body = JSON.stringify(values);
         const response = await fetch(`${functionUrl}&mode=post&environment=${environment}`, {
             method: 'POST',

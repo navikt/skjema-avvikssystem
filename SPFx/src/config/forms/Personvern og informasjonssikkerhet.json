@@ -147,6 +147,20 @@
                     },
                     "hidden": "!(state.values.unit === 'Annen enhet')",
                     "required": "state.values.unit === 'Annen enhet'"
+                },
+                {
+                    "key": "selectedMunicipality",
+                    "label": "Hvilken kommune gjelder avviket?",
+                    "type": "Choice",
+                    "options": "context.agreementOptions",
+                    "optionType": {
+                        "type": "object",
+                        "key": "key",
+                        "text": "text"
+                    },
+                    "required": "state.values.stateOrMunicipalityService === 'Municipal' && context.agreementOptions.length > 0",
+                    "hidden": "!(state.values.stateOrMunicipalityService === 'Municipal') || context.agreementOptions.length === 0",
+                    "infoText": "Vennligst velg en kommune fra listen."
                 }
             ],
             "messages": [
