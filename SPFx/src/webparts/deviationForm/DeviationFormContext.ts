@@ -15,6 +15,7 @@ export interface IDeviationFormContext {
     functionUrl: string;
     orgUnits: IOrgUnitOption[];
     agreementOptions: IDropdownOption[];
+    unitNumber: string;
     municipalityOrgNumber?: string;
 }
 

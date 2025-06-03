@@ -42,63 +42,6 @@
     "pages": [
         {
             "key": 1,
-            "title": "Gjelder det en statlig eller kommunal tjeneste?",
-            "type": "Input",
-            "fields": [
-                {
-                    "key": "stateOrMunicipalityService",
-                    "type": "ChoiceGroup",
-                    "options": [
-                        "State",
-                        "Municipal",
-                        "Unsure"
-                    ],
-                    "required": "true",
-                    "choiceInfoTexts": [
-                        {
-                            "key": "State",
-                            "text": "Omfatter statlige arbeids- og velferdstjenester som arbeid, trygd, familie, pensjon, tiltak og hjelpemidler mfl."
-                        },
-                        {
-                            "key": "Municipal",
-                            "text": "Omfatter sosiale tjenester og andre kommunale tjenester i NAV-kontoret"
-                        }
-                    ]
-                }
-            ],
-            "actions": [
-                {
-                    "key": "previous",
-                    "label": "Tilbake",
-                    "type": "default",
-                    "iconProps": {
-                        "iconName": "ChevronLeft"
-                    },
-                    "invoke": {
-                        "functionName": "ToFormSelection"
-                    }
-                },
-                {
-                    "key": "next",
-                    "label": "Neste",
-                    "type": "default",
-                    "iconProps": {
-                        "iconName": "ChevronRight"
-                    },
-                    "iconPosition": "right",
-                    "disabled": "!state.values.stateOrMunicipalityService",
-                    "invoke": {
-                        "functionName": "NextPage",
-                        "params": {
-                            "state_pageNumber": "currentPageNumber",
-                            "setstate": "currentPageNumber"
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "key": 2,
             "type": "Input",
             "fields": [
                 {
@@ -132,6 +75,18 @@
                             "value": "context.unit",
                             "fallback": "Min enhet"
                         }
+                    ],
+                    "optionOverrides": [
+                        {
+                            "option": "Min enhet",
+                            "stateVariable": "selectedMunicipality",
+                            "value": "context.municipalityOrgNumber"
+                        },
+                        {
+                            "option": "Annen enhet",
+                            "stateVariable": "selectedMunicipality",
+                            "value": null
+                        }
                     ]
                 },
                 {
@@ -147,20 +102,6 @@
                     },
                     "hidden": "!(state.values.unit === 'Annen enhet')",
                     "required": "state.values.unit === 'Annen enhet'"
-                },
-                {
-                    "key": "selectedMunicipality",
-                    "label": "Hvilken kommune gjelder avviket?",
-                    "type": "Choice",
-                    "options": "context.agreementOptions",
-                    "optionType": {
-                        "type": "object",
-                        "key": "key",
-                        "text": "text"
-                    },
-                    "required": "state.values.stateOrMunicipalityService === 'Municipal' && context.agreementOptions.length > 0",
-                    "hidden": "!(state.values.stateOrMunicipalityService === 'Municipal') || context.agreementOptions.length === 0",
-                    "infoText": "Vennligst velg en kommune fra listen."
                 }
             ],
             "messages": [
@@ -201,7 +142,79 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "(state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && !state.agreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement) || !state.valid",
+                    "disabled": "!state.valid",
+                    "invoke": {
+                        "functionName": "NextPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "key": 2,
+            "title": "Gjelder det en statlig eller kommunal tjeneste?",
+            "type": "Input",
+            "fields": [
+                {
+                    "key": "stateOrMunicipalityService",
+                    "type": "ChoiceGroup",
+                    "options": [
+                        "State",
+                        "Municipal",
+                        "Unsure"
+                    ],
+                    "required": "true",
+                    "choiceInfoTexts": [
+                        {
+                            "key": "State",
+                            "text": "Omfatter statlige arbeids- og velferdstjenester som arbeid, trygd, familie, pensjon, tiltak og hjelpemidler mfl."
+                        },
+                        {
+                            "key": "Municipal",
+                            "text": "Omfatter sosiale tjenester og andre kommunale tjenester i NAV-kontoret"
+                        }
+                    ]
+                },
+                {
+                    "key": "selectedMunicipality",
+                    "label": "Hvilken kommune gjelder avviket?",
+                    "type": "Choice",
+                    "options": "state.values.unit === 'Min enhet' ? context.agreementOptions.filter(o => o.unit === context.unitNumber) : context.agreementOptions.filter(o => o.unit === state.otherUnitNumber)",
+                    "optionType": {
+                        "type": "object",
+                        "key": "key",
+                        "text": "text"
+                    },
+                    "required": "state.values.stateOrMunicipalityService === 'Municipal' && context.agreementOptions.length > 0",
+                    "hidden": "!(state.values.stateOrMunicipalityService === 'Municipal') || context.agreementOptions.length === 0",
+                    "disabled": "options.length === 1",
+                    "infoText": "Vennligst velg en kommune fra listen."
+                }
+            ],
+            "actions": [
+                {
+                    "key": "previous",
+                    "label": "Tilbake",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronLeft"
+                    },
+                    "invoke": {
+                        "functionName": "ToFormSelection"
+                    }
+                },
+                {
+                    "key": "next",
+                    "label": "Neste",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronRight"
+                    },
+                    "iconPosition": "right",
+                    "disabled": "!state.values.stateOrMunicipalityService || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && !state.agreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.agreement && context.agreementOptions.filter(o => o.unit === state.otherUnitNumber).length > 1 && !state.values.selectedMunicipality) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement) || !state.valid",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {

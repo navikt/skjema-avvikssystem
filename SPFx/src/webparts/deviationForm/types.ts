@@ -101,6 +101,13 @@ export interface IDeviationFormField {
     disabledOptions?: string[];
     additionalData?: IDeviationFieldAdditionalData[];
     infoText?: string;
+    optionOverrides?: IOptionOverride[];
+}
+
+export interface IOptionOverride {
+    option: string;
+    stateVariable: string;
+    value: any;
 }
 
 export interface IDeviationPageConfirmation {
@@ -181,6 +188,7 @@ export interface IDeviationFormState {
     skipPage?: ISkipPage;
     filteredOptions: IFilteredOptions;
     agreement?: boolean;
+    otherUnitNumber?: string;
 }
 
 export interface IGetCaseParameters {

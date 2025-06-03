@@ -77,7 +77,8 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
         summaryConfirmed: false,
         submitting: false,
         submitResult: null,
-        agreement: null
+        agreement: null,
+        otherUnitNumber: null
     });
     const getFunctionParams = useFunctionParams(state, context, form, setBubbleState);
     const [fieldTypes, setFieldTypes] = useState<Map<string, string>>(new Map<string, string>());
@@ -194,8 +195,9 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                 options = objects.map(o => ({
                                     key: o[field.optionType.key],
                                     text: strings[o[field.optionType.text]] || o[field.optionType.text],
-                                    data: o.agreement ? { agreement: o.agreement } : null
+                                    data: o.agreement || o.unit ? { agreement: o.agreement, unit: o.unit } : null
                                 }));
+                                console.log(options);
                             } else if (field.optionType?.type === 'string') {
                                 options = eval(field.options).map(o => ({ key: o, text: strings[o] || o }));
                             }
@@ -206,10 +208,12 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                 <SearchableDropdown
                                     label={field.label}
                                     required={eval(field.required)}
+                                    disabled={eval(field.disabled)}
                                     defaultSelectedKey={state.values[field.key]}
                                     options={state.filteredOptions[field.key] || options}
                                     onDismiss={() => setState({ ...state, filteredOptions: { ...state.filteredOptions, [field.key]: null } })}
                                     onChange={(_, option) => {
+                                        console.log(option);
                                         let selectedValues = [];
                                         if (multiSelect) {
                                             const vals = state.values[field.key] || [];
@@ -221,7 +225,8 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                             ...state,
                                             values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.key },
                                             filteredOptions: { ...state.filteredOptions, [field.key]: null },
-                                            agreement: option?.data?.agreement
+                                            agreement: option?.data?.agreement,
+                                            otherUnitNumber: option?.data?.unit || null
                                         });
                                     }}
                                     onSearchValueChanged={(searchValue) => {
@@ -241,6 +246,7 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                     selectedKeys={state.values[field.key]}
                                     selectedKey={state.values[field.key]}
                                     required={eval(field.required)}
+                                    disabled={eval(field.disabled)}
                                     options={options}
                                     multiSelect={multiSelect}
                                     onChange={(_, option) => {
@@ -355,7 +361,21 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                     disabled={eval(field.disabled)}
                                     options={options}
                                     onChange={(_, option) => {
-                                        setState({ ...state, values: { ...state.values, [field.key]: option.key } });
+                                        let newValues = { ...state.values, [field.key]: option.key };
+                                        if (field.optionOverrides) {
+                                            const override = field.optionOverrides.find(o => o.option === option.key);
+                                            if (override) {
+                                                let overrideValue = override.value;
+                                                if (typeof overrideValue === 'string' && (overrideValue.startsWith('context.') || overrideValue.startsWith('state.'))) {
+                                                    try {
+                                                        // eslint-disable-next-line no-eval
+                                                        overrideValue = eval(overrideValue);
+                                                    } catch { }
+                                                }
+                                                newValues[override.stateVariable] = overrideValue;
+                                            }
+                                        }
+                                        setState({ ...state, values: newValues });
                                     }}
                                 />
                             </div>
@@ -366,6 +386,7 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                         <TextField
                             label={field.label}
                             description={field.description}
+                            disabled={eval(field.disabled)}
                             styles={{ description: { fontSize: '14px' } }}
                             placeholder={field.placeholder}
                             maxLength={field.maxLength}

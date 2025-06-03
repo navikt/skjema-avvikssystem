@@ -308,6 +308,18 @@
                                 },
                                 "required": {
                                     "type": "string"
+                                },
+                                "optionOverrides": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "option": { "type": "string" },
+                                            "stateVariable": { "type": "string" },
+                                            "value": {}
+                                        },
+                                        "required": ["option", "stateVariable", "value"]
+                                    }
                                 }
                             },
                             "required": [

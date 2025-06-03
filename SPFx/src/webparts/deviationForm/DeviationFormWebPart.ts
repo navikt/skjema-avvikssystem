@@ -44,6 +44,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
   private spClient: SPFI;
   private agreementOptions: IDropdownOption[] = [];
   private municipalityOrgNumber: string;
+  private unitNumber: string;
 
   public render(): void {
     const value: IDeviationFormContext = {
@@ -59,6 +60,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
       functionUrl: this.properties.functionUrl,
       agreementOptions: this.agreementOptions,
       municipalityOrgNumber: this.municipalityOrgNumber,
+      unitNumber: this.unitNumber
     };
 
     const element: React.ReactElement<{}> = (
@@ -76,7 +78,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
     await super.onInit();
     this.spClient = spfi().using(SPFx(this.context));
 
-    const units = await this.spClient.web.lists.getByTitle('Enheter').items.select('NOMId', 'Title', 'Avtale').getAll();
+    const units = await this.spClient.web.lists.getByTitle('Enheter').items.select('NOMId', 'Title', 'Avtale', 'UnitNumber').getAll();
 
     /*     const body = `{
                             "query": "query { orgEnheter(where: {nomNivaa: ARBEIDSOMRAADE}){ orgEnhet{ id navn nomNivaa gyldigFom gyldigTom organiseringer(retning: under){ orgEnhet{ navn nomNivaa orgEnhetsType gyldigFom gyldigTom } } } } }"
@@ -119,9 +121,9 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
     const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName,department,mail,onPremisesSamAccountName,streetAddress', AadHttpClient.configurations.v1);
     const user = await res.json();
 
-    let unitNumber = user.streetAddress;
+    this.unitNumber = user.streetAddress;
     if (this.properties.environment === 'Test' && this.properties.debugMode) {
-      unitNumber = this.properties.debugUnitNumber;
+      this.unitNumber = this.properties.debugUnitNumber;
       this.organization = this.properties.debugOrganization;
       this.reporterNAVIdentId = this.properties.debugNAVIdent;
     } else {
@@ -141,21 +143,22 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
       }
     }
 
-    const agreements = await this.spClient.web.lists.getByTitle('Databehandleravtaler').select('Title,Kommunenavn,Organisasjonsnummer').items.filter(`Title eq '${unitNumber}'`)();
+    const agreements = await this.spClient.web.lists.getByTitle('Databehandleravtaler').select('Title,Kommunenavn,Organisasjonsnummer').items();
+    const [userUnitAgreement] = agreements.filter(agreement => agreement.Title === this.unitNumber);
 
     this.unitDataAgreement = false;
-    if (agreements.length >= 1) {
-      this.unitDataAgreement = true;
-      if (agreements.length > 1) {
-        this.agreementOptions = agreements.map(agreement => ({
-          key: agreement.Organisasjonsnummer,
-          text: agreement.Kommunenavn,
-        }));
-      } else if (agreements.length === 1) {
-        this.municipalityOrgNumber = agreements[0].Organisasjonsnummer;
+    if (agreements.length > 0) {
+      this.agreementOptions = agreements.map(agreement => ({
+        key: agreement.Organisasjonsnummer,
+        text: agreement.Kommunenavn,
+        unit: agreement.Title
+      }));
+      if (userUnitAgreement) {
+        this.unitDataAgreement = true;
+        this.municipalityOrgNumber = userUnitAgreement.Organisasjonsnummer;
       }
     }
-    this.orgUnits = units.map(unit => ({ id: unit.NOMId, name: unit.Title, agreement: unit.Avtale })).sort((a, b) => a.name > b.name ? 1 : -1); //unitOptions.sort();
+    this.orgUnits = units.map(unit => ({ id: unit.NOMId, name: unit.Title, agreement: unit.Avtale, unit: unit.UnitNumber })).sort((a, b) => a.name > b.name ? 1 : -1); //unitOptions.sort();
     this.unit = user.department;
     this.reporterEmail = user.mail;
   }
@@ -185,7 +188,6 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     let debugModeToggle: any = [];
     let debugProperties: any = [];
-    console.log(this.properties.environment);
     if (this.properties.environment === 'Test') {
       debugModeToggle = [PropertyPaneToggle('debugMode', {
         label: strings.DebugModeToggleLabel,
