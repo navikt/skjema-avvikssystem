@@ -197,7 +197,6 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                     text: strings[o[field.optionType.text]] || o[field.optionType.text],
                                     data: o.agreement || o.unit ? { agreement: o.agreement, unit: o.unit } : null
                                 }));
-                                console.log(options);
                             } else if (field.optionType?.type === 'string') {
                                 options = eval(field.options).map(o => ({ key: o, text: strings[o] || o }));
                             }
@@ -213,7 +212,6 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                     options={state.filteredOptions[field.key] || options}
                                     onDismiss={() => setState({ ...state, filteredOptions: { ...state.filteredOptions, [field.key]: null } })}
                                     onChange={(_, option) => {
-                                        console.log(option);
                                         let selectedValues = [];
                                         if (multiSelect) {
                                             const vals = state.values[field.key] || [];
@@ -361,16 +359,13 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                     disabled={eval(field.disabled)}
                                     options={options}
                                     onChange={(_, option) => {
-                                        let newValues = { ...state.values, [field.key]: option.key };
+                                        const newValues = { ...state.values, [field.key]: option.key };
                                         if (field.optionOverrides) {
                                             const override = field.optionOverrides.find(o => o.option === option.key);
                                             if (override) {
                                                 let overrideValue = override.value;
                                                 if (typeof overrideValue === 'string' && (overrideValue.startsWith('context.') || overrideValue.startsWith('state.'))) {
-                                                    try {
-                                                        // eslint-disable-next-line no-eval
-                                                        overrideValue = eval(overrideValue);
-                                                    } catch { }
+                                                    overrideValue = eval(overrideValue);
                                                 }
                                                 newValues[override.stateVariable] = overrideValue;
                                             }

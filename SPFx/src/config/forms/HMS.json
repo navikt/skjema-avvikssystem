@@ -130,6 +130,18 @@
                             "dynamicKey": "context.unit",
                             "text": "For HMS vil avviket bli håndtert av din personalleder"
                         }
+                    ],
+                    "optionOverrides": [
+                        {
+                            "option": "Min enhet",
+                            "stateVariable": "selectedMunicipality",
+                            "value": "context.municipalityOrgNumber"
+                        },
+                        {
+                            "option": "Annen enhet",
+                            "stateVariable": "selectedMunicipality",
+                            "value": null
+                        }
                     ]
                 },
                 {
@@ -206,6 +218,21 @@
                             "text": "Omfatter sosiale tjenester og andre kommunale tjenester i NAV-kontoret"
                         }
                     ]
+                },
+                {
+                    "key": "selectedMunicipality",
+                    "label": "Hvilken kommune gjelder avviket?",
+                    "type": "Choice",
+                    "options": "state.values.unit === 'Min enhet' ? context.agreementOptions.filter(o => o.unit === context.unitNumber) : context.agreementOptions.filter(o => o.unit === state.otherUnitNumber)",
+                    "optionType": {
+                        "type": "object",
+                        "key": "key",
+                        "text": "text"
+                    },
+                    "required": "state.values.stateOrMunicipalityService === 'Municipal' && context.agreementOptions.length > 0",
+                    "hidden": "(state.values.stateOrMunicipalitySector === 'State' && state.values.unit === 'Min enhet') || !(state.values.stateOrMunicipalityService === 'Municipal') || (state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement)",
+                    "disabled": "options.length === 1",
+                    "infoText": "Vennligst velg en kommune fra listen."
                 }
             ],
             "messages": [
@@ -240,7 +267,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.values.stateOrMunicipalityService || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement)",
+                    "disabled": "!state.values.stateOrMunicipalityService || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.agreement && context.agreementOptions.filter(o => o.unit === state.otherUnitNumber).length > 1 && !state.values.selectedMunicipality)",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {

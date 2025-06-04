@@ -104,20 +104,6 @@
                     "required": "state.values.unit === 'Annen enhet'"
                 }
             ],
-            "messages": [
-                {
-                    "display": "state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement",
-                    "type": "error",
-                    "content": "Din enhet har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system.",
-                    "position": "bottom"
-                },
-                {
-                    "display": "state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement",
-                    "type": "error",
-                    "content": "Valgt enhet har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system.",
-                    "position": "bottom"
-                }
-            ],
             "actions": [
                 {
                     "key": "previous",
@@ -127,11 +113,7 @@
                         "iconName": "ChevronLeft"
                     },
                     "invoke": {
-                        "functionName": "PreviousPage",
-                        "params": {
-                            "state_pageNumber": "currentPageNumber",
-                            "setstate": "currentPageNumber"
-                        }
+                        "functionName": "ToFormSelection"
                     }
                 },
                 {
@@ -189,9 +171,23 @@
                         "text": "text"
                     },
                     "required": "state.values.stateOrMunicipalityService === 'Municipal' && context.agreementOptions.length > 0",
-                    "hidden": "!(state.values.stateOrMunicipalityService === 'Municipal') || context.agreementOptions.length === 0",
+                    "hidden": "!(state.values.stateOrMunicipalityService === 'Municipal') || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement)",
                     "disabled": "options.length === 1",
                     "infoText": "Vennligst velg en kommune fra listen."
+                }
+            ],
+            "messages": [
+                {
+                    "display": "state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement",
+                    "type": "error",
+                    "content": "Din enhet har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system.",
+                    "position": "bottom"
+                },
+                {
+                    "display": "state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement",
+                    "type": "error",
+                    "content": "Valgt enhet har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system.",
+                    "position": "bottom"
                 }
             ],
             "actions": [
@@ -203,7 +199,11 @@
                         "iconName": "ChevronLeft"
                     },
                     "invoke": {
-                        "functionName": "ToFormSelection"
+                        "functionName": "PreviousPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
                     }
                 },
                 {

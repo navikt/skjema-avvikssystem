@@ -51,8 +51,7 @@ export default class ActionsHandler {
                 }
             }
         }
-        console.log(JSON.stringify(values, null, 2));
-/*         const body = JSON.stringify(values);
+        const body = JSON.stringify(values);
         const response = await fetch(`${functionUrl}&mode=post&environment=${environment}`, {
             method: 'POST',
             headers: {
@@ -61,6 +60,6 @@ export default class ActionsHandler {
             body,
         });
         const result = await response.text();
-        this._setState({ ...state, [stateVariable]: false, [resultVariable]: { status: response.status, text: result } }); */
+        this._setState({ ...state, [stateVariable]: false, [resultVariable]: { status: response.status, text: result } });
     }
 }
