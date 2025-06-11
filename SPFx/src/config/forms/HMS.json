@@ -223,14 +223,14 @@
                     "key": "selectedMunicipality",
                     "label": "Hvilken kommune gjelder avviket?",
                     "type": "Choice",
-                    "options": "state.values.unit === 'Min enhet' ? context.agreementOptions.filter(o => o.unit === context.unitNumber) : context.agreementOptions.filter(o => o.unit === state.otherUnitNumber)",
+                    "options": "state.values.unit !== 'Annen enhet' ? context.agreementOptions.filter(o => o.unit === context.unitNumber) : context.agreementOptions.filter(o => o.unit === state.otherUnitNumber)",
                     "optionType": {
                         "type": "object",
                         "key": "key",
                         "text": "text"
                     },
                     "required": "state.values.stateOrMunicipalityService === 'Municipal' && context.agreementOptions.length > 0",
-                    "hidden": "(state.values.stateOrMunicipalitySector === 'State' && state.values.unit === 'Min enhet') || !(state.values.stateOrMunicipalityService === 'Municipal') || (state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement)",
+                    "hidden": "(state.values.stateOrMunicipalitySector === 'State' && state.values.unit !== 'Annen enhet') || !(state.values.stateOrMunicipalityService === 'Municipal') || (state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement)",
                     "disabled": "options.length === 1",
                     "infoText": "Vennligst velg en kommune fra listen."
                 }
