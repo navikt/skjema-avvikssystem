@@ -59,11 +59,6 @@
             "type": "Validation",
             "renderConditions": [
                 {
-                    "condition": "state.values.stateOrMunicipalitySector === 'Municipal' && !context.unitDataAgreement",
-                    "message": "Din enhet har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system.",
-                    "type": "error"
-                },
-                {
                     "condition": "state.values.stateOrMunicipalitySector === 'External'",
                     "message": "Du er registrert som ekstern og kan ikke registrere HMS-avvik. Ta kontakt med din kontaktperson i NAV.",
                     "type": "error"
@@ -231,7 +226,6 @@
                     },
                     "required": "state.values.stateOrMunicipalityService === 'Municipal' && context.agreementOptions.length > 0",
                     "hidden": "(state.values.stateOrMunicipalitySector === 'State' && state.values.unit !== 'Annen enhet') || !(state.values.stateOrMunicipalityService === 'Municipal') || (state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement)",
-                    "disabled": "options.length === 1",
                     "infoText": "Vennligst velg en kommune fra listen."
                 }
             ],
@@ -267,7 +261,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.values.stateOrMunicipalityService || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.agreement && context.agreementOptions.filter(o => o.unit === state.otherUnitNumber).length > 1 && !state.values.selectedMunicipality)",
+                    "disabled": "!state.values.stateOrMunicipalityService || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.agreement && context.agreementOptions.filter(o => o.unit === state.otherUnitNumber).length > 1 && !state.values.selectedMunicipality) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && context.agreementOptions.filter(o => o.unit === context.unitNumber).length > 1 && !state.values.selectedMunicipality)",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {

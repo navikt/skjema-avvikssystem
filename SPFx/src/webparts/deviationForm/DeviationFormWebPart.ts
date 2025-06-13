@@ -144,7 +144,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
     }
 
     const agreements = await this.spClient.web.lists.getByTitle('Databehandleravtaler').select('Title,Kommunenavn,Organisasjonsnummer').items();
-    const [userUnitAgreement] = agreements.filter(agreement => agreement.Title === this.unitNumber);
+    const userUnitAgreement = agreements.filter(agreement => agreement.Title === this.unitNumber);
 
     this.unitDataAgreement = false;
     if (agreements.length > 0) {
@@ -155,7 +155,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
       }));
       if (userUnitAgreement) {
         this.unitDataAgreement = true;
-        this.municipalityOrgNumber = userUnitAgreement.Organisasjonsnummer;
+        this.municipalityOrgNumber = userUnitAgreement.length === 1 && userUnitAgreement[0].Organisasjonsnummer;
       }
     }
     this.orgUnits = units.map(unit => ({ id: unit.NOMId, name: unit.Title, agreement: unit.Avtale, unit: unit.UnitNumber })).sort((a, b) => a.name > b.name ? 1 : -1); //unitOptions.sort();
