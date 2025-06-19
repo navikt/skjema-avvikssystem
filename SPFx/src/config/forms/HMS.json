@@ -224,16 +224,22 @@
                         "key": "key",
                         "text": "text"
                     },
-                    "required": "state.values.stateOrMunicipalityService === 'Municipal' && context.agreementOptions.length > 0",
-                    "hidden": "(state.values.stateOrMunicipalitySector === 'State' && state.values.unit !== 'Annen enhet') || !(state.values.stateOrMunicipalityService === 'Municipal') || (state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement)",
+                    "required": "state.values.stateOrMunicipalityService === 'Municipal' && (state.values.unit !== 'Annen enhet' ? context.agreementOptions.filter(o => o.unit === context.unitNumber) : context.agreementOptions.filter(o => o.unit === state.otherUnitNumber)).length > 0",
+                    "hidden": "!(state.values.stateOrMunicipalityService === 'Municipal') || (state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement) || (state.values.unit !== 'Annen enhet' ? context.agreementOptions.filter(o => o.unit === context.unitNumber) : context.agreementOptions.filter(o => o.unit === state.otherUnitNumber)).length === 0",
                     "infoText": "Vennligst velg en kommune fra listen."
                 }
             ],
             "messages": [
                 {
+                    "display": "state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement",
+                    "type": "error",
+                    "content": "Valgt enhet har ikke databehandleravtale med NAV for kommunale avvik.",
+                    "position": "bottom"
+                },
+                {
                     "display": "state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement",
                     "type": "error",
-                    "content": "Valgt enhet har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system.",
+                    "content": "Valgt enhet har ikke databehandleravtale med NAV for kommunale avvik.",
                     "position": "bottom"
                 }
             ],
@@ -261,7 +267,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.values.stateOrMunicipalityService || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.agreement && context.agreementOptions.filter(o => o.unit === state.otherUnitNumber).length > 1 && !state.values.selectedMunicipality) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && context.agreementOptions.filter(o => o.unit === context.unitNumber).length > 1 && !state.values.selectedMunicipality)",
+                    "disabled": "!state.values.stateOrMunicipalityService || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.agreement && context.agreementOptions.filter(o => o.unit === state.otherUnitNumber).length > 1 && !state.values.selectedMunicipality) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && context.agreementOptions.filter(o => o.unit === context.unitNumber).length > 1 && !state.values.selectedMunicipality) || state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {

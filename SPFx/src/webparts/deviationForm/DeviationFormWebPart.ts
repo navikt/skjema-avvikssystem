@@ -142,7 +142,6 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
           break;
       }
     }
-
     const agreements = await this.spClient.web.lists.getByTitle('Databehandleravtaler').select('Title,Kommunenavn,Organisasjonsnummer').items();
     const userUnitAgreement = agreements.filter(agreement => agreement.Title === this.unitNumber);
 
@@ -153,7 +152,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
         text: agreement.Kommunenavn,
         unit: agreement.Title
       }));
-      if (userUnitAgreement) {
+      if (userUnitAgreement.length > 0) {
         this.unitDataAgreement = true;
         this.municipalityOrgNumber = userUnitAgreement.length === 1 && userUnitAgreement[0].Organisasjonsnummer;
       }
