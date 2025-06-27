@@ -408,8 +408,8 @@
                     "label": "Ble avviket oppdaget av noen utenfor NAV?",
                     "type": "ChoiceGroup",
                     "options": [
-                        "Ja",
-                        "Nei"
+                        "Yes",
+                        "No"
                     ],
                     "required": "state.values.category === 'Violation of personal data security'",
                     "hidden": "state.values.category !== 'Violation of personal data security' && state.values.category !== 'Violation of privacy requirements'"
@@ -421,8 +421,8 @@
                     "maxLength": 255,
                     "placeholder": "Ola Normann, 47101112",
                     "multiline": true,
-                    "hidden": "!(state.values.isExternalReporter === 'Ja') || state.values.category !== 'Violation of personal data security'",
-                    "required": "state.values.isExternalReporter === 'Ja' && state.values.category === 'Violation of personal data security'"
+                    "hidden": "!(state.values.isExternalReporter === 'Yes') || state.values.category !== 'Violation of personal data security'",
+                    "required": "state.values.isExternalReporter === 'Yes' && state.values.category === 'Violation of personal data security'"
                 },
                 {
                     "key": "affectedPeopleCount",

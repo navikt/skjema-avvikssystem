@@ -110,11 +110,9 @@
                         "Vandalism and/or burglary",
                         "Power failure",
                         "Water damage, environmental aspects and pollution",
-                        "Violation of laws, regulations and routines",
                         "Missing or deficient alarm system",
                         "Deficiencies or violations on access control",
                         "Deficiencies or violations on emergeny exit",
-                        "Lack of possibility for notifiying/call for help",
                         "Other unwanted incidents"
                     ],
                     "required": "true"
