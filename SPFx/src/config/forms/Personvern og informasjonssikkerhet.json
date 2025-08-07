@@ -41,6 +41,17 @@
     },
     "pages": [
         {
+            "key": 0,
+            "type": "Validation",
+            "renderConditions": [
+                {
+                    "condition": "false",
+                    "message": "",
+                    "type": "error"
+                }
+            ]
+        },
+        {
             "key": 1,
             "type": "Input",
             "fields": [
@@ -242,6 +253,10 @@
                         {
                             "key": "Violation of personal data security",
                             "text": "Ett brudd på personopplysningssikkerhet er at personopplysningene er på avveie, er blitt endret eller slettet, eller ikke tilgjengelig. Eksempler kan være brev sendt til feil mottaker, opplysninger registrert på feil bruker, eller feil i ett IT-system."
+                        },
+                        {
+                            "key": "Violation of privacy requirements",
+                            "text": "Brudd på lovkrav etter personvernregelverket."
                         }
                     ],
                     "required": "true"
@@ -326,6 +341,10 @@
                         {
                             "key": "Other unwanted incidents",
                             "text": "Andre personvernbrudd som ikke er kategorisert her eller som faller inn under mer enn en kategori."
+                        },
+                        {
+                            "key": "Data management agreements",
+                            "text": "Brudd knyttet til at databehandleravtale mangler, ikke er gyldig, at databehandler behandler personopplysninger utover avtalens instrukser mm."
                         }
                     ]
                 }

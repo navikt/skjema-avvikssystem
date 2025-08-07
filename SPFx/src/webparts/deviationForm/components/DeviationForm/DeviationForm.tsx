@@ -64,7 +64,7 @@ export interface IDeviationFormProps {
 const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, breadcrumbState, toFormSelection, setBubbleState }: IDeviationFormProps) => {
     const context = useContext(DeviationFormContext);
     const [state, setState] = useState<IDeviationFormState>({
-        currentPageNumber: 1,
+        currentPageNumber: 0,
         values: {
             stateOrMunicipalitySector: context.organization,
             reporterEmail: context.reporterEmail,
@@ -89,6 +89,8 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
     const minutes = range(0, 60).map(key => ({ key, text: `${padStart(key.toString(), 2, '0')}` }));
 
     const isFirstRender = useRef(true);
+
+    console.log(state.values.unit);
 
     useEffect(() => {
         const types = fieldTypes;
@@ -349,6 +351,8 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                 }
                             }
                         }
+                        console.log(options);
+                        console.log(state.values[field.key]);
                         return (
                             <div className={styles.field}>
                                 <ChoiceGroup

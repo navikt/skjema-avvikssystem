@@ -12,6 +12,17 @@
     },
     "pages": [
         {
+            "key": 0,
+            "type": "Validation",
+            "renderConditions": [
+                {
+                    "condition": "false",
+                    "message": "",
+                    "type": "error"
+                }
+            ]
+        },
+        {
             "key": 1,
             "type": "Input",
             "fields": [
