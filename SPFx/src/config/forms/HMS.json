@@ -268,7 +268,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.values.stateOrMunicipalityService || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.agreement && context.agreementOptions.filter(o => o.unit === state.otherUnitNumber).length > 1 && !state.values.selectedMunicipality) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && context.agreementOptions.filter(o => o.unit === context.unitNumber).length > 1 && !state.values.selectedMunicipality) || state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement",
+                    "disabled": "!state.values.stateOrMunicipalityService || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && !state.agreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.agreement && context.agreementOptions.filter(o => o.unit === state.otherUnitNumber).length > 1 && !state.values.selectedMunicipality) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement) || !state.valid",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {

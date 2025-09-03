@@ -90,8 +90,6 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
 
     const isFirstRender = useRef(true);
 
-    console.log(state.values.unit);
-
     useEffect(() => {
         const types = fieldTypes;
         setState(prevState => {
@@ -351,8 +349,6 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                 }
                             }
                         }
-                        console.log(options);
-                        console.log(state.values[field.key]);
                         return (
                             <div className={styles.field}>
                                 <ChoiceGroup
