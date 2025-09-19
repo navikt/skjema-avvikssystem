@@ -212,16 +212,34 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                     options={state.filteredOptions[field.key] || options}
                                     onDismiss={() => setState({ ...state, filteredOptions: { ...state.filteredOptions, [field.key]: null } })}
                                     onChange={(_, option) => {
-                                        let selectedValues = [];
+                                        let selectedValues = [] as any[];
+                                        const newValues: any = { ...state.values };
                                         if (multiSelect) {
                                             const vals = state.values[field.key] || [];
                                             if (option.selected) {
                                                 selectedValues = [...vals, option.key];
                                             } else selectedValues = vals.filter(v => v !== option.key);
+                                            newValues[field.key] = selectedValues;
+                                        } else {
+                                            newValues[field.key] = option.key;
+                                            if ((field as any).optionOverrides) {
+                                                const overrides = (field as any).optionOverrides.filter((o: any) => o.option === option.key || o.option === '*');
+                                                overrides.forEach((ovr: any) => {
+                                                    let overrideValue = ovr.value;
+                                                    if (typeof overrideValue === 'string' && (overrideValue.startsWith('context.') || overrideValue.startsWith('state.') || overrideValue.startsWith('option.'))) {
+                                                        try {
+                                                            overrideValue = eval(overrideValue);
+                                                        } catch {
+                                                            console.error('Error evaluating override value:', overrideValue);
+                                                        }
+                                                        newValues[ovr.stateVariable] = overrideValue;
+                                                    }
+                                                });
+                                            }
                                         }
                                         setState({
                                             ...state,
-                                            values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.key },
+                                            values: newValues,
                                             filteredOptions: { ...state.filteredOptions, [field.key]: null },
                                             agreement: option?.data?.agreement,
                                             otherUnitNumber: option?.data?.unit || null
@@ -234,6 +252,8 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                 />
                             );
                         }
+                        console.log(field.key);
+                        console.log(state.values[field.key]);
                         return (
                             <div className={styles.field}>
                                 <Dropdown
@@ -248,14 +268,33 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                     options={options}
                                     multiSelect={multiSelect}
                                     onChange={(_, option) => {
-                                        let selectedValues = [];
+                                        let selectedValues = [] as any[];
+                                        const newValues: any = { ...state.values };
                                         if (multiSelect) {
                                             const vals = state.values[field.key] || [];
                                             if (option.selected) {
                                                 selectedValues = [...vals, option.key];
                                             } else selectedValues = vals.filter(v => v !== option.key);
+                                            newValues[field.key] = selectedValues;
+                                        } else {
+                                            newValues[field.key] = option.key;
+                                            // Declarative per-option overrides (update dependent fields)
+                                            if ((field as any).optionOverrides) {
+                                                const overrides = (field as any).optionOverrides.filter((o: any) => o.option === option.key || o.option === '*');
+                                                overrides.forEach((ovr: any) => {
+                                                    let overrideValue = ovr.value;
+                                                    if (typeof overrideValue === 'string' && (overrideValue.startsWith('context.') || overrideValue.startsWith('state.') || overrideValue.startsWith('option.'))) {
+                                                        try {
+                                                            overrideValue = eval(overrideValue);
+                                                        } catch {
+                                                            console.error('Error evaluating override value:', overrideValue);
+                                                        }
+                                                    }
+                                                    newValues[ovr.stateVariable] = overrideValue;
+                                                });
+                                            }
                                         }
-                                        setState({ ...state, values: { ...state.values, [field.key]: multiSelect ? selectedValues : option.key } });
+                                        setState({ ...state, values: newValues });
                                     }}
                                 />
                             </div>
@@ -359,16 +398,16 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                     disabled={eval(field.disabled)}
                                     options={options}
                                     onChange={(_, option) => {
-                                        const newValues = { ...state.values, [field.key]: option.key };
+                                        const newValues = { ...state.values, [field.key]: option.key } as any;
                                         if (field.optionOverrides) {
-                                            const override = field.optionOverrides.find(o => o.option === option.key);
-                                            if (override) {
-                                                let overrideValue = override.value;
-                                                if (typeof overrideValue === 'string' && (overrideValue.startsWith('context.') || overrideValue.startsWith('state.'))) {
+                                            const overrides = field.optionOverrides.filter(o => o.option === option.key || o.option === '*');
+                                            overrides.forEach(ovr => {
+                                                let overrideValue: any = ovr.value as any;
+                                                if (typeof overrideValue === 'string' && (overrideValue.startsWith('context.') || overrideValue.startsWith('state.') || overrideValue.startsWith('option.'))) {
                                                     overrideValue = eval(overrideValue);
                                                 }
-                                                newValues[override.stateVariable] = overrideValue;
-                                            }
+                                                (newValues as any)[ovr.stateVariable] = overrideValue;
+                                            });
                                         }
                                         setState({ ...state, values: newValues });
                                     }}
@@ -631,7 +670,7 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                     }
                 </>
             );
-        } catch (error) {
+        } catch (error: any) {
             return <MessageBar messageBarType={MessageBarType.error}>{error.message}</MessageBar>;
         }
     };
