@@ -151,6 +151,13 @@
                         "key": "id",
                         "text": "name"
                     },
+                    "optionOverrides": [
+                        {
+                            "option": "*",
+                            "stateVariable": "selectedMunicipality",
+                            "value": "context.agreementOptions.filter(o => o.unit === option.data.unit).length === 1 ? context.agreementOptions.filter(o => o.unit === option.data.unit)[0].key : state.values.selectedMunicipality"
+                        }
+                    ],
                     "hidden": "!(state.values.unit === 'Annen enhet')",
                     "required": "state.values.unit === 'Annen enhet'"
                 }
