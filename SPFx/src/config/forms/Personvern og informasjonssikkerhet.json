@@ -197,13 +197,13 @@
                 {
                     "display": "state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement",
                     "type": "error",
-                    "content": "Valgt enhet har ikke databehandleravtale med NAV for kommunale avvik.",
+                    "content": "Fordi Nav-kontoret du jobber ved ikke har inngått databehandleravtale med Nav kan du ikke rapportere avviket her. Inntil videre skal denne type avvik rapporteres i kommunens eget avvikssystem.",
                     "position": "bottom"
                 },
                 {
                     "display": "state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement",
                     "type": "error",
-                    "content": "Valgt enhet har ikke databehandleravtale med NAV for kommunale avvik.",
+                    "content": "Fordi dette Nav-kontoret ikke har inngått databehandleravtale med Nav, kan du ikke rapportere avviket her. Inntil videre skal denne type avvik rapporteres i kommunens eget avvikssystem.",
                     "position": "bottom"
                 }
             ],
