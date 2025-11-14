@@ -43,6 +43,7 @@ export default class ActionsHandler {
             if (Object.prototype.hasOwnProperty.call(values, key)) {
                 if (values.form === 'Physical security') values.stateOrMunicipalityService = 'Unsure';
                 if (values[key] === '') delete values[key];
+                if (key === 'selectedMunicipality' && values[key] === 'x') delete values[key];
                 if (!includes(fieldsToInclude, key) || key === 'personalInfoLost') {
                     delete values[key];
                 } else if (key === 'category' && values[key] === 'Violation of privacy requirements') {
