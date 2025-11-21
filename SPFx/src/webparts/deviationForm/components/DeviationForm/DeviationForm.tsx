@@ -731,7 +731,7 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                     }
                                     {renderMessages(page.messages?.filter(m => m.position === MessagePosition.Bottom))}
                                     <div className={styles.actions}>
-                                        {page.actions?.map(action => renderAction(action))}
+                                        {page.actions?.filter(action => !action.hidden || !eval(action.hidden)).map(action => renderAction(action))}
                                     </div>
                                 </>
                             }

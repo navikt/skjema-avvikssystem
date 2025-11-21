@@ -54,6 +54,7 @@ export interface IDeviationFormAction {
     iconProps?: IIconProps;
     iconPosition?: DeviationActionIconPosition;
     disabled?: string;
+    hidden?: string;
     addtobreadcrumbs?: string;
     removefrombreadcrumbs?: string;
 }

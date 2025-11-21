@@ -361,6 +361,9 @@
                                 "disabled": {
                                     "type": "string"
                                 },
+                                "hidden": {
+                                    "type": "string"
+                                },
                                 "addtobreadcrumbs": {
                                     "type": "string"
                                 },

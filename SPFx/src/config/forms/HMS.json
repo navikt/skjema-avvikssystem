@@ -61,8 +61,8 @@
             "renderConditions": [
                 {
                     "condition": "state.values.stateOrMunicipalitySector === 'External'",
-                    "message": "Du er registrert som ekstern og kan ikke registrere HMS-avvik. Ta kontakt med din kontaktperson i NAV.",
-                    "type": "error"
+                    "message": "Du er registrert som eksternt ansatt. Vurder om HMS-avviket også bør registreres hos din arbeidsgiver.",
+                    "type": "info"
                 },
                 {
                     "condition": "!state.values.stateOrMunicipalitySector",
@@ -80,6 +80,23 @@
                     },
                     "invoke": {
                         "functionName": "ToFormSelection"
+                    }
+                },
+                {
+                    "key": "next",
+                    "label": "Neste",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronRight"
+                    },
+                    "iconPosition": "right",
+                    "hidden": "!state.values.stateOrMunicipalitySector",
+                    "invoke": {
+                        "functionName": "NextPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
                     }
                 }
             ]
