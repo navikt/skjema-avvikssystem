@@ -38,6 +38,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
   private organization: string;
   private unit: string;
   private unitDataAgreement: boolean;
+  private unitIsKontaktsenter: boolean = false;
   private reporterEmail: string;
   private reporterNAVIdentId: string;
   private orgUnits: IOrgUnitOption[];
@@ -54,6 +55,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
       organization: this.organization,
       unit: this.unit,
       unitDataAgreement: this.unitDataAgreement,
+      unitIsKontaktsenter: this.unitIsKontaktsenter,
       orgUnits: this.orgUnits,
       reporterEmail: this.reporterEmail,
       reporterNAVIdentId: this.reporterNAVIdentId,
@@ -142,19 +144,24 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
           break;
       }
     }
-    const agreements = await this.spClient.web.lists.getByTitle('Databehandleravtaler').select('Title,Kommunenavn,Organisasjonsnummer').items();
+    const agreements = await this.spClient.web.lists.getByTitle('Databehandleravtaler').select('Title,Kommunenavn,Organisasjonsnummer,Kontaktsenter').items();
     const userUnitAgreement = agreements.filter(agreement => agreement.Title === this.unitNumber);
 
     this.unitDataAgreement = false;
+    this.unitIsKontaktsenter = false;
     if (agreements.length > 0) {
-      this.agreementOptions = agreements.map(agreement => ({
-        key: agreement.Organisasjonsnummer,
+      this.agreementOptions = agreements.map((agreement, index) => ({
+        key: agreement.Organisasjonsnummer || `agreement-${agreement.Title || index}`,
         text: agreement.Kommunenavn,
-        unit: agreement.Title
+        unit: agreement.Title,
+        data: { kontaktsenter: agreement.Kontaktsenter }
       }));
       if (userUnitAgreement.length > 0) {
         this.unitDataAgreement = true;
-        this.municipalityOrgNumber = userUnitAgreement.length === 1 && userUnitAgreement[0].Organisasjonsnummer;
+        this.unitIsKontaktsenter = userUnitAgreement[0].Kontaktsenter === true;
+        this.municipalityOrgNumber = userUnitAgreement.length === 1 
+          ? (userUnitAgreement[0].Organisasjonsnummer || `agreement-${userUnitAgreement[0].Title}`)
+          : false;
       }
     }
     this.orgUnits = units.map(unit => ({ id: unit.NOMId, name: unit.Title, agreement: unit.Avtale, unit: unit.UnitNumber })).sort((a, b) => a.name > b.name ? 1 : -1); //unitOptions.sort();

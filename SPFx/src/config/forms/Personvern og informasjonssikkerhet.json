@@ -189,11 +189,17 @@
                         "text": "text"
                     },
                     "required": "state.values.stateOrMunicipalityService === 'Municipal' && context.agreementOptions.length > 0",
-                    "hidden": "!(state.values.stateOrMunicipalityService === 'Municipal') || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement)",
+                    "hidden": "(context.unitIsKontaktsenter && state.values.unit === 'Min enhet' && state.values.stateOrMunicipalityService === 'Municipal') || !(state.values.stateOrMunicipalityService === 'Municipal') || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement)",
                     "infoText": "Vennligst velg en kommune fra listen."
                 }
             ],
             "messages": [
+                {
+                    "display": "context.unitIsKontaktsenter && state.values.unit === 'Min enhet' && state.values.stateOrMunicipalityService === 'Municipal'",
+                    "type": "error",
+                    "content": "Kontaktsentre kan ikke registrere personvern- og informasjonssikkerhetsavvik som gjelder kommunale tjenester.",
+                    "position": "bottom"
+                },
                 {
                     "display": "state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement",
                     "type": "error",
@@ -231,7 +237,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.values.stateOrMunicipalityService || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && !state.agreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.agreement && context.agreementOptions.filter(o => o.unit === state.otherUnitNumber).length > 1 && !state.values.selectedMunicipality) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement) || !state.valid",
+                    "disabled": "(context.unitIsKontaktsenter && state.values.unit === 'Min enhet' && state.values.stateOrMunicipalityService === 'Municipal') || !state.values.stateOrMunicipalityService || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && !state.agreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.agreement && context.agreementOptions.filter(o => o.unit === state.otherUnitNumber).length > 1 && !state.values.selectedMunicipality) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement) || !state.valid",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {

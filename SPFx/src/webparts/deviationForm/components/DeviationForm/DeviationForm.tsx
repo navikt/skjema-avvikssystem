@@ -83,7 +83,7 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
     const getFunctionParams = useFunctionParams(state, context, form, setBubbleState);
     const [fieldTypes, setFieldTypes] = useState<Map<string, string>>(new Map<string, string>());
     const prevPageRef = useRef(state.currentPageNumber);
-    const actionsHandler = new ActionsHandler(setState, setSelectedForm, context.config.forms);
+    const actionsHandler = new ActionsHandler(setState, setSelectedForm, context.config.forms, context);
 
     const hours = range(0, 24).map(key => ({ key, text: `${padStart(key.toString(), 2, '0')}` }));
     const minutes = range(0, 60).map(key => ({ key, text: `${padStart(key.toString(), 2, '0')}` }));
@@ -252,8 +252,7 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                 />
                             );
                         }
-                        console.log(field.key);
-                        console.log(state.values[field.key]);
+                        
                         return (
                             <div className={styles.field}>
                                 <Dropdown

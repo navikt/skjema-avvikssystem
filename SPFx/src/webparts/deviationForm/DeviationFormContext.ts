@@ -10,6 +10,7 @@ export interface IDeviationFormContext {
     organization: string;
     unit: string;
     unitDataAgreement: boolean;
+    unitIsKontaktsenter: boolean;
     reporterEmail: string;
     reporterNAVIdentId: string;
     functionUrl: string;

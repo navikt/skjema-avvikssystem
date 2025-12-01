@@ -1,15 +1,18 @@
 import { includes } from 'lodash';
 import { IDeviationForm, IDeviationFormState } from '../webparts/deviationForm/types';
+import { IDeviationFormContext } from '../webparts/deviationForm/DeviationFormContext';
 
 export default class ActionsHandler {
     private _setState;
     private _setForm;
     private _forms: IDeviationForm[];
+    private _context: IDeviationFormContext;
 
-    constructor(setState: React.Dispatch<React.SetStateAction<IDeviationFormState>>, setForm: (form: IDeviationForm) => void, forms: IDeviationForm[]) {
+    constructor(setState: React.Dispatch<React.SetStateAction<IDeviationFormState>>, setForm: (form: IDeviationForm) => void, forms: IDeviationForm[], context: IDeviationFormContext) {
         this._setState = setState;
         this._setForm = setForm;
         this._forms = forms;
+        this._context = context;
     }
 
     public invoke(functionName: string, params: any): void {
@@ -43,7 +46,7 @@ export default class ActionsHandler {
             if (Object.prototype.hasOwnProperty.call(values, key)) {
                 if (values.form === 'Physical security') values.stateOrMunicipalityService = 'Unsure';
                 if (values[key] === '') delete values[key];
-                if (key === 'selectedMunicipality' && values[key] === 'x') delete values[key];
+                if (key === 'selectedMunicipality' && this._context.unitIsKontaktsenter && values.unit === 'Min enhet') delete values[key];
                 if (!includes(fieldsToInclude, key) || key === 'personalInfoLost') {
                     delete values[key];
                 } else if (key === 'category' && values[key] === 'Violation of privacy requirements') {
