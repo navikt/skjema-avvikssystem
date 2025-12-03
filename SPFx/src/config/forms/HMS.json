@@ -241,7 +241,7 @@
                 },
                 {
                     "key": "selectedMunicipality",
-                    "label": "Hvilken kommune gjelder avviket?",
+                    "label": "Avviket knyttes til følgende:",
                     "type": "Choice",
                     "options": "state.values.unit !== 'Annen enhet' ? context.agreementOptions.filter(o => o.unit === context.unitNumber) : context.agreementOptions.filter(o => o.unit === state.otherUnitNumber)",
                     "optionType": {
