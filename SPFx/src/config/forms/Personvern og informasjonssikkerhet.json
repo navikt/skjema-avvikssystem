@@ -197,7 +197,7 @@
                 {
                     "display": "context.unitIsKontaktsenter && state.values.stateOrMunicipalityService === 'Municipal'",
                     "type": "error",
-                    "content": "Kontaktsentre kan ikke registrere personvern- og informasjonssikkerhetsavvik som gjelder kommunale tjenester.",
+                    "content": "Det kan ikke registreres personvern- eller informasjonssikkerhetsavvik som gjelder kommunale tjenester på et kontaktsenter.",
                     "position": "bottom"
                 },
                 {
