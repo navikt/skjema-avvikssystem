@@ -1,6 +1,6 @@
 {
   "name": "deviation-form",
-  "version": "1.16.15",
+  "version": "1.16.16",
   "private": true,
   "main": "lib/index.js",
   "scripts": {
@@ -9,7 +9,8 @@
     "prebuild-minor": "npm version minor",
     "build-minor": "gulp bundle --ship && gulp package-solution --ship && start \"\" \".\\sharepoint\\solution\"",
     "prebuild-major": "npm version major",
-    "build-major": "gulp bundle --ship && gulp package-solution --ship && start \"\" \".\\sharepoint\\solution\""
+    "build-major": "gulp bundle --ship && gulp package-solution --ship && start \"\" \".\\sharepoint\\solution\"",
+    "rebuild": "gulp clean && gulp bundle --ship && gulp package-solution --ship && start \"\" \".\\sharepoint\\solution\""
   },
   "engines": {
     "node": ">=16.13.0 <17.0.0 || >=18.17.1 <19.0.0"
