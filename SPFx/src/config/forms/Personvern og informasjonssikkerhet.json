@@ -189,13 +189,13 @@
                         "text": "text"
                     },
                     "required": "state.values.stateOrMunicipalityService === 'Municipal' && context.agreementOptions.length > 0",
-                    "hidden": "(context.unitIsKontaktsenter && state.values.unit === 'Min enhet' && state.values.stateOrMunicipalityService === 'Municipal') || (state.values.unit === 'Annen enhet' && state.values.stateOrMunicipalityService === 'Municipal' && context.agreementOptions.filter(o => o.unit === state.otherUnitNumber)[0].data.kontaktsenter) || !(state.values.stateOrMunicipalityService === 'Municipal') || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement)",
+                    "hidden": "(context.unitIsKontaktsenter && state.values.unit === 'Min enhet' && state.values.stateOrMunicipalityService === 'Municipal') || (state.values.unit === 'Annen enhet' && state.values.stateOrMunicipalityService === 'Municipal' && context.agreementOptions.filter(o => o.unit === state.otherUnitNumber)[0]?.data.kontaktsenter) || !(state.values.stateOrMunicipalityService === 'Municipal') || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement)",
                     "infoText": "Vennligst velg en kommune fra listen."
                 }
             ],
             "messages": [
                 {
-                    "display": "(context.unitIsKontaktsenter && state.values.unit === 'Min enhet' && state.values.stateOrMunicipalityService === 'Municipal') || (state.values.unit === 'Annen enhet' && state.values.stateOrMunicipalityService === 'Municipal' && context.agreementOptions.filter(o => o.unit === state.otherUnitNumber)[0].data.kontaktsenter)",
+                    "display": "(context.unitIsKontaktsenter && state.values.unit === 'Min enhet' && state.values.stateOrMunicipalityService === 'Municipal') || (state.values.unit === 'Annen enhet' && state.values.stateOrMunicipalityService === 'Municipal' && context.agreementOptions.filter(o => o.unit === state.otherUnitNumber)[0]?.data.kontaktsenter)",
                     "type": "error",
                     "content": "Det kan ikke registreres personvern- eller informasjonssikkerhetsavvik som gjelder kommunale tjenester på et kontaktsenter.",
                     "position": "bottom"
@@ -237,7 +237,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "(context.unitIsKontaktsenter && state.values.unit === 'Min enhet' && state.values.stateOrMunicipalityService === 'Municipal') || (state.values.unit === 'Annen enhet' && state.values.stateOrMunicipalityService === 'Municipal' && context.agreementOptions.filter(o => o.unit === state.otherUnitNumber)[0].data.kontaktsenter) || !state.values.stateOrMunicipalityService || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && !state.agreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.agreement && context.agreementOptions.filter(o => o.unit === state.otherUnitNumber).length > 1 && !state.values.selectedMunicipality) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement) || !state.valid",
+                    "disabled": "(context.unitIsKontaktsenter && state.values.unit === 'Min enhet' && state.values.stateOrMunicipalityService === 'Municipal') || (state.values.unit === 'Annen enhet' && state.values.stateOrMunicipalityService === 'Municipal' && context.agreementOptions.filter(o => o.unit === state.otherUnitNumber)[0]?.data.kontaktsenter) || !state.values.stateOrMunicipalityService || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && !state.agreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.agreement && context.agreementOptions.filter(o => o.unit === state.otherUnitNumber).length > 1 && !state.values.selectedMunicipality) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement) || !state.valid",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
