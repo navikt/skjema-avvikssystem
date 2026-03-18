@@ -38,6 +38,21 @@ export default class ActionsHandler {
         this._setState({ ...state, [stateVariable]: currentPageNumber - 1 });
     }
 
+    private isSelectedUnitKontaktsenter(values: any, state: any): boolean {
+        if (values.unit === 'Min enhet' || !values.unit) {
+            return this._context.unitIsKontaktsenter;
+        }
+
+        if (values.unit === 'Annen enhet' && state.otherUnitNumber) {
+            const selectedAgreement = this._context.agreementOptions?.find(
+                option => option.unit === state.otherUnitNumber
+            );
+            return selectedAgreement?.data?.kontaktsenter === true;
+        }
+
+        return false;
+    }
+
     private async Submit({ values, functionUrl, environment, stateVariable, state, resultVariable, fieldsToInclude }): Promise<void> {
         fieldsToInclude = [...fieldsToInclude, 'stateOrMunicipalitySector', 'form'];
         if (!values.anonymous) fieldsToInclude = [...fieldsToInclude, 'reporterEmail', 'reporterNAVIdentId'];
@@ -46,7 +61,7 @@ export default class ActionsHandler {
             if (Object.prototype.hasOwnProperty.call(values, key)) {
                 if (values.form === 'Physical security') values.stateOrMunicipalityService = 'Unsure';
                 if (values[key] === '') delete values[key];
-                if (key === 'selectedMunicipality' && this._context.unitIsKontaktsenter) delete values[key];
+                if (key === 'selectedMunicipality' && this.isSelectedUnitKontaktsenter(values, state)) delete values[key];
                 if (!includes(fieldsToInclude, key) || key === 'personalInfoLost') {
                     delete values[key];
                 } else if (key === 'category' && values[key] === 'Violation of privacy requirements') {

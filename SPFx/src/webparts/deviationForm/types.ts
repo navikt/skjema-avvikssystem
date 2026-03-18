@@ -222,6 +222,15 @@ export interface IOrgUnitOption {
     agreement?: boolean;
 }
 
+export interface IAgreementOption {
+    key: string;
+    text: string;
+    unit: string;
+    data: {
+        kontaktsenter: boolean;
+    };
+}
+
 export interface IRenderCondition {
     condition: string;
     message: string;

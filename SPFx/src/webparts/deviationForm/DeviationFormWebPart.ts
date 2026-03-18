@@ -10,13 +10,11 @@ import {
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 
-import { IDropdownOption } from '@fluentui/react';
-
 import * as strings from 'DeviationFormWebPartStrings';
 import App from './components/App';
 import config from '../../config/config';
 import { DeviationFormContext, IDeviationFormContext } from './DeviationFormContext';
-import { IAppConfig, IOrgUnitOption } from './types';
+import { IAppConfig, IOrgUnitOption, IAgreementOption } from './types';
 import { AadHttpClient } from '@microsoft/sp-http';
 import { SPFI, spfi, SPFx } from '@pnp/sp';
 import "@pnp/sp/webs";
@@ -43,7 +41,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
   private reporterNAVIdentId: string;
   private orgUnits: IOrgUnitOption[];
   private spClient: SPFI;
-  private agreementOptions: IDropdownOption[] = [];
+  private agreementOptions: IAgreementOption[] = [];
   private municipalityOrgNumber: string;
   private unitNumber: string;
 

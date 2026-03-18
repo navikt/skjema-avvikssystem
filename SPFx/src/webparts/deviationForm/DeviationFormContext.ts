@@ -1,7 +1,6 @@
 import { createContext } from 'react';
-import { IAppConfig, IOrgUnitOption } from './types';
+import { IAppConfig, IOrgUnitOption, IAgreementOption } from './types';
 import { SPFI } from '@pnp/sp';
-import { IDropdownOption } from '@fluentui/react';
 
 export interface IDeviationFormContext {
     config: IAppConfig;
@@ -15,7 +14,7 @@ export interface IDeviationFormContext {
     reporterNAVIdentId: string;
     functionUrl: string;
     orgUnits: IOrgUnitOption[];
-    agreementOptions: IDropdownOption[];
+    agreementOptions: IAgreementOption[];
     unitNumber: string;
     municipalityOrgNumber?: string;
 }
