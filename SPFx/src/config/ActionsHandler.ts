@@ -39,18 +39,12 @@ export default class ActionsHandler {
     }
 
     private isSelectedUnitKontaktsenter(values: any, state: any): boolean {
-        if (values.unit === 'Min enhet' || !values.unit) {
-            return this._context.unitIsKontaktsenter;
-        }
-
         if (values.unit === 'Annen enhet' && state.otherUnitNumber) {
             const selectedAgreement = this._context.agreementOptions?.find(
                 option => option.unit === state.otherUnitNumber
             );
             return selectedAgreement?.data?.kontaktsenter === true;
-        }
-
-        return false;
+        } else return this._context.unitIsKontaktsenter;
     }
 
     private async Submit({ values, functionUrl, environment, stateVariable, state, resultVariable, fieldsToInclude }): Promise<void> {
