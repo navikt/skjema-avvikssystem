@@ -15,7 +15,6 @@ import {
     IChoiceGroupOption,
     IconButton,
     IDropdownOption,
-    mergeStyles,
     MessageBar,
     MessageBarType,
     Spinner,
@@ -192,15 +191,15 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                         if (typeof field.options === 'string') {
                             if (field.optionType?.type === 'object') {
                                 const objects = eval(field.options);
-                                options = objects.map(o => ({
+                                options = objects.map((o: any) => ({
                                     key: o[field.optionType.key],
-                                    text: strings[o[field.optionType.text]] || o[field.optionType.text],
+                                    text: (strings as any)[o[field.optionType.text]] || o[field.optionType.text],
                                     data: o.agreement || o.unit ? { agreement: o.agreement, unit: o.unit } : null
                                 }));
                             } else if (field.optionType?.type === 'string') {
-                                options = eval(field.options).map(o => ({ key: o, text: strings[o] || o }));
+                                options = eval(field.options).map((o: any) => ({ key: o, text: (strings as any)[o] || o }));
                             }
-                        } else options = field.options.map(o => ({ key: o, text: strings[o] || o }));
+                        } else options = field.options.map((o: string) => ({ key: o, text: (strings as any)[o] || o }));
                         const multiSelect = field.multiselect || false;
                         if (field.searchable) {
                             return (
@@ -218,7 +217,7 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                             const vals = state.values[field.key] || [];
                                             if (option.selected) {
                                                 selectedValues = [...vals, option.key];
-                                            } else selectedValues = vals.filter(v => v !== option.key);
+                                            } else selectedValues = vals.filter((v: any) => v !== option.key);
                                             newValues[field.key] = selectedValues;
                                         } else {
                                             newValues[field.key] = option.key;
@@ -273,7 +272,7 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                             const vals = state.values[field.key] || [];
                                             if (option.selected) {
                                                 selectedValues = [...vals, option.key];
-                                            } else selectedValues = vals.filter(v => v !== option.key);
+                                            } else selectedValues = vals.filter((v: any) => v !== option.key);
                                             newValues[field.key] = selectedValues;
                                         } else {
                                             newValues[field.key] = option.key;
@@ -308,11 +307,10 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                             });
                         }
                         if (typeof field.options === 'string') {
-                            options = eval(field.options).map(o => ({ key: values.has(o) ? values.get(o) : o, text: strings[o] || o }));
-                        } else options = field.options.map(o => ({ key: values.has(o) ? values.get(o) : o, text: strings[o] || o, disabled: field.disabledOptions?.length > 0 && field.disabledOptions.indexOf(o) !== -1 }));
+                            options = eval(field.options).map((o: any) => ({ key: values.has(o) ? values.get(o) : o, text: (strings as any)[o] || o }));
+                        } else options = field.options.map((o: string) => ({ key: values.has(o) ? values.get(o) : o, text: (strings as any)[o] || o, disabled: field.disabledOptions?.length > 0 && field.disabledOptions.indexOf(o) > -1 }));
                         if (field.choiceInfoTexts) {
                             field.choiceInfoTexts.forEach((choiceText, i) => {
-                                const optionRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
                                 const choiceKey = choiceText.dynamicKey ? eval(choiceText.dynamicKey) || choiceText.key : choiceText.key;
                                 const [replaceOption] = options.filter(o => o.key === choiceKey);
                                 const screenReaderTextId = `screenReaderText-${field.key}-choice-tooltip-${i}`;
@@ -325,15 +323,13 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                 if (options.indexOf(replaceOption) !== -1) {
                                     const option: IChoiceGroupOption = {
                                         key: key,
-                                        text: strings[choiceText.key] || choiceText.key,
-                                        "aria-describedby": screenReaderTextId,
-
+                                    text: (strings as any)[choiceText.key] || choiceText.key,
                                         onRenderField: (props, render) => {
                                             return (
-                                                <div className={optionRootClass}>
+                                                <div className={styles.flexRowCenter}>
                                                     {render && render(props)}
                                                     <span
-                                                        style={{ height: '1px', width: '1px', position: 'absolute', overflow: 'hidden', margin: '-1px', padding: '0px', border: '0px' }}
+                                                        className={styles.screenReaderOnly}
                                                         id={screenReaderTextId}
                                                         aria-hidden='true'
                                                     >
@@ -387,32 +383,107 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                 }
                             }
                         }
-                        return (
-                            <div className={styles.field}>
-                                <ChoiceGroup
-                                    id='choiceGroup'
-                                    label={field.label}
-                                    selectedKey={state.values[field.key]}
-                                    required={eval(field.required)}
-                                    disabled={eval(field.disabled)}
-                                    options={options}
-                                    onChange={(_, option) => {
-                                        const newValues = { ...state.values, [field.key]: option.key } as any;
-                                        if (field.optionOverrides) {
-                                            const overrides = field.optionOverrides.filter(o => o.option === option.key || o.option === '*');
-                                            overrides.forEach(ovr => {
-                                                let overrideValue: any = ovr.value as any;
-                                                if (typeof overrideValue === 'string' && (overrideValue.startsWith('context.') || overrideValue.startsWith('state.') || overrideValue.startsWith('option.'))) {
-                                                    overrideValue = eval(overrideValue);
-                                                }
-                                                (newValues as any)[ovr.stateVariable] = overrideValue;
-                                            });
+
+                        if (field.infoText) {
+                            const screenReaderChoiceGroupTextId = `screenReaderText-${field.key}-choicegroup-tooltip`;
+                            
+                            return (
+                                <div className={styles.field}>
+                                    <div className={styles.flexColumnGap}>
+                                        {field.label && (
+                                            <div className={styles.flexRowCenter}>
+                                                <span className={styles.labelText}>
+                                                    {field.label}
+                                                    {eval(field.required) && <span className={styles.requiredAsterisk}>*</span>}
+                                                </span>
+                                                <span
+                                                    className={styles.screenReaderOnly}
+                                                    id={screenReaderChoiceGroupTextId}
+                                                    aria-hidden='true'
+                                                >
+                                                    {field.infoText}
+                                                </span>
+                                                <TooltipHost content={field.infoText} id={`${field.key}-choicegroup-tooltip`}>
+                                                    <IconButton tabIndex={-1} aria-hidden='true' styles={{ rootHovered: { background: 'none' }, rootPressed: { background: 'none' } }} iconProps={{ iconName: 'Info' }} />
+                                                </TooltipHost>
+                                            </div>
+                                        )}
+                                        {!field.label && (
+                                            <div className={styles.infoIconContainer}>
+                                                <span
+                                                    className={styles.screenReaderOnly}
+                                                    id={screenReaderChoiceGroupTextId}
+                                                    aria-hidden='true'
+                                                >
+                                                    {field.infoText}
+                                                </span>
+                                                <TooltipHost content={field.infoText} id={`${field.key}-choicegroup-tooltip`}>
+                                                    <IconButton tabIndex={-1} aria-hidden='true' styles={{ rootHovered: { background: 'none' }, rootPressed: { background: 'none' } }} iconProps={{ iconName: 'Info' }} />
+                                                </TooltipHost>
+                                            </div>
+                                        )}
+                                        {field.description && 
+                                            <div className={styles.fieldDescription}>
+                                                {field.description}
+                                            </div>
                                         }
-                                        setState({ ...state, values: newValues });
-                                    }}
-                                />
-                            </div>
-                        );
+                                        <ChoiceGroup
+                                            id='choiceGroup'
+                                            selectedKey={state.values[field.key]}
+                                            required={eval(field.required)}
+                                            disabled={eval(field.disabled)}
+                                            options={options}
+                                            onChange={(_, option) => {
+                                                const newValues = { ...state.values, [field.key]: option.key } as any;
+                                                if (field.optionOverrides) {
+                                                    const overrides = field.optionOverrides.filter(o => o.option === option.key || o.option === '*');
+                                                    overrides.forEach(ovr => {
+                                                        let overrideValue: any = ovr.value as any;
+                                                        if (typeof overrideValue === 'string' && (overrideValue.startsWith('context.') || overrideValue.startsWith('state.') || overrideValue.startsWith('option.'))) {
+                                                            overrideValue = eval(overrideValue);
+                                                        }
+                                                        (newValues as any)[ovr.stateVariable] = overrideValue;
+                                                    });
+                                                }
+                                                setState({ ...state, values: newValues });
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            );
+                        } else {
+                            return (
+                                <div className={styles.field}>
+                                    {field.description && 
+                                        <div className={styles.fieldDescription}>
+                                            {field.description}
+                                        </div>
+                                    }
+                                    <ChoiceGroup
+                                        id='choiceGroup'
+                                        label={field.label}
+                                        selectedKey={state.values[field.key]}
+                                        required={eval(field.required)}
+                                        disabled={eval(field.disabled)}
+                                        options={options}
+                                        onChange={(_, option) => {
+                                            const newValues = { ...state.values, [field.key]: option.key } as any;
+                                            if (field.optionOverrides) {
+                                                const overrides = field.optionOverrides.filter(o => o.option === option.key || o.option === '*');
+                                                overrides.forEach(ovr => {
+                                                    let overrideValue: any = ovr.value as any;
+                                                    if (typeof overrideValue === 'string' && (overrideValue.startsWith('context.') || overrideValue.startsWith('state.') || overrideValue.startsWith('option.'))) {
+                                                        overrideValue = eval(overrideValue);
+                                                    }
+                                                    (newValues as any)[ovr.stateVariable] = overrideValue;
+                                                });
+                                            }
+                                            setState({ ...state, values: newValues });
+                                        }}
+                                    />
+                                </div>
+                            );
+                        }
                     }
                 case 'Text':
                     return (
@@ -480,7 +551,7 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                                                 setState({ ...state, values: { ...state.values, [field.key]: date } });
                                             }}
                                         />
-                                        <span style={{ marginLeft: '25px' }}> : </span>
+                                        <span className={styles.dateTimeColon}> : </span>
                                         <ComboBox
                                             className={styles.input}
                                             options={minutes}
@@ -519,19 +590,18 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                     }
                 case 'Checkbox':
                     {
-                        const checkboxRootClass = mergeStyles({ display: 'flex', alignItems: 'center', gap: '5px' });
                         const screenReaderCheckboxTextId = `screenReaderText-${field.key}-tooltip`;
                         if (field.infoText) {
                             return (
                                 <div className={styles.checkboxContainer}>
-                                    <div className={checkboxRootClass}>
+                                    <div className={styles.flexRowCenter}>
                                         <Checkbox
                                             label={field.label}
                                             checked={state.values[field.key]}
                                             onChange={(_, checked) => setState({ ...state, values: { ...state.values, [field.key]: checked } })}
                                         />
                                         <span
-                                            style={{ height: '1px', width: '1px', position: 'absolute', overflow: 'hidden', margin: '-1px', padding: '0px', border: '0px' }}
+                                            className={styles.screenReaderOnly}
                                             id={screenReaderCheckboxTextId}
                                             aria-hidden='true'
                                         >
@@ -569,15 +639,15 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
                 } else return field.value.toLocaleDateString('no');
             } else if (field.optionType?.type === 'object') {
                 if (typeof field.options === 'string') field.options = eval(field.options);
-                const [option] = field.options.filter(o => o[field.optionType.key] === field.value);
-                return strings[option[field.optionType.text]] || option[field.optionType.text];
+                const [option] = field.options.filter((o: any) => o[field.optionType.key] === field.value);
+                return (strings as any)[option[field.optionType.text]] || option[field.optionType.text];
             } else if (field.value instanceof Array) {
-                return field.value.map(v => strings[v]).join(', ');
+                return field.value.map((v: any) => (strings as any)[v]).join(', ');
             }
             else if (typeof field.value === 'boolean') {
                 return field.value ? strings.Yes : strings.No;
             }
-            return strings[field.value] || field.value;
+            return (strings as any)[field.value] || field.value;
         };
 
         return (
@@ -645,15 +715,15 @@ const DeviationForm: React.FC<IDeviationFormProps> = ({ form, setSelectedForm, b
     };
 
     const renderMessages = (messages: IDeviationFormMessage[]): JSX.Element[] => {
-        if (messages) return messages.map(m => (eval(m.display) && <MessageBar className={styles.message} messageBarType={getMessageType(m.type)}><div style={{ whiteSpace: 'break-spaces' }}>{m.content}</div></MessageBar>));
+        if (messages) return messages.map(m => (eval(m.display) && <MessageBar className={styles.message} messageBarType={getMessageType(m.type)}><div className={styles.messageContent}>{m.content}</div></MessageBar>));
     };
 
     const renderContent = (content: string, format: string[], confirmation: IDeviationPageConfirmation, messages: IDeviationFormMessage[]): JSX.Element => {
         const formatString = (string: string, ...args: string[]): string => {
             return string.replace(/{(\d+)}/g, (match, number) => {
                 return typeof args[number] !== 'undefined'
-                    ? strings[args[number]]?.toLowerCase() || args[number]?.toLowerCase()
-                    : strings[match].toLocaleLowerCase() || match.toLocaleLowerCase();
+                    ? (strings as any)[args[number]]?.toLowerCase() || args[number]?.toLowerCase()
+                    : (strings as any)[match].toLocaleLowerCase() || match.toLocaleLowerCase();
             });
         };
         if (!format || format.length === 0) return <div role='banner' aria-label={content} dangerouslySetInnerHTML={{ __html: content }} />;

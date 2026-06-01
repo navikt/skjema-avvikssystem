@@ -34,7 +34,7 @@
     "description": {
         "type": "html",
         "categories": {
-            "page": 3,
+            "page": 4,
             "field": "category"
         },
         "contentTemplate": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> {categories} </ul> </div>"
@@ -250,6 +250,66 @@
         },
         {
             "key": 3,
+            "title": "Har personopplysninger blitt utilsiktet eller ulovlig:",
+            "type": "Input",
+            "fields": [
+                {
+                    "key": "personalDataBreach",
+                    "label": "",
+                    "type": "ChoiceGroup",
+                    "options": [
+                        "Ja",
+                        "Nei"
+                    ],
+                    "required": "true",
+                    "description": "• slettet\n• tapt\n• endret\n• delt (herunder ulovlig tilgang til personopplysninger)?"
+                }
+            ],
+            "messages": [
+                {
+                    "display": "true",
+                    "type": "info",
+                    "content": "Eksempel kan være at Nav har sendt brev som inneholder navn og fødselsnummer til feil mottaker.",
+                    "position": "bottom"
+                }
+            ],
+            "actions": [
+                {
+                    "key": "previous",
+                    "label": "Tilbake",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronLeft"
+                    },
+                    "invoke": {
+                        "functionName": "PreviousPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
+                },
+                {
+                    "key": "next",
+                    "label": "Neste",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronRight"
+                    },
+                    "iconPosition": "right",
+                    "disabled": "!state.valid",
+                    "invoke": {
+                        "functionName": "NavigateFromBreachQuestion",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "key": 4,
             "title": "Velg kategori",
             "type": "Input",
             "fields": [
@@ -312,7 +372,7 @@
             ]
         },
         {
-            "key": 4,
+            "key": 5,
             "title": "Velg underkategori",
             "type": "Input",
             "fields": [
@@ -400,7 +460,7 @@
             ]
         },
         {
-            "key": 5,
+            "key": 6,
             "type": "Input",
             "fields": [
                 {
@@ -546,7 +606,7 @@
             ]
         },
         {
-            "key": 6,
+            "key": 7,
             "title": "Verifiser opplysningene som er registrert",
             "type": "Summary",
             "values": "state.values",

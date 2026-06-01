@@ -45,6 +45,19 @@ export default class ActionsHandler {
         this._setState({ ...state, [stateVariable]: currentPageNumber - 1 });
     }
 
+    private NavigateFromBreachQuestion({ currentPageNumber, stateVariable, state }: IPageNavigationParams): void {
+        if (state.values.personalDataBreach === 'Ja') {
+            this._setState({ 
+                ...state, 
+                values: { ...state.values, category: 'Violation of personal data security' },
+                [stateVariable]: 4,
+                skipPage: { page: 4, addtobreadcrumbs: 'state.values.category' }
+            });
+        } else {
+            this._setState({ ...state, [stateVariable]: currentPageNumber + 1 });
+        }
+    }
+
     private isSelectedUnitKontaktsenter(values: IFormValues, state: ISubmitState): boolean {
         if (values.unit === 'Annen enhet' && state.otherUnitNumber) {
             const selectedAgreement = this._context.agreementOptions?.find(
@@ -63,7 +76,7 @@ export default class ActionsHandler {
                 if (values.form === 'Physical security') values.stateOrMunicipalityService = 'Unsure';
                 if (values[key] === '') delete values[key];
                 if (key === 'selectedMunicipality' && this.isSelectedUnitKontaktsenter(values, state)) delete values[key];
-                if (!includes(fieldsToInclude, key) || key === 'personalInfoLost') {
+                if (!includes(fieldsToInclude, key) || key === 'personalInfoLost' || key === 'personalDataBreach') {
                     delete values[key];
                 } else if (key === 'category' && values[key] === 'Violation of privacy requirements') {
                     values.form = 'Privacy';
@@ -72,8 +85,9 @@ export default class ActionsHandler {
                 }
             }
         }
-        const body = JSON.stringify(values);
-        const response = await fetch(`${functionUrl}&mode=post&environment=${environment}`, {
+        const body = JSON.stringify(values, null, 2);
+        console.log(body);
+/*         const response = await fetch(`${functionUrl}&mode=post&environment=${environment}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -81,6 +95,6 @@ export default class ActionsHandler {
             body,
         });
         const result = await response.text();
-        this._setState({ ...state, [stateVariable]: false, [resultVariable]: { status: response.status, text: result } });
+        this._setState({ ...state, [stateVariable]: false, [resultVariable]: { status: response.status, text: result } }); */
     }
 }
