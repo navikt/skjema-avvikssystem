@@ -56,7 +56,7 @@ define([], function () {
     "Deficiencies or violations on access control": "Mangler eller brudd på adgangskontroll",
     "Deficiencies or violations on emergeny exit": "Mangler eller brudd på rømningsvei",
     "Violation of personal data security": "Brudd på personopplysningssikkerhet",
-    "Violation of policies": "Brudd på policy/retningslinjer innen informasjonssikkerhet",
+    "Violation of policies": "Brudd på sikkerhetskrav og/eller retningslinjer",
     "Basis for processing": "Behandlingsgrunnlag",
     "The rights of the registered": "Registrertes rettigheter",
     "Data management agreements": "Databehandleravtaler",

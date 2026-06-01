@@ -325,11 +325,19 @@
                     "choiceInfoTexts": [
                         {
                             "key": "Violation of personal data security",
-                            "text": "Ett brudd på personopplysningssikkerhet er at personopplysningene er på avveie, er blitt endret eller slettet, eller ikke tilgjengelig. Eksempler kan være brev sendt til feil mottaker, opplysninger registrert på feil bruker, eller feil i ett IT-system."
+                            "text": "Et brudd på personopplysningssikkerheten (avvik) er i personvernforordningen definert som utilsiktet eller ulovlig tilintetgjøring, tap, endring, ulovlig spredning av eller tilgang til personopplysninger som er overført, lagret eller på annen måte behandlet.\n\nEksempel kan være at Nav har sendt brev som inneholder navn og fødselsnummer til feil mottaker."
                         },
                         {
                             "key": "Violation of privacy requirements",
-                            "text": "Brudd på lovkrav etter personvernregelverket."
+                            "text": "Velg «Brudd på personvernkrav» når avviket innebærer at personopplysninger kan ha blitt håndtert feil. Dette gjelder situasjoner der virksomheten kan ha brutt krav i personopplysningsloven, personvernforordningen (GDPR). Eksempler kan være at opplysninger er behandlet uten dokumentert behandlingsgrunnlag, eller at databehandleravtale ikke er dokumentert.\n\nHvis avviket har ført til at personopplysninger har blitt utilsiktet eller ulovlig slettet, tapt, endret, eller delt skal «Brudd på personopplysningssikkerhet» velges som kategori."
+                        },
+                        {
+                            "key": "Violation of policies",
+                            "text": "Velg «Brudd på sikkerhetskrav og/eller retningslinjer» når avviket innebærer at NAV sine interne sikkerhetskrav eller retningslinjer for informasjonssikkerhet kan ha blitt brutt. Dette gjelder situasjoner der sikkerhetskrav for hvordan vi skal ivareta informasjonssikkerheten ikke blir fulgt opp.\n\nEksempel kan være brudd på krav i standard for digital sikkerhet eller standard for brukeridentitets og tilgangsforvaltning."
+                        },
+                        {
+                            "key": "Other unwanted incidents",
+                            "text": "Velg «Andre uønskede hendelser» når avviket gjelder informasjonssikkerhet, men ikke passer inn i de andre kategoriene. Dette gjelder situasjoner der noe uventet har skjedd som påvirker informasjonssikkerheten, men som verken er et brudd på personopplysningssikkerheten eller et brudd på interne sikkerhetskrav og/eller retningslinjer."
                         }
                     ],
                     "required": "true"
