@@ -1,10 +1,17 @@
 import { includes } from 'lodash';
 import { IDeviationForm, IDeviationFormState } from '../webparts/deviationForm/types';
 import { IDeviationFormContext } from '../webparts/deviationForm/DeviationFormContext';
+import { 
+    ISwitchFormParams, 
+    IPageNavigationParams, 
+    IFormValues, 
+    ISubmitState, 
+    ISubmitParams 
+} from './ActionsHandlerTypes';
 
 export default class ActionsHandler {
-    private _setState;
-    private _setForm;
+    private _setState: React.Dispatch<React.SetStateAction<IDeviationFormState>>;
+    private _setForm: (form: IDeviationForm) => void;
     private _forms: IDeviationForm[];
     private _context: IDeviationFormContext;
 
@@ -16,29 +23,29 @@ export default class ActionsHandler {
     }
 
     public invoke(functionName: string, params: any): void {
-        this[functionName](params);
+        (this as any)[functionName](params);
     }
 
     private ToFormSelection(): void {
         this._setForm(null);
     }
 
-    private SwitchForm({ formName, stateVariable, state, key, value, skipPage, bubble, setBubbleState }): void {
+    private SwitchForm({ formName, stateVariable, state, key, value, skipPage, bubble, setBubbleState }: ISwitchFormParams): void {
         const [form] = this._forms.filter((f) => f.title === formName);
         this._setState({ ...state, currentPageNumber: 1, [stateVariable]: { ...state[stateVariable], form: formName, [key]: value }, skipPage: skipPage });
         this._setForm(form);
         setBubbleState(bubble);
     }
 
-    private NextPage({ currentPageNumber, stateVariable, state }): void {
+    private NextPage({ currentPageNumber, stateVariable, state }: IPageNavigationParams): void {
         this._setState({ ...state, [stateVariable]: currentPageNumber + 1 });
     }
 
-    private PreviousPage({ currentPageNumber, stateVariable, state }): void {
+    private PreviousPage({ currentPageNumber, stateVariable, state }: IPageNavigationParams): void {
         this._setState({ ...state, [stateVariable]: currentPageNumber - 1 });
     }
 
-    private isSelectedUnitKontaktsenter(values: any, state: any): boolean {
+    private isSelectedUnitKontaktsenter(values: IFormValues, state: ISubmitState): boolean {
         if (values.unit === 'Annen enhet' && state.otherUnitNumber) {
             const selectedAgreement = this._context.agreementOptions?.find(
                 option => option.unit === state.otherUnitNumber
@@ -47,7 +54,7 @@ export default class ActionsHandler {
         } else return this._context.unitIsKontaktsenter;
     }
 
-    private async Submit({ values, functionUrl, environment, stateVariable, state, resultVariable, fieldsToInclude }): Promise<void> {
+    private async Submit({ values, functionUrl, environment, stateVariable, state, resultVariable, fieldsToInclude }: ISubmitParams): Promise<void> {
         fieldsToInclude = [...fieldsToInclude, 'stateOrMunicipalitySector', 'form'];
         if (!values.anonymous) fieldsToInclude = [...fieldsToInclude, 'reporterEmail', 'reporterNAVIdentId'];
         this._setState({ ...state, [stateVariable]: true });

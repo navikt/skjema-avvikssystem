@@ -190,6 +190,7 @@ export interface IDeviationFormState {
     filteredOptions: IFilteredOptions;
     agreement?: boolean;
     otherUnitNumber?: string;
+    [key: string]: any;
 }
 
 export interface IGetCaseParameters {
