@@ -1,12 +1,12 @@
 import { includes } from 'lodash';
 import { IDeviationForm, IDeviationFormState } from '../webparts/deviationForm/types';
 import { IDeviationFormContext } from '../webparts/deviationForm/DeviationFormContext';
-import { 
-    ISwitchFormParams, 
-    IPageNavigationParams, 
-    IFormValues, 
-    ISubmitState, 
-    ISubmitParams 
+import {
+    ISwitchFormParams,
+    IPageNavigationParams,
+    IFormValues,
+    ISubmitState,
+    ISubmitParams
 } from './ActionsHandlerTypes';
 
 export default class ActionsHandler {
@@ -47,8 +47,8 @@ export default class ActionsHandler {
 
     private NavigateFromBreachQuestion({ currentPageNumber, stateVariable, state }: IPageNavigationParams): void {
         if (state.values.personalDataBreach === 'Ja') {
-            this._setState({ 
-                ...state, 
+            this._setState({
+                ...state,
                 values: { ...state.values, category: 'Violation of personal data security' },
                 [stateVariable]: 4,
                 skipPage: { page: 4, addtobreadcrumbs: 'state.values.category' }
@@ -85,9 +85,8 @@ export default class ActionsHandler {
                 }
             }
         }
-        const body = JSON.stringify(values, null, 2);
-        console.log(body);
-/*         const response = await fetch(`${functionUrl}&mode=post&environment=${environment}`, {
+        const body = JSON.stringify(values);
+        const response = await fetch(`${functionUrl}&mode=post&environment=${environment}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -95,6 +94,6 @@ export default class ActionsHandler {
             body,
         });
         const result = await response.text();
-        this._setState({ ...state, [stateVariable]: false, [resultVariable]: { status: response.status, text: result } }); */
+        this._setState({ ...state, [stateVariable]: false, [resultVariable]: { status: response.status, text: result } });
     }
 }
