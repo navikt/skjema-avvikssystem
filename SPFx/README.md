@@ -1,73 +1,87 @@
-# deviation-form
+# Avvikssystem
 
-## Summary
+## Oversikt
 
-Short summary on functionality and used technologies.
+En SharePoint Framework (SPFx) webdel som lar NAV-ansatte registrere og søke etter avvik i tre hovedkategorier: HMS, Fysisk sikkerhet, og Personvern og informasjonssikkerhet. Løsningen bruker dynamiske JSON-baserte skjemaer og integrerer med Salesforce via Azure Functions for lagring av avvik.
 
-[picture of the solution in action, if possible]
+**Hovedfunksjoner:**
+- Dynamisk skjemaoppbygging basert på JSON-konfigurasjon
+- Integrasjon med SharePoint-liste for organisasjonsdata (NOM-enheter)
+- Lagring til Salesforce via Azure Function backend
+- Søkefunksjonalitet for eksisterende avvik
+- Støtte for anonym registrering
+- Multi-miljø støtte (test/prod)
 
-## Used SharePoint Framework Version
+📄 **[Les fullstendig dokumentasjon](DOKUMENTASJON.md)** for detaljert arkitektur, dataflyt og integrasjoner.
 
-![version](https://img.shields.io/badge/version-1.13-green.svg)
+## SharePoint Framework versjon
 
-## Applies to
+![version](https://img.shields.io/badge/version-1.20-green.svg)
 
-- [SharePoint Framework](https://aka.ms/spfx)
-- [Microsoft 365 tenant](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
+## Forutsetninger
 
-> Get your own free development tenant by subscribing to [Microsoft 365 developer program](http://aka.ms/o365devprogram)
+- SharePoint Online miljø
+- SharePoint-liste kalt "Enheter" med felter: NOMId, Title, Avtale, UnitNumber
+- SharePoint-liste kalt "Databehandleravtaler" med felter: Title, Kommunenavn, Organisasjonsnummer, Kontaktsenter
+- Azure Function for backend-integrasjon med Salesforce
+- Node.js versjon 18.17.1+
+- Tilgang til NAV tenant app-katalog (for produksjonsdeploy)
 
-## Prerequisites
+## Utvikling
 
-> Any special pre-requisites?
+```powershell
+# Installer avhengigheter
+npm install
 
-## Solution
+# Start lokal utviklingsserver
+gulp serve --nobrowser
 
-Solution|Author(s)
---------|---------
-folder name | Author details (name, company, twitter alias with link)
+# Bygg pakke (øker patch-versjon, bygger og åpner pakke-mappen)
+npm run build-patch
 
-## Version history
+# Bygg pakke med ny funksjonalitet (øker minor-versjon, bygger og åpner pakke-mappen)
+npm run build-minor
 
-Version|Date|Comments
--------|----|--------
-1.1|March 10, 2021|Update comment
-1.0|January 29, 2021|Initial release
+# Bygg pakke med breaking changes (øker major-versjon, bygger og åpner pakke-mappen)
+npm run build-major
 
-## Disclaimer
+# Bygg ny pakke uten å øke versjonsnummer (clean + build)
+npm run rebuild
+```
 
-**THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**
+**Output:** `sharepoint/solution/deviation-form.sppkg`
 
----
+### Konfigurasjon av webdel
 
-## Minimal Path to Awesome
+Etter deployment må følgende properties konfigureres:
+- **webpartTitle**: Tittel som vises i webdelen
+- **functionUrl**: URL til Azure Function backend
+- **environment**: "test" eller "prod"
+- **debugMode**: false (true kun for lokal utvikling)
 
-- Clone this repository
-- Ensure that you are at the solution folder
-- in the command-line run:
-  - **npm install**
-  - **gulp serve**
+## Funksjoner
 
-> Include any additional steps as needed.
+Denne løsningen demonstrerer følgende konsepter:
 
-## Features
+- **JSON-drevet skjemaoppbygging**: Dynamiske skjemaer definert via JSON-filer (HMS.json, Fysisk sikkerhet.json, Personvern og informasjonssikkerhet.json)
+- **React Context API**: Deling av konfigurasjon og SharePoint-klient mellom komponenter
+- **PnP JS**: Moderne tilgang til SharePoint REST API
+- **Fluent UI**: Konsistente UI-komponenter fra Microsoft
+- **ActionsHandler pattern**: Sentralisert forretningslogikk for skjemahandlinger
+- **Multi-miljø støtte**: Konfigurerbar deployment til test/prod miljøer
+- **Azure Functions integrasjon**: Backend-kommunikasjon for Salesforce-integrasjon
+- **Versjonering**: Automatisk versjonering via npm scripts
 
-Description of the extension that expands upon high-level summary above.
+### Arkitektur
 
-This extension illustrates the following concepts:
+```
+SharePoint (SPFx Web Part)
+    ↓
+SharePoint Liste "Enheter" (NOM-data)
+    ↓
+Azure Function (Backend)
+    ↓
+Salesforce API (Avvikslagring)
+```
 
-- topic 1
-- topic 2
-- topic 3
-
-> Notice that better pictures and documentation will increase the sample usage and the value you are providing for others. Thanks for your submissions advance.
-
-> Share your web part with others through Microsoft 365 Patterns and Practices program to get visibility and exposure. More details on the community, open-source projects and other activities from http://aka.ms/m365pnp.
-
-## References
-
-- [Getting started with SharePoint Framework](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
-- [Building for Microsoft teams](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/build-for-teams-overview)
-- [Use Microsoft Graph in your solution](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/web-parts/get-started/using-microsoft-graph-apis)
-- [Publish SharePoint Framework applications to the Marketplace](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/publish-to-marketplace-overview)
-- [Microsoft 365 Patterns and Practices](https://aka.ms/m365pnp) - Guidance, tooling, samples and open-source controls for your Microsoft 365 development
+Se [DOKUMENTASJON.md](DOKUMENTASJON.md) for detaljert arkitekturdiagram og dataflyt.
