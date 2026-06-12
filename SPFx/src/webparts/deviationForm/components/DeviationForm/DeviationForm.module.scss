@@ -49,6 +49,60 @@
         }
     }
 
+    .screenReaderOnly {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    .infoIconContainer {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .fieldDescription {
+        white-space: pre-line;
+        @include ms-font-m;
+        color: rgb(50, 49, 48);
+        margin-bottom: 8px;
+    }
+
+    .flexRowCenter {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .flexColumnGap {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .labelText {
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .requiredAsterisk {
+        color: rgb(164, 38, 44);
+        padding-left: 4px;
+    }
+
+    .dateTimeColon {
+        margin-left: 25px;
+    }
+
+    .messageContent {
+        white-space: break-spaces;
+    }
+
     .dateTimeWrapper {
         display: flex;
         flex-direction: column;

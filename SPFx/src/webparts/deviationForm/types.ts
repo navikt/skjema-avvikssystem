@@ -54,6 +54,7 @@ export interface IDeviationFormAction {
     iconProps?: IIconProps;
     iconPosition?: DeviationActionIconPosition;
     disabled?: string;
+    hidden?: string;
     addtobreadcrumbs?: string;
     removefrombreadcrumbs?: string;
 }
@@ -101,6 +102,13 @@ export interface IDeviationFormField {
     disabledOptions?: string[];
     additionalData?: IDeviationFieldAdditionalData[];
     infoText?: string;
+    optionOverrides?: IOptionOverride[];
+}
+
+export interface IOptionOverride {
+    option: string;
+    stateVariable: string;
+    value: any;
 }
 
 export interface IDeviationPageConfirmation {
@@ -181,6 +189,8 @@ export interface IDeviationFormState {
     skipPage?: ISkipPage;
     filteredOptions: IFilteredOptions;
     agreement?: boolean;
+    otherUnitNumber?: string;
+    [key: string]: any;
 }
 
 export interface IGetCaseParameters {
@@ -211,6 +221,15 @@ export interface IOrgUnitOption {
     id: string;
     name: string;
     agreement?: boolean;
+}
+
+export interface IAgreementOption {
+    key: string;
+    text: string;
+    unit: string;
+    data: {
+        kontaktsenter: boolean;
+    };
 }
 
 export interface IRenderCondition {

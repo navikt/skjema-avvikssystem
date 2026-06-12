@@ -42,31 +42,27 @@
             "Before user meetings",
             "Change and adjustment",
             "Physical working environment conditions",
-            "Information about planed and implemented actions"
+            "Conditions that may lead to injuries or health problems for employees",
+            "Follow-up of measures for risk reduction"
         ]
     },
     "description": {
         "type": "html",
         "categories": {
-            "page": 4,
+            "page": 3,
             "field": "category"
         },
         "contentTemplate": "<div style='padding: 5px 10px'> <h3 style='margin-left: 15px'>Kategorier</h3> <ul> {categories} </ul> </div>"
     },
     "pages": [
         {
-            "key": 1,
+            "key": 0,
             "type": "Validation",
             "renderConditions": [
                 {
-                    "condition": "state.values.stateOrMunicipalitySector === 'Municipal' && !context.unitDataAgreement",
-                    "message": "Din enhet har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system.",
-                    "type": "error"
-                },
-                {
                     "condition": "state.values.stateOrMunicipalitySector === 'External'",
-                    "message": "Du er registrert som ekstern og kan ikke registrere HMS-avvik. Ta kontakt med din kontaktperson i NAV.",
-                    "type": "error"
+                    "message": "Du er registrert som eksternt ansatt. Vurder om HMS-avviket også bør registreres hos din arbeidsgiver.",
+                    "type": "info"
                 },
                 {
                     "condition": "!state.values.stateOrMunicipalitySector",
@@ -85,11 +81,28 @@
                     "invoke": {
                         "functionName": "ToFormSelection"
                     }
+                },
+                {
+                    "key": "next",
+                    "label": "Neste",
+                    "type": "default",
+                    "iconProps": {
+                        "iconName": "ChevronRight"
+                    },
+                    "iconPosition": "right",
+                    "hidden": "!state.values.stateOrMunicipalitySector",
+                    "invoke": {
+                        "functionName": "NextPage",
+                        "params": {
+                            "state_pageNumber": "currentPageNumber",
+                            "setstate": "currentPageNumber"
+                        }
+                    }
                 }
             ]
         },
         {
-            "key": 2,
+            "key": 1,
             "type": "Input",
             "fields": [
                 {
@@ -130,6 +143,18 @@
                             "dynamicKey": "context.unit",
                             "text": "For HMS vil avviket bli håndtert av din personalleder"
                         }
+                    ],
+                    "optionOverrides": [
+                        {
+                            "option": "Min enhet",
+                            "stateVariable": "selectedMunicipality",
+                            "value": "context.municipalityOrgNumber"
+                        },
+                        {
+                            "option": "Annen enhet",
+                            "stateVariable": "selectedMunicipality",
+                            "value": null
+                        }
                     ]
                 },
                 {
@@ -143,6 +168,13 @@
                         "key": "id",
                         "text": "name"
                     },
+                    "optionOverrides": [
+                        {
+                            "option": "*",
+                            "stateVariable": "selectedMunicipality",
+                            "value": "context.agreementOptions.filter(o => o.unit === option.data.unit).length === 1 ? context.agreementOptions.filter(o => o.unit === option.data.unit)[0].key : state.values.selectedMunicipality"
+                        }
+                    ],
                     "hidden": "!(state.values.unit === 'Annen enhet')",
                     "required": "state.values.unit === 'Annen enhet'"
                 }
@@ -183,7 +215,7 @@
             ]
         },
         {
-            "key": 3,
+            "key": 2,
             "title": "Gjelder det en statlig eller kommunal tjeneste?",
             "type": "Input",
             "fields": [
@@ -206,13 +238,33 @@
                             "text": "Omfatter sosiale tjenester og andre kommunale tjenester i NAV-kontoret"
                         }
                     ]
+                },
+                {
+                    "key": "selectedMunicipality",
+                    "label": "Avviket knyttes til følgende:",
+                    "type": "Choice",
+                    "options": "state.values.unit !== 'Annen enhet' ? context.agreementOptions.filter(o => o.unit === context.unitNumber) : context.agreementOptions.filter(o => o.unit === state.otherUnitNumber)",
+                    "optionType": {
+                        "type": "object",
+                        "key": "key",
+                        "text": "text"
+                    },
+                    "required": "state.values.stateOrMunicipalityService === 'Municipal' && (state.values.unit !== 'Annen enhet' ? context.agreementOptions.filter(o => o.unit === context.unitNumber) : context.agreementOptions.filter(o => o.unit === state.otherUnitNumber)).length > 0",
+                    "hidden": "!(state.values.stateOrMunicipalityService === 'Municipal') || (state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement) || (state.values.unit !== 'Annen enhet' ? context.agreementOptions.filter(o => o.unit === context.unitNumber) : context.agreementOptions.filter(o => o.unit === state.otherUnitNumber)).length === 0",
+                    "infoText": "Vennligst velg en kommune fra listen."
                 }
             ],
             "messages": [
                 {
+                    "display": "state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement",
+                    "type": "error",
+                    "content": "Fordi Nav-kontoret du jobber ved ikke har inngått databehandleravtale med Nav kan du ikke rapportere avviket her. Inntil videre skal denne type avvik rapporteres i kommunens eget avvikssystem.",
+                    "position": "bottom"
+                },
+                {
                     "display": "state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement",
                     "type": "error",
-                    "content": "Valgt enhet har ikke databehandleravtale med NAV. Vennligst rapporter avviket i kommunalt system.",
+                    "content": "Fordi dette Nav-kontoret ikke har inngått databehandleravtale med Nav, kan du ikke rapportere avviket her. Inntil videre skal denne type avvik rapporteres i kommunens eget avvikssystem.",
                     "position": "bottom"
                 }
             ],
@@ -240,7 +292,7 @@
                         "iconName": "ChevronRight"
                     },
                     "iconPosition": "right",
-                    "disabled": "!state.values.stateOrMunicipalityService || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.values.unitOther && !state.agreement)",
+                    "disabled": "!state.values.stateOrMunicipalityService || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && !state.agreement) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit === 'Annen enhet' && state.agreement && context.agreementOptions.filter(o => o.unit === state.otherUnitNumber).length > 1 && !state.values.selectedMunicipality) || (state.values.stateOrMunicipalityService === 'Municipal' && state.values.unit !== 'Annen enhet' && !context.unitDataAgreement) || !state.valid",
                     "invoke": {
                         "functionName": "NextPage",
                         "params": {
@@ -252,7 +304,7 @@
             ]
         },
         {
-            "key": 4,
+            "key": 3,
             "type": "Input",
             "title": "Velg kategori",
             "fields": [
@@ -330,7 +382,7 @@
             ]
         },
         {
-            "key": 5,
+            "key": 4,
             "type": "Input",
             "title": "Velg underkategori",
             "fields": [
@@ -454,7 +506,7 @@
             ]
         },
         {
-            "key": 6,
+            "key": 5,
             "type": "Input",
             "fields": [
                 {
@@ -588,7 +640,7 @@
             ]
         },
         {
-            "key": 7,
+            "key": 6,
             "title": "Verifiser opplysningene som er registrert",
             "type": "Summary",
             "values": "state.values",

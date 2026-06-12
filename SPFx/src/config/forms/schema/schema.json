@@ -199,6 +199,12 @@
                                 "placeholder": {
                                     "type": "string"
                                 },
+                                "valid": {
+                                    "type": "string"
+                                },
+                                "errorMessage": {
+                                    "type": "string"
+                                },
                                 "dynamicValue": {
                                     "type": "object",
                                     "additionalProperties": false,
@@ -302,6 +308,18 @@
                                 },
                                 "required": {
                                     "type": "string"
+                                },
+                                "optionOverrides": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "option": { "type": "string" },
+                                            "stateVariable": { "type": "string" },
+                                            "value": {}
+                                        },
+                                        "required": ["option", "stateVariable", "value"]
+                                    }
                                 }
                             },
                             "required": [
@@ -341,6 +359,9 @@
                                     "type": "string"
                                 },
                                 "disabled": {
+                                    "type": "string"
+                                },
+                                "hidden": {
                                     "type": "string"
                                 },
                                 "addtobreadcrumbs": {

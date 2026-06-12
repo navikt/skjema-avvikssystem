@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { IAppConfig, IOrgUnitOption } from './types';
+import { IAppConfig, IOrgUnitOption, IAgreementOption } from './types';
 import { SPFI } from '@pnp/sp';
 
 export interface IDeviationFormContext {
@@ -9,10 +9,14 @@ export interface IDeviationFormContext {
     organization: string;
     unit: string;
     unitDataAgreement: boolean;
+    unitIsKontaktsenter: boolean;
     reporterEmail: string;
     reporterNAVIdentId: string;
     functionUrl: string;
     orgUnits: IOrgUnitOption[];
+    agreementOptions: IAgreementOption[];
+    unitNumber: string;
+    municipalityOrgNumber?: string;
 }
 
 export const DeviationFormContext = createContext<IDeviationFormContext>(null);

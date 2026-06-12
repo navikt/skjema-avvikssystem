@@ -5,7 +5,8 @@ import {
   IPropertyPaneConfiguration,
   PropertyPaneDropdown,
   PropertyPaneLabel,
-  PropertyPaneTextField
+  PropertyPaneTextField,
+  PropertyPaneToggle
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 
@@ -13,7 +14,7 @@ import * as strings from 'DeviationFormWebPartStrings';
 import App from './components/App';
 import config from '../../config/config';
 import { DeviationFormContext, IDeviationFormContext } from './DeviationFormContext';
-import { IAppConfig, IOrgUnitOption } from './types';
+import { IAppConfig, IOrgUnitOption, IAgreementOption } from './types';
 import { AadHttpClient } from '@microsoft/sp-http';
 import { SPFI, spfi, SPFx } from '@pnp/sp';
 import "@pnp/sp/webs";
@@ -25,16 +26,24 @@ export interface IDeviationFormWebPartProps {
   webpartTitle: string;
   functionUrl: string;
   environment: string;
+  debugMode: boolean;
+  debugNAVIdent: string;
+  debugOrganization: string;
+  debugUnitNumber: string;
 }
 
 export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviationFormWebPartProps> {
   private organization: string;
   private unit: string;
   private unitDataAgreement: boolean;
+  private unitIsKontaktsenter: boolean = false;
   private reporterEmail: string;
   private reporterNAVIdentId: string;
   private orgUnits: IOrgUnitOption[];
   private spClient: SPFI;
+  private agreementOptions: IAgreementOption[] = [];
+  private municipalityOrgNumber: string;
+  private unitNumber: string;
 
   public render(): void {
     const value: IDeviationFormContext = {
@@ -44,10 +53,14 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
       organization: this.organization,
       unit: this.unit,
       unitDataAgreement: this.unitDataAgreement,
+      unitIsKontaktsenter: this.unitIsKontaktsenter,
       orgUnits: this.orgUnits,
       reporterEmail: this.reporterEmail,
       reporterNAVIdentId: this.reporterNAVIdentId,
-      functionUrl: this.properties.functionUrl
+      functionUrl: this.properties.functionUrl,
+      agreementOptions: this.agreementOptions,
+      municipalityOrgNumber: this.municipalityOrgNumber,
+      unitNumber: this.unitNumber
     };
 
     const element: React.ReactElement<{}> = (
@@ -65,7 +78,7 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
     await super.onInit();
     this.spClient = spfi().using(SPFx(this.context));
 
-    const units = await this.spClient.web.lists.getByTitle('Enheter').items.select('NOMId', 'Title', 'Avtale').getAll();
+    const units = await this.spClient.web.lists.getByTitle('Enheter').items.select('NOMId', 'Title', 'Avtale', 'UnitNumber').getAll();
 
     /*     const body = `{
                             "query": "query { orgEnheter(where: {nomNivaa: ARBEIDSOMRAADE}){ orgEnhet{ id navn nomNivaa gyldigFom gyldigTom organiseringer(retning: under){ orgEnhet{ navn nomNivaa orgEnhetsType gyldigFom gyldigTom } } } } }"
@@ -107,27 +120,51 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
     const client: AadHttpClient = await this.context.aadHttpClientFactory.getClient('https://graph.microsoft.com');
     const res = await client.get('https://graph.microsoft.com/v1.0/me?$select=companyName,department,mail,onPremisesSamAccountName,streetAddress', AadHttpClient.configurations.v1);
     const user = await res.json();
-    switch (user.companyName) {
-      case 'NAV Kommunal':
-        this.organization = 'Municipal';
-        break;
-      case 'NAV Statlig':
-        this.organization = 'State';
-        break;
-      case 'Ikke NAV':
-        this.organization = 'External';
-        break;
-      default:
-        // DEBUG
-        //this.organization = 'Municipal';
-        break;
+
+    this.unitNumber = user.streetAddress;
+    if (this.properties.environment === 'Test' && this.properties.debugMode) {
+      this.unitNumber = this.properties.debugUnitNumber;
+      this.organization = this.properties.debugOrganization;
+      this.reporterNAVIdentId = this.properties.debugNAVIdent;
+    } else {
+      this.reporterNAVIdentId = user.onPremisesSamAccountName;
+      switch (user.companyName) {
+        case 'NAV Kommunal':
+          this.organization = 'Municipal';
+          break;
+        case 'NAV Statlig':
+          this.organization = 'State';
+          break;
+        case 'Ikke NAV':
+          this.organization = 'External';
+          break;
+        default:
+          break;
+      }
     }
-    const [unitAgreement] = await this.spClient.web.lists.getByTitle('Databehandleravtaler').items.filter(`Title eq '${user.streetAddress}'`)();
-    this.unitDataAgreement = !!unitAgreement;
-    this.orgUnits = units.map(unit => ({ id: unit.NOMId, name: unit.Title, agreement: unit.Avtale })).sort((a, b) => a.name > b.name ? 1 : -1); //unitOptions.sort();
+    const agreements = await this.spClient.web.lists.getByTitle('Databehandleravtaler').select('Title,Kommunenavn,Organisasjonsnummer,Kontaktsenter').items();
+    const userUnitAgreement = agreements.filter(agreement => agreement.Title === this.unitNumber);
+
+    this.unitDataAgreement = false;
+    this.unitIsKontaktsenter = false;
+    if (agreements.length > 0) {
+      this.agreementOptions = agreements.map((agreement, index) => ({
+        key: agreement.Organisasjonsnummer || `agreement-${agreement.Title || index}`,
+        text: agreement.Kommunenavn,
+        unit: agreement.Title,
+        data: { kontaktsenter: agreement.Kontaktsenter }
+      }));
+      if (userUnitAgreement.length > 0) {
+        this.unitDataAgreement = true;
+        this.unitIsKontaktsenter = userUnitAgreement[0].Kontaktsenter === true;
+        this.municipalityOrgNumber = userUnitAgreement.length === 1 
+          ? (userUnitAgreement[0].Organisasjonsnummer || `agreement-${userUnitAgreement[0].Title}`)
+          : false;
+      }
+    }
+    this.orgUnits = units.map(unit => ({ id: unit.NOMId, name: unit.Title, agreement: unit.Avtale, unit: unit.UnitNumber })).sort((a, b) => a.name > b.name ? 1 : -1); //unitOptions.sort();
     this.unit = user.department;
     this.reporterEmail = user.mail;
-    this.reporterNAVIdentId = user.onPremisesSamAccountName;
   }
 
   /*   private filterUnits(rawUnits: IOrgUnit[]) {
@@ -153,6 +190,32 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    let debugModeToggle: any = [];
+    let debugProperties: any = [];
+    if (this.properties.environment === 'Test') {
+      debugModeToggle = [PropertyPaneToggle('debugMode', {
+        label: strings.DebugModeToggleLabel,
+        checked: this.properties.debugMode,
+        onText: strings.On,
+        offText: strings.Off,
+      })]
+    }
+
+    if (this.properties.environment === 'Test' && this.properties.debugMode) {
+      debugProperties = [
+        PropertyPaneTextField('debugNAVIdent', {
+          label: strings.DebugNAVIdentSettingLabel
+        }),
+        PropertyPaneDropdown('debugOrganization', {
+          label: strings.DebugOrganizationSettingLabel,
+          options: [{ key: 'State', text: 'Statlig' }, { key: 'Municipal', text: 'Kommunal' }],
+        }),
+        PropertyPaneTextField('debugUnitNumber', {
+          label: strings.DebugUnitNumberSettingLabel
+        })
+      ]
+    }
+
     return {
       pages: [
         {
@@ -169,7 +232,10 @@ export default class DeviationFormWebPart extends BaseClientSideWebPart<IDeviati
                 PropertyPaneDropdown('environment', {
                   label: strings.EnvironmentSettingLabel,
                   options: [{ key: 'Production', text: strings.EnvironmentProd }, { key: 'Test', text: strings.EnvironmentTest }],
+                  selectedKey: this.properties.environment,
                 }),
+                ...debugModeToggle,
+                ...debugProperties,
                 PropertyPaneLabel('', {
                   text: `v${this.manifest.version}`
                 })
